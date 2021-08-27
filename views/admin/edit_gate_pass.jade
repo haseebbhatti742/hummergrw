@@ -1,0 +1,152 @@
+.col-md-12
+                .card.card-primary.card-outline
+                    .card-header
+                        h3.card-title Gate Pass Form
+                    .card-body.p-2.mt-2
+                        .card-tools
+                            -if (found=="no"){
+                                .row.form-group
+                                    .col-md-4
+                                        h3 Gate Pass Not Found    
+                            -} else{
+                                #tab1
+                                    .row.form-group
+                                        input#length(value="#{gp_entries.length}" type="hidden")
+                                        .col-md-4
+                                            .form-group.input-group-md
+                                                label Gate Pass Number
+                                                input#gate_pass_number.form-control(type = "text", value='#{gate_pass.gp_number}', disabled='true')
+                                            #gate_pass_number_error(style="color:red")
+                                        .col-md-4
+                                            .form-group.input-group-md
+                                                label Date
+                                                input#gate_pass_date.form-control(type = "date", value='#{gate_pass.gp_date}')
+                                            #gate_pass_date_error(style="color:red")
+                                        .col-md-4.px-5
+                                            label Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            .row
+                                                .col-md-6
+                                                    .form-check.form-group-md
+                                                        if gate_pass.gp_type=="Expense"
+                                                            input#gate_pass_type_in.form-check-input(type = "radio" name='gate_pass_type_in_out' value='in' checked)
+                                                        else 
+                                                            input#gate_pass_type_in.form-check-input(type = "radio" name='gate_pass_type_in_out' value='in')
+                                                        label.form-check-label In
+                                                    #gate_pass_in_error(style="color:red")
+                                                .col-md-6
+                                                    .form-check.form-group-md
+                                                        if gate_pass.gp_type=="Recovery"
+                                                            input#gate_pass_type_out.form-check-input(type = "radio" name='gate_pass_type_in_out' value='out' checked)
+                                                        else
+                                                            input#gate_pass_type_out.form-check-input(type = "radio" name='gate_pass_type_in_out' value='out')
+                                                        label.form-check-label Out
+                                                    #gate_pass_out_error(style="color:red")
+                                    .row.form-group
+                                        .col-md-6
+                                            .form-group.input-group-md
+                                                label Party
+                                                input#gate_pass_party_id.form-control(type="text" value='#{gate_pass.gp_party_name}')
+                                                input#gp_party_id.form-control(type="hidden" value='#{gate_pass.gp_party_id}')
+                                                //select#gate_pass_party_id.form-control(onchange="getContact()")
+                                                    //option(value="" disabled selected) Select Party
+                                            #gate_pass_name_error(style="color:red")
+                                        .col-md-2
+                                            .form-group.input-group-md
+                                                label Gand Total
+                                                input#gate_pass_grand_total.form-control(type="text", value='#{gate_pass.gp_total}' disabled)
+                                            #gate_pass_name_error(style="color:red")
+                                        .col-md-4
+                                            .form-group.input-group-md
+                                                label Contact (Optional)
+                                                input#gate_pass_contact.form-control(type = "text", value='#{gate_pass.gp_contact}')
+                                            #gate_pass_name_error(style="color:red")
+                                hr
+                                #tab2
+                                    -for(let i=0; i<gp_entries.length; i++){ 
+                                        .row.form-group(id="gp_row#{i}")
+                                            //col commodity
+                                            input.form-control.col-md-2(id="gate_entry_id#{i}" type="hidden" value="#{gp_entries[i].gp_entry_id}")
+                                            .col-md-2
+                                                .form-group.input-group-md
+                                                    label Commodity
+                                                    select.form-control(id="gate_pass_commodity#{i}")
+                                                        option(value="#{gp_entries[i].gp_commodity}" selected) #{gp_entries[i].gp_commodity} 
+                                                        option(value="Raw Material") Raw Material 
+                                                        option(value="Tools & Consumables") Tools & Consumables 
+                                                        option(value="Services") Services 
+                                                        option(value="Personal") Personal 
+                                                        option(value="Food, Welfare & Entertainment") Food, Welfare & Entertainment
+                                                        option(value="Iron Scrap") Iron Scrap 
+                                                        option(value="Rotor") Rotor 
+                                                        option(value="Cast Iron") Cast Iron 
+                                                        option(value="Silver") Silver 
+                                                        option(value="Copper") Copper 
+                                                        option(value="Khulaai") Khulaai 
+                                                        option(value="Wages") Wages
+                                                        option(value="Brass") Brass
+                                                        option(value="Zinc") Zinc
+                                                        option(value="SS") SS
+                                                        option(value="Bacha Part") Bacha Part
+                                                        option(value="Weight Loss") Weight Loss
+                                                        option(value="Chalu") Chalu
+                                                        option(value="Misc") Misc
+                                                        option(value="Transport") Transport
+                                                #gate_pass_commodity_type_error(style="color:red")
+                                            //col quantity
+                                            .col-md-2
+                                                .form-group.input-group-md
+                                                    label Seller Weight
+                                                    input.form-control(id="gate_pass_quantity#{i}" type = "number", value="#{gp_entries[i].gp_quantity}")
+                                                #gate_pass_quantity_error(style="color:red")
+                                            .col-md-2
+                                                .form-group.input-group-md
+                                                    label Buyer Weight
+                                                    input.form-control(id="gate_pass_buyer_weight#{i}" type = "number" value="#{gp_entries[i].gp_buyer_weight}")
+                                                #gate_pass_quantity_error(style="color:red")
+                                            //.col-md-2
+                                                .form-group.input-group-md
+                                                    label Tare Weight
+                                                    input.form-control(id="gate_pass_tare_weight#{i}" type = "number" value="#{gp_entries[i].gp_tare_weight}")
+                                                #gate_pass_quantity_error(style="color:red")
+                                            //col unit
+                                            .col-md-2
+                                                .form-group.input-group-md
+                                                    label Unit
+                                                    select.form-control(id="gate_pass_unit#{i}")
+                                                        option(value="#{gp_entries[i].gp_unit}" selected) #{gp_entries[i].gp_unit}
+                                                        option(value="KG") KG 
+                                                        option(value="NOS") NOS 
+                                                        option(value="PCS") PCS 
+                                                #gate_pass_unit_error(style="color:red")
+                                            //col unit amount
+                                            .col-md-2
+                                                .form-group.input-group-md
+                                                    label Unit Amount
+                                                    input.form-control(id="gate_pass_unit_amount#{i}" type = "number", value="#{gp_entries[i].gp_unit_amount}")
+                                                #gate_pass_unit_amount_error(style="color:red")
+                                            //col total amount
+                                            .col-md-2
+                                                .form-group.input-group-md
+                                                    label Total Amount
+                                                    input.form-control(id="gate_pass_total_amount#{i}"  type = "number", value="#{gp_entries[i].gp_total_amount}" disabled)
+                                                #gate_pass_total_amount_error(style="color:red")
+                                            //col details
+                                            .col-md-3
+                                                label Details
+                                                input.form-control(id="gate_pass_details#{i}" type="text", value="#{gp_entries[i].gp_details}")
+                                        .row
+                                            .col-md-12 
+                                                hr
+                                            //col buttonX
+                                            //- .col-md-1 
+                                            //-     label &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            //-     button#buttonX0.btn.btn-danger(onclick='buttonXgpRowDelete()') X
+                                    -}
+                            .col-md-12
+                                #submitButtons
+                                    .row.form-group
+                                        button#btn2.col-md-12.btn.btn-success(onclick="submitForm()") Submit
+                        -}
+
+include footer
+script(src='/js/edit_gate_pass.js')

@@ -1,0 +1,16 @@
+include header1
+include aside
+.content-wrapper
+    section.content
+        .container-fluid
+            include sub-header
+            .error-page
+                h2.headline.text-danger 500
+                .error-content
+                    h3
+                        i.fas.fa-exclamation-triangle.text-danger Oops! Error: #{errorMessage}
+                    p We will work on fixing that right away. Meanwhile, you may
+                        a(href='/admin/') &nbsp; return to dashboard
+                            
+
+include footer

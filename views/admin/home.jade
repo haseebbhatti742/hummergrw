@@ -1,0 +1,33 @@
+include header1
+include aside
+.content-wrapper
+    section.content
+        .container-fluid
+            include sub-header
+            //add party
+            .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Search
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            #tab1
+                                .row.form-group
+                                    .col-md-5
+                                        .form-group.input-group-md
+                                            input#searchId.form-control(type = "number", placeholder="Enter ID..." autofocus)
+                                        #searchId_error(style="color:red")
+                                     .col-md-5
+                                        .form-group.input-group-md
+                                            select#searchType.form-control
+                                                option(value="gate_pass") Gate Pass
+                                                option(value="cash_voucher") Cash Voucher
+                                    .col-md-2
+                                        .form-group 
+                                            button#btnSearch.btn.btn-success(onclick="searchById()") Search
+            //form to show
+            #gatePassDiv
+
+include footer
+script(src='/js/home.js')
+script(src='/js/edit-gate-pass.js')

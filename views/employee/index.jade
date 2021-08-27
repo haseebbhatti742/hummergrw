@@ -1,0 +1,527 @@
+doctype html(xmlns='http://www.w3.org/1999/xhtml')
+head
+    meta(charset='utf-8')
+    |     
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    |     
+    title Free Bootstrap Admin Template : Binary Admin
+    // BOOTSTRAP STYLES
+    link(href='/css/bootstrap.css', rel='stylesheet')
+    // FONTAWESOME STYLES
+    link(href='/css/font-awesome.css', rel='stylesheet')
+    // MORRIS CHART STYLES
+    link(href='/js/morris/morris-0.4.3.min.css', rel='stylesheet')
+    // CUSTOM STYLES
+    link(href='/css/custom.css', rel='stylesheet')
+    // GOOGLE FONTS
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans', rel='stylesheet', type='text/css')
+  body
+    #wrapper
+      nav.navbar.navbar-default.navbar-cls-top(role='navigation', style='margin-bottom: 0')
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.sidebar-collapse')
+            span.sr-only Toggle navigation
+            |                     
+            span.icon-bar
+            |                     
+            span.icon-bar
+            |                     
+            span.icon-bar
+          |                 
+          a.navbar-brand(href='index.html') Binary admin
+        |   
+        div(style='color: white;\
+        padding: 15px 50px 5px 50px;\
+        float: right;\
+        font-size: 16px;')
+          | Last access : 30 May 2014 &nbsp; 
+          a.btn.btn-danger.square-btn-adjust(href='#') Logout
+      // /. NAV TOP
+      nav.navbar-default.navbar-side(role='navigation')
+        .sidebar-collapse
+          ul#main-menu.nav
+            li.text-center
+              img.user-image.img-responsive(src='/images/find_user.png')
+            | &#x9;&#x9;&#x9;&#x9;
+            | &#x9;&#x9;&#x9;&#x9;&#x9;
+            |                     
+            li
+              a.active-menu(href='index.html')
+                i.fa.fa-dashboard.fa-3x
+                |  Dashboard
+            |                      
+            li
+              a(href='ui.html')
+                i.fa.fa-desktop.fa-3x
+                |  UI Elements
+            |                     
+            li
+              a(href='tab-panel.html')
+                i.fa.fa-qrcode.fa-3x
+                |  Tabs &amp; Panels
+            | &#x9;&#x9;&#x9;&#x9;&#x9;&#x9;   
+            li
+              a(href='chart.html')
+                i.fa.fa-bar-chart-o.fa-3x
+                |  Morris Charts
+            | &#x9;
+            |                       
+            li
+              a(href='table.html')
+                i.fa.fa-table.fa-3x
+                |  Table Examples
+            |                     
+            li
+              a(href='form.html')
+                i.fa.fa-edit.fa-3x
+                |  Forms
+            | &#x9;&#x9;&#x9;&#x9;
+            | &#x9;&#x9;&#x9;&#x9;&#x9;
+            | &#x9;&#x9;&#x9;&#x9;&#x9;                   
+            |                     
+            li
+              a(href='#')
+                i.fa.fa-sitemap.fa-3x
+                |  Multi-Level Dropdown
+                span.fa.arrow
+              |                         
+              ul.nav.nav-second-level
+                li
+                  a(href='#') Second Level Link
+                |                             
+                li
+                  a(href='#') Second Level Link
+                |                             
+                li
+                  a(href='#')
+                    | Second Level Link
+                    span.fa.arrow
+                  |                                 
+                  ul.nav.nav-third-level
+                    li
+                      a(href='#') Third Level Link
+                    |                                     
+                    li
+                      a(href='#') Third Level Link
+                    |                                     
+                    li
+                      a(href='#') Third Level Link
+            |   
+            |                   
+            li
+              a(href='blank.html')
+                i.fa.fa-square-o.fa-3x
+                |  Blank Page
+      // /. NAV SIDE
+      #page-wrapper
+        #page-inner
+          .row
+            .col-md-12
+              h2 Admin Dashboard
+              |    
+              |                         
+              h5 Welcome Jhon Deo , Love to see you back. 
+          // /. ROW
+          hr
+          |                 
+          .row
+            .col-md-3.col-sm-6.col-xs-6
+              .panel.panel-back.noti-box
+                span.icon-box.bg-color-red.set-icon
+                  i.fa.fa-envelope-o
+                |                 
+                .text-box
+                  p.main-text 120 New
+                  |                     
+                  p.text-muted Messages
+            |                     
+            .col-md-3.col-sm-6.col-xs-6
+              .panel.panel-back.noti-box
+                span.icon-box.bg-color-green.set-icon
+                  i.fa.fa-bars
+                |                 
+                .text-box
+                  p.main-text 30 Tasks
+                  |                     
+                  p.text-muted Remaining
+            |                     
+            .col-md-3.col-sm-6.col-xs-6
+              .panel.panel-back.noti-box
+                span.icon-box.bg-color-blue.set-icon
+                  i.fa.fa-bell-o
+                |                 
+                .text-box
+                  p.main-text 240 New
+                  |                     
+                  p.text-muted Notifications
+            |                     
+            .col-md-3.col-sm-6.col-xs-6
+              .panel.panel-back.noti-box
+                span.icon-box.bg-color-brown.set-icon
+                  i.fa.fa-rocket
+                |                 
+                .text-box
+                  p.main-text 3 Orders
+                  |                     
+                  p.text-muted Pending
+          // /. ROW
+          hr
+          |                 
+          |                 
+          .row
+            .col-md-6.col-sm-12.col-xs-12
+              .panel.panel-back.noti-box
+                span.icon-box.bg-color-blue
+                  i.fa.fa-warning
+                |                 
+                .text-box
+                  p.main-text 52 Important Issues to Fix 
+                  |                     
+                  p.text-muted Please fix these issues to work smooth
+                  |                     
+                  p.text-muted Time Left: 30 mins
+                  |                     
+                  hr
+                  |                     
+                  p.text-muted
+                    span.text-muted.color-bottom-txt
+                      i.fa.fa-edit
+                      |                                Lorem ipsum dolor sit amet, consectetur adipiscing elit gthn.
+                      |                               Lorem ipsum dolor sit amet, consectetur adipiscing elit gthn.
+            |                     
+            |                     
+            |                     
+            .col-md-3.col-sm-12.col-xs-12
+              .panel.back-dash
+                i.fa.fa-dashboard.fa-3x
+                strong  &nbsp; SPEED
+                |                              
+                p.text-muted
+                  | Lorem ipsum dolor sit amet, consectetur adipiscing sit ametsit amet elit ftr. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            |                     
+            .col-md-3.col-sm-12.col-xs-12
+              .panel
+                .main-temp-back
+                  .panel-body
+                    .row
+                      .col-xs-6
+                        i.fa.fa-cloud.fa-3x
+                        |  Newyork City
+                      |                 
+                      .col-xs-6
+                        .text-temp  10&deg; 
+              |                      
+              .panel.panel-back.noti-box
+                span.icon-box.bg-color-green.set-icon
+                  i.fa.fa-desktop
+                |                 
+                .text-box
+                  p.main-text Display
+                  |                     
+                  p.text-muted Looking Good
+          // /. ROW
+          .row
+            .col-md-9.col-sm-12.col-xs-12
+              .panel.panel-default
+                .panel-heading
+                  | Bar Chart Example
+                |                         
+                .panel-body
+                  #morris-bar-chart
+            |                     
+            .col-md-3.col-sm-12.col-xs-12
+              .panel.panel-primary.text-center.no-boder.bg-color-green
+                .panel-body
+                  i.fa.fa-bar-chart-o.fa-5x
+                  |                             
+                  h3 120 GB 
+                |                         
+                .panel-footer.back-footer-green
+                  | Disk Space Available
+              |                     
+              .panel.panel-primary.text-center.no-boder.bg-color-red
+                .panel-body
+                  i.fa.fa-edit.fa-5x
+                  |                             
+                  h3 20,000 
+                |                         
+                .panel-footer.back-footer-red
+                  | Articles Pending
+          // /. ROW
+          .row
+            .col-md-3.col-sm-12.col-xs-12
+              .panel.panel-primary.text-center.no-boder.bg-color-green
+                .panel-body
+                  i.fa.fa-comments-o.fa-5x
+                  |                             
+                  h4 200 New Comments 
+                  |                              
+                  h4 See All Comments  
+                |                         
+                .panel-footer.back-footer-green
+                  i.fa.fa-rocket.fa-5x
+                  |                             Lorem ipsum dolor sit amet sit sit, consectetur adipiscing elitsit sit gthn ipsum dolor sit amet ipsum dolor sit amet
+            |                     
+            .col-md-9.col-sm-12.col-xs-12
+              .panel.panel-default
+                .panel-heading
+                  | Responsive Table Example
+                |                         
+                .panel-body
+                  .table-responsive
+                    table.table.table-striped.table-bordered.table-hover
+                      thead
+                        tr
+                          th #
+                          |                                             
+                          th First Name
+                          |                                             
+                          th Last Name
+                          |                                             
+                          th Username
+                          |                                              
+                          th User No.
+                      |                                     
+                      tbody
+                        tr
+                          td 1
+                          |                                             
+                          td Mark
+                          |                                             
+                          td Otto
+                          |                                             
+                          td @mdo
+                          |                                             
+                          td 100090
+                        |                                         
+                        tr
+                          td 2
+                          |                                             
+                          td Jacob
+                          |                                             
+                          td Thornton
+                          |                                             
+                          td @fat
+                          |                                             
+                          td 100090
+                        |                                         
+                        tr
+                          td 3
+                          |                                             
+                          td Larry
+                          |                                             
+                          td the Bird
+                          |                                             
+                          td @twitter
+                          |                                             
+                          td 100090
+                        |                                          
+                        tr
+                          td 1
+                          |                                             
+                          td Mark
+                          |                                             
+                          td Otto
+                          |                                             
+                          td @mdo
+                          |                                             
+                          td 100090
+                        |                                         
+                        tr
+                          td 2
+                          |                                             
+                          td Jacob
+                          |                                             
+                          td Thornton
+                          |                                             
+                          td @fat
+                          |                                             
+                          td 100090
+                        |                                         
+                        tr
+                          td 3
+                          |                                             
+                          td Larry
+                          |                                             
+                          td the Bird
+                          |                                             
+                          td @twitter
+                          |                                             
+                          td 100090
+          // /. ROW
+          .row
+            .col-md-6.col-sm-12.col-xs-12
+              .chat-panel.panel.panel-default.chat-boder.chat-panel-head
+                .panel-heading
+                  i.fa.fa-comments.fa-fw
+                  |                             Chat Box
+                  |                             
+                  .btn-group.pull-right
+                    button.btn.btn-default.btn-xs.dropdown-toggle(type='button', data-toggle='dropdown')
+                      i.fa.fa-chevron-down
+                    |                                 
+                    ul.dropdown-menu.slidedown
+                      li
+                        a(href='#')
+                          i.fa.fa-refresh.fa-fw
+                          | Refresh
+                      |                                     
+                      li
+                        a(href='#')
+                          i.fa.fa-check-circle.fa-fw
+                          | Available
+                      |                                     
+                      li
+                        a(href='#')
+                          i.fa.fa-times.fa-fw
+                          | Busy
+                      |                                     
+                      li
+                        a(href='#')
+                          i.fa.fa-clock-o.fa-fw
+                          | Away
+                      |                                     
+                      li.divider
+                      |                                     
+                      li
+                        a(href='#')
+                          i.fa.fa-sign-out.fa-fw
+                          | Sign Out
+                |                         
+                .panel-body
+                  ul.chat-box
+                    li.left.clearfix
+                      span.chat-img.pull-left
+                        img.img-circle(src='/images/1.png', alt='User')
+                      |                                     
+                      .chat-body
+                        strong Jack Sparrow
+                        |                                             
+                        small.pull-right.text-muted
+                          i.fa.fa-clock-o.fa-fw
+                          | 12 mins ago
+                        |                                       
+                        |                                         
+                        p
+                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                    |                                 
+                    li.right.clearfix
+                      span.chat-img.pull-right
+                        img.img-circle(src='/images/2.png', alt='User')
+                      |                                     
+                      .chat-body.clearfix
+                        small.text-muted
+                          i.fa.fa-clock-o.fa-fw
+                          | 13 mins ago
+                        |                                             
+                        strong.pull-right Jhonson Deed
+                        |                                       
+                        |                                         
+                        p
+                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                    |                                 
+                    li.left.clearfix
+                      span.chat-img.pull-left
+                        img.img-circle(src='/images/3.png', alt='User')
+                      |                                     
+                      .chat-body.clearfix
+                        strong Jack Sparrow
+                        |                                             
+                        small.pull-right.text-muted
+                          i.fa.fa-clock-o.fa-fw
+                          | 14 mins ago
+                        |                                         
+                        |                                         
+                        p
+                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                    |                                 
+                    li.right.clearfix
+                      span.chat-img.pull-right
+                        img.img-circle(src='/images/4.png', alt='User')
+                      |                                     
+                      .chat-body.clearfix
+                        small.text-muted
+                          i.fa.fa-clock-o.fa-fw
+                          | 15 mins ago
+                        |                                             
+                        strong.pull-right Jhonson Deed
+                        |                                        
+                        |                                         
+                        p
+                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                    |                                     
+                    li.left.clearfix
+                      span.chat-img.pull-left
+                        img.img-circle(src='/images/1.png', alt='User')
+                      |                                     
+                      .chat-body
+                        strong Jack Sparrow
+                        |                                             
+                        small.pull-right.text-muted
+                          i.fa.fa-clock-o.fa-fw
+                          | 12 mins ago
+                        |                                       
+                        |                                         
+                        p
+                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                    |                                 
+                    li.right.clearfix
+                      span.chat-img.pull-right
+                        img.img-circle(src='/images/2.png', alt='User')
+                      |                                     
+                      .chat-body.clearfix
+                        small.text-muted
+                          i.fa.fa-clock-o.fa-fw
+                          | 13 mins ago
+                        |                                             
+                        strong.pull-right Jhonson Deed
+                        |                                       
+                        |                                         
+                        p
+                          | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
+                |                         
+                .panel-footer
+                  .input-group
+                    input#btn-input.form-control.input-sm(type='text', placeholder='Type your message to send...')
+                    |                                 
+                    span.input-group-btn
+                      button#btn-chat.btn.btn-warning.btn-sm
+                        | Send
+            |                     
+            .col-md-6.col-sm-12.col-xs-12
+              .panel.panel-default
+                .panel-heading
+                  | Label Examples
+                |                         
+                .panel-body
+                  span.label.label-default Default
+                  span.label.label-primary Primary
+                  span.label.label-success Success
+                  span.label.label-info Info
+                  span.label.label-warning Warning
+                  span.label.label-danger Danger
+              |                          
+              |                          
+              .panel.panel-default
+                .panel-heading
+                  | Donut Chart Example
+                |                         
+                .panel-body
+                  #morris-donut-chart
+          // /. ROW
+        // /. PAGE INNER
+      // /. PAGE WRAPPER
+    // /. WRAPPER
+    // SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME
+    // JQUERY SCRIPTS
+    script(src='/js/jquery-1.10.2.js')
+    // BOOTSTRAP SCRIPTS
+    script(src='/js/bootstrap.min.js')
+    // METISMENU SCRIPTS
+    script(src='/js/jquery.metisMenu.js')
+    // MORRIS CHART SCRIPTS
+    script(src='/js/morris/raphael-2.1.0.min.js')
+    |     
+    script(src='/js/morris/morris.js')
+    // CUSTOM SCRIPTS
+    script(src='/js/custom.js')

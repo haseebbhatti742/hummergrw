@@ -1,0 +1,15 @@
+include header1
+include aside
+.content-wrapper
+    section.content
+        .container-fluid
+            include sub-header
+            .col-md-12
+                .card.card-primary.card-outline
+                    .card-header
+                        h3.card-title Cash Voucher Form
+                    .card-body.p-2.mt-2
+                        .card-tools
+                            #cash_voucher_form
+include footer
+script(src='/js/cash_voucher.js')
