@@ -29,14 +29,14 @@ function getParty() {
 function addCashVoucher(){
     party_id = document.getElementById("cv_party_id").value
     cv_date = document.getElementById("cash_voucher_date").value
-    cv_type = document.getElementById("cash_voucher_type").value
+    cv_type = "Advance"
     cv_payment_type = "Debit"
     cv_name = document.getElementById("cash_voucher_party_id").value
     cv_signature = document.getElementById("cash_voucher_signature").value
     cv_amount = document.getElementById("cash_voucher_amount").value
     cv_details = document.getElementById("cash_voucher_details").value
 
-    fetch("/cash_voucher/add", {
+    fetch("/advance_cash_voucher/add", {
         method: "POST",
         body: JSON.stringify({ party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details }),
         headers: new Headers({

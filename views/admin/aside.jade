@@ -49,6 +49,15 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
                         a.nav-link(href='/cash_voucher')
                             i.nav-icon.fas.fa-file-contract
                             p Cash Voucher
+                li.nav-item    
+                    if title == "Advance Cash Voucher"
+                        a.nav-link.active(href='/advance_cash_voucher')
+                            i.nav-icon.fas.fa-file-contract
+                            p Advance Cash Voucher
+                    else
+                        a.nav-link(href='/advance_cash_voucher')
+                            i.nav-icon.fas.fa-file-contract
+                            p Advance Cash Voucher
                 li.nav-item
                     if title == "Ledger"
                         a.nav-link.active.ml-2(href='#')

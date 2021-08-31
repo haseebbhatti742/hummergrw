@@ -137,11 +137,16 @@
                                         .row
                                             .col-md-12 
                                                 hr
-                                            //col buttonX
-                                            //- .col-md-1 
-                                            //-     label &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            //-     button#buttonX0.btn.btn-danger(onclick='buttonXgpRowDelete()') X
                                     -}
+                                #voucherButtons
+                                    .row.form-group
+                                        #divAddVoucher.col-md-2
+                                            button#btnAddVoucher.btn.btn-primary(onclick="add_cv()") Add Voucher
+                                        #divRemoveVoucher.col-md-2(style="display: none")
+                                            button#btnRemoveVoucher.btn.btn-warning(onclick="remove_cv()") Remove Voucher
+                                    .row.form-group 
+                                        .col-md-12
+                                            #cv_form
                             .col-md-12
                                 #submitButtons
                                     .row.form-group

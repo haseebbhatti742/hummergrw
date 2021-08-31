@@ -2,7 +2,8 @@ document.getElementById('gate_pass_date').valueAsDate = new Date();
 idCounter = 0;
 idList = [idCounter];
 let data = [];
-let gate_pass_date, gate_pass_party_id, gate_pass_type, gate_pass_contact = "";
+let gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_contact = "";
+let cash_voucher_type, cash_voucher_signature, cash_voucher_details
 var add_cv_checkbox = false;
 
 //party select start
@@ -44,8 +45,12 @@ function addNewParty(){
     party_contact = document.getElementById("new_party_contact").value;
     if(party_name == ""){
         document.getElementById("new_party_name_error").innerHTML = "Enter Party"
-    } else {
+    } else if(party_contact == ""){
         document.getElementById("new_party_name_error").innerHTML = ""
+        document.getElementById("new_party_contact_error").innerHTML = "Enter Contact"
+    }else {
+        document.getElementById("new_party_name_error").innerHTML = ""
+        document.getElementById("new_party_contact_error").innerHTML = ""
         
         fetch("/gate_pass/add-party", {
             method: "POST",
@@ -82,8 +87,8 @@ function getContact(party_id){
         }
     })
 }
-//party select end
 
+//party select end
 function add_cv(){
     document.getElementById("divAddVoucher").style.display = "none";
     document.getElementById("divRemoveVoucher").style.display = "block";
@@ -140,8 +145,11 @@ function submitWithoutVoucher(){
             body: JSON.stringify({ "gate_pass_type":gate_pass_type, 
                                     "gate_pass_date":gate_pass_date, 
                                     "gate_pass_party_id":gate_pass_party_id,
+                                    "gate_pass_party_name": gate_pass_party_name,
                                     "gate_pass_contact": gate_pass_contact,
-                                    "gp_entries":data }),
+                                    "gate_pass_payment_type": "Credit",
+                                    "gp_entries":data,
+                                    "cash_voucher": "false" }),
             headers: new Headers({
                 'Content-Type': 'application/json'
             }),
@@ -159,6 +167,7 @@ function submitWithoutVoucher(){
 function getGatePass(){
     gate_pass_date = document.getElementById('gate_pass_date').value;
     gate_pass_party_id = document.getElementById('gp_party_id').value;
+    gate_pass_party_name = document.getElementById('gate_pass_party_id').value;
     gate_pass_type = document.querySelector('input[name="gate_pass_type_in_out"]:checked').value;
     gate_pass_contact = document.getElementById("gate_pass_contact").value;
 
@@ -195,8 +204,59 @@ function getGatePass(){
     }
 }
 
+function getCashVoucher(){
+    cash_voucher_type = document.getElementById('cash_voucher_type').value;
+    cash_voucher_signature = document.getElementById("cash_voucher_signature").value;
+    cash_voucher_details = document.getElementById("cash_voucher_details").value;
+
+    if(cash_voucher_type == ""){
+        document.getElementById("cash_voucher_type_error").innerHTML = "Select Type";
+        return false;
+    } else if (cash_voucher_signature == ""){
+        document.getElementById("cash_voucher_signature_error").innerHTML = "Enter Signature";
+        return false;
+    }  else if (cash_voucher_details == ""){
+        document.getElementById("cash_voucher_details_error").innerHTML = "Enter Details";
+        return false;
+    } else {
+        document.getElementById("cash_voucher_type_error").innerHTML = "";
+        document.getElementById("cash_voucher_signature_error").innerHTML = "";
+        document.getElementById("cash_voucher_details_error").innerHTML = "";
+
+        if(cash_voucher_type == "Pay"){ cash_voucher_type = "Credit" }
+        else if(cash_voucher_type == "Receive"){ cash_voucher_type = "Debit" }
+
+        return true;
+    }
+}
+
 function submitWithVoucher(){
-    alert('submit with voucher')
+    if(getGatePass() && getCashVoucher()){
+        fetch("/gate_pass/add-gate-pass", {
+            method: "POST",
+            body: JSON.stringify({ "gate_pass_type":gate_pass_type, 
+                                    "gate_pass_date":gate_pass_date, 
+                                    "gate_pass_party_id":gate_pass_party_id,
+                                    "gate_pass_party_name": gate_pass_party_name,
+                                    "gate_pass_contact": gate_pass_contact,
+                                    "gate_pass_payment_type": cash_voucher_type,
+                                    "gp_entries":data,
+                                    "cash_voucher": "true",
+                                    "cash_voucher_type": cash_voucher_type,
+                                    "cash_voucher_signature": cash_voucher_signature,
+                                    "cash_voucher_details":cash_voucher_details }),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+        }).then(data => data.json()).then(data => {
+            if (data.status == "ok") {
+                toastr.success("Gate Pass Added")
+                window.location.replace("/gate_pass")
+            } else if (data.status == "error") {
+                toastr.error("Error: "+data.errorMessage)
+            }
+        })
+    }
 }
 
 function add_gp_row(){
@@ -380,7 +440,7 @@ function addCommodity(){
     
     //making col unit start
     var col_md_2 = document.createElement("div");
-        col_md_2.setAttribute("class", "col-md-1");
+        col_md_2.setAttribute("class", "col-md-2");
     var form_group = document.createElement("div");
         form_group.setAttribute("class", "form-group input-group-md");
     var label = document.createElement("label");
@@ -464,7 +524,7 @@ function addCommodity(){
 
     //making col details start
     var col_md_2 = document.createElement("div");
-        col_md_2.setAttribute("class", "col-md-3");
+        col_md_2.setAttribute("class", "col-md-2");
     
     var form_group = document.createElement("div");
         form_group.setAttribute("class", "form-group input-group-md");

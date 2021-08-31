@@ -57,20 +57,24 @@ function addGatePass(req,res){
     let gp_type = req.body.gate_pass_type;
     let gp_date = req.body.gate_pass_date;
     let gate_pass_party_id = req.body.gate_pass_party_id;
+    let gate_pass_party_name = req.body.gate_pass_party_name;
     let gp_contact = req.body.gate_pass_contact;
+    let gp_payment_type = req.body.gate_pass_payment_type;
     let gp_row = req.body.gp_entries;
+    let cash_voucher = req.body.cash_voucher
     let gp_total = 0;
+    let gp_number = 0;
 
     if(gp_type == "in") gp_type = "Expense"
     else if(gp_type == "out") gp_type = "Recovery"
 
-    var query1 = "insert into gate_pass(gp_party_id,gp_type,gp_date,gp_contact) values('"+gate_pass_party_id+"','"+gp_type+"','"+gp_date+"','"+gp_contact+"')";
+    var query1 = "insert into gate_pass(gp_party_id,gp_type,gp_date,gp_contact, gp_payment_type) values('"+gate_pass_party_id+"','"+gp_type+"','"+gp_date+"','"+gp_contact+"', '"+gp_payment_type+"')";
     app.conn.query(query1, function(err,result){
         if(err){
             res.status(200).json({status:"error", errorMessage:err.message})
             console.log("Error1: "+err.message)
         } else {
-            let gp_number = result.insertId;
+            gp_number = result.insertId;
             for(let i=0; i<=gp_row.length; i++){
                 if(i<gp_row.length){
                     let gp_commodity = gp_row[i].commodity 
@@ -87,6 +91,7 @@ function addGatePass(req,res){
                             res.status(200).json({status:"error", errorMessage:err.message})
                             console.log("Error2: "+err.message)
                         }
+                        gp_number  = result2.insertId
                     })
                 } else if (i==gp_row.length){
                     let query3 = "update gate_pass set gp_total = '"+gp_total+"' where gp_number = "+gp_number
@@ -95,8 +100,68 @@ function addGatePass(req,res){
                             res.status(200).json({status:"error", errorMessage:err.message})
                             console.log("Error3: "+err.message)
                         }
-                        else {res.status(200).json({status:"ok"})}
+                        else {
+                            if(gp_payment_type == "Credit"){ gp_total = -gp_total }
+
+                            if(cash_voucher == "false"){
+                                addToAccounts(gate_pass_party_id, gp_total, gp_payment_type,res)
+                            } else if(cash_voucher == "true"){
+                                cash_voucher_type = req.body.cash_voucher_type
+                                cash_voucher_signature = req.body.cash_voucher_signature
+                                cash_voucher_details = req.body.cash_voucher_details
+
+                                addCashVoucher(gp_number, gate_pass_party_id,gp_date,gp_type,cash_voucher_type,gate_pass_party_name,cash_voucher_signature,gp_total, cash_voucher_details, res)
+                            }
+                        }
                     })
+                }
+            }
+        }
+    })
+}
+
+function editGatePass(req,res){
+    let gp_number = req.body.gate_pass_number;
+    let gp_type = req.body.gate_pass_type;
+    let gp_date = req.body.gate_pass_date;
+    let gp_party_id = req.body.gate_pass_party_id;
+    let gate_pass_party_name = req.body.gate_pass_party_name;
+    let gp_total = req.body.gate_pass_grand_total;
+    let gp_payment_type = req.body.gate_pass_payment_type;
+    let gp_contact = req.body.gate_pass_contact;
+    let gp_entries = req.body.gp_entries;
+    let cash_voucher = req.body.cash_voucher;
+    
+    if(gp_type == "in") gp_type = "Expense"
+    else if(gp_type == "out") gp_type = "Recovery"
+
+    let query = "update gate_pass set gp_party_id='"+gp_party_id+"', gp_type='"+gp_type+"', gp_date='"+gp_date+"', gp_contact='"+gp_contact+"', gp_total='"+gp_total+"' where gp_number="+gp_number
+    app.conn.query(query, function(err,result1){
+        if(err){
+            res.status(200).json({status:"error", errorMessage:err.message})
+        } else {
+            for(var i=0; i<=gp_entries.length; i++){
+                if(i<gp_entries.length){
+                    let query2 = "update gp_entries set gp_commodity='"+gp_entries[i].commodity+"', gp_unit='"+gp_entries[i].unit+"', gp_quantity='"+gp_entries[i].quantity+"', gp_buyer_weight='"+gp_entries[i].buyer_weight+"', gp_unit_amount='"+gp_entries[i].unit_amount+"', gp_total_amount='"+gp_entries[i].total_amount+"', gp_details='"+gp_entries[i].details+"' where gp_entry_id="+gp_entries[i].entry_id
+                    app.conn.query(query2, function(err,result2){
+                        if(err){
+                            console.log(err.message)
+                            res.status(200).json({status:"error", errorMessage:err.message})
+                        }
+                    })
+                } else if(i==gp_entries.length){
+                    if(gp_payment_type == "Credit"){ gp_total = -gp_total }
+
+                    if(cash_voucher == "false"){
+                        // res.status(200).json({status:"ok"})
+                        addToAccounts(gp_party_id, gp_total, gp_payment_type,res)
+                    } else if(cash_voucher == "true"){
+                        cash_voucher_type = req.body.cash_voucher_type
+                        cash_voucher_signature = req.body.cash_voucher_signature
+                        cash_voucher_details = req.body.cash_voucher_details
+
+                        addCashVoucher(gp_number, gp_party_id,gp_date,gp_type,cash_voucher_type,gate_pass_party_name,cash_voucher_signature,gp_total, cash_voucher_details, res)
+                    }
                 }
             }
         }
@@ -174,37 +239,55 @@ router.post("/edit-gate-pass", function(req,res){
     editGatePass(req,res)
 })
 
-function editGatePass(req,res){
-    let gp_number = req.body.gate_pass_number;
-    let gp_type = req.body.gate_pass_type;
-    let gp_date = req.body.gate_pass_date;
-    let gp_party_id = req.body.gate_pass_party_id;
-    let gp_total = req.body.gate_pass_grand_total;
-    let gp_contact = req.body.gate_pass_contact;
-    let gp_entries = req.body.gp_entries;
+function addCashVoucher(gp_number, party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
     
-    if(gp_type == "in") gp_type = "Expense"
-    else if(gp_type == "out") gp_type = "Recovery"
+    if(cv_type == "Pay") { 
+        cv_type = "Expense"
+        cv_payment_type = "Credit"
+    } else if(cv_type == "Receive") { 
+        cv_type = "Recovery"
+        cv_payment_type = "Debit"
+    }
 
-    let query = "update gate_pass set gp_party_id='"+gp_party_id+"', gp_type='"+gp_type+"', gp_date='"+gp_date+"', gp_contact='"+gp_contact+"', gp_total='"+gp_total+"' where gp_number="+gp_number
-    app.conn.query(query, function(err,result1){
+    query1 = "insert into cash_voucher (gp_number, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details) values ('"+gp_number+"', '"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"')"
+    app.conn.query(query1, function(err,result1){
         if(err){
-            res.status(200).json({status:"error", errorMessage:err.message})
+            res.status(200).json({status: "error", errorMessage:err.message})
         } else {
-            for(var i=0; i<=gp_entries.length; i++){
-                if(i<gp_entries.length){
-                    let query2 = "update gp_entries set gp_commodity='"+gp_entries[i].commodity+"', gp_unit='"+gp_entries[i].unit+"', gp_quantity='"+gp_entries[i].quantity+"', gp_buyer_weight='"+gp_entries[i].buyer_weight+"', gp_unit_amount='"+gp_entries[i].unit_amount+"', gp_total_amount='"+gp_entries[i].total_amount+"', gp_details='"+gp_entries[i].details+"' where gp_entry_id="+gp_entries[i].entry_id
-                    app.conn.query(query2, function(err,result2){
-                        if(err){
-                            console.log(err.message)
-                            res.status(200).json({status:"error", errorMessage:err.message})
-                        }
-                    })
-                } else if(i==gp_entries.length){
-                    res.status(200).json({status:"ok"})
-                }
-            }
+            addToAccounts(party_id, cv_amount, cv_payment_type,res)
         }
+    })
+}
+
+function addToAccounts(party_id, cv_amount, cv_payment_type,res){
+
+    // if(cv_payment_type == "Credit") { 
+    //     cv_amount = -cv_amount
+    // }
+
+    let query1 = "select acc_balance from accounts where party_id="+party_id+" order by acc_id desc limit 1"
+    app.conn.query(query1, function(err, result1){
+        if(err) {
+            res.status(200).json({status:"error", errorMessage:err.message})
+        } else if(result1.length == 0){
+            let query2 = "insert into accounts(party_id, acc_payment_amount, acc_payment_type, acc_balance) values('"+party_id+"','"+cv_amount+"','"+cv_payment_type+"', '"+cv_amount+"')"
+            app.conn.query(query2, function(err, result2){
+                if(err) {
+                    res.status(200).json({status:"error", errorMessage:err.message})
+                } else {
+                    res.status(200).json({status: "ok"})
+                }
+            })
+        } else if(result1.length > 0){
+            let query2 = "insert into accounts(party_id, acc_payment_amount, acc_payment_type, acc_balance) values('"+party_id+"','"+cv_amount+"','"+cv_payment_type+"', '"+(parseFloat(cv_amount)+parseFloat(result1[0].acc_balance))+"')"
+            app.conn.query(query2, function(err, result2){
+                if(err) {
+                    res.status(200).json({status:"error", errorMessage:err.message})
+                } else {
+                    res.status(200).json({status: "ok"})
+                }
+            })
+        } 
     })
 }
 

@@ -1,5 +1,6 @@
 let data = [];
-let length, gate_pass_number, gate_pass_date, gate_pass_party_id, gate_pass_grand_total, gate_pass_type, gate_pass_contact;
+let length, gate_pass_number, gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_grand_total, gate_pass_type, gate_pass_contact;
+let cash_voucher_type, cash_voucher_signature, cash_voucher_details
 
 var partyNameArray = [];
 var partyIdArray = [];
@@ -83,10 +84,14 @@ function getContact(party_id){
 
 function submitForm(){
     length = document.getElementById("length").value
-    editGatePass()
+    if(add_cv_checkbox == false){
+        editGatePassWithoutVoucher()
+    } else if(add_cv_checkbox == true){
+        editGatePassWithVoucher()
+    }
 }
 
-function editGatePass(){
+function editGatePassWithoutVoucher(){
     if(addGatePass()){
         fetch("/gate_pass/edit-gate-pass", {
             method: "POST",
@@ -94,9 +99,43 @@ function editGatePass(){
                                     "gate_pass_number":gate_pass_number, 
                                     "gate_pass_date":gate_pass_date, 
                                     "gate_pass_party_id":gate_pass_party_id,
+                                    "gate_pass_party_name": gate_pass_party_name,
                                     "gate_pass_grand_total":gate_pass_grand_total,
                                     "gate_pass_contact": gate_pass_contact,
-                                    "gp_entries":data }),
+                                    "gate_pass_payment_type": "Credit",
+                                    "gp_entries":data,
+                                    "cash_voucher": "false" }),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+        }).then(data => data.json()).then(data => {
+            if (data.status == "ok") {
+                toastr.success("Gate Pass Edited")
+                //window.location.replace("/gate_pass")
+            } else if (data.status == "error") {
+                toastr.error("Error: "+data.errorMessage)
+            }
+        })
+    }
+}
+
+function editGatePassWithVoucher(){
+    if(addGatePass() && getCashVoucher()){
+        fetch("/gate_pass/edit-gate-pass", {
+            method: "POST",
+            body: JSON.stringify({ "gate_pass_type":gate_pass_type, 
+                                    "gate_pass_number":gate_pass_number, 
+                                    "gate_pass_date":gate_pass_date, 
+                                    "gate_pass_party_id":gate_pass_party_id,
+                                    "gate_pass_party_name": gate_pass_party_name,
+                                    "gate_pass_grand_total":gate_pass_grand_total,
+                                    "gate_pass_contact": gate_pass_contact,
+                                    "gate_pass_payment_type": cash_voucher_type,
+                                    "gp_entries":data,
+                                    "cash_voucher": "true",
+                                    "cash_voucher_type": cash_voucher_type,
+                                    "cash_voucher_signature": cash_voucher_signature,
+                                    "cash_voucher_details":cash_voucher_details  }),
             headers: new Headers({
                 'Content-Type': 'application/json'
             }),
@@ -115,6 +154,7 @@ function addGatePass(){
     gate_pass_number = document.getElementById('gate_pass_number').value;
     gate_pass_date = document.getElementById('gate_pass_date').value;
     gate_pass_party_id = document.getElementById('gp_party_id').value;
+    gate_pass_party_name = document.getElementById("gate_pass_party_id").value
     gate_pass_grand_total = document.getElementById('gate_pass_grand_total').value;
     gate_pass_type = document.querySelector('input[name="gate_pass_type_in_out"]:checked').value;
     gate_pass_contact = document.getElementById("gate_pass_contact").value;
@@ -159,6 +199,32 @@ function addGatePass(){
     // }
 }
 
+function getCashVoucher(){
+    cash_voucher_type = document.getElementById('cash_voucher_type').value;
+    cash_voucher_signature = document.getElementById("cash_voucher_signature").value;
+    cash_voucher_details = document.getElementById("cash_voucher_details").value;
+
+    if(cash_voucher_type == ""){
+        document.getElementById("cash_voucher_type_error").innerHTML = "Select Type";
+        return false;
+    } else if (cash_voucher_signature == ""){
+        document.getElementById("cash_voucher_signature_error").innerHTML = "Enter Signature";
+        return false;
+    }  else if (cash_voucher_details == ""){
+        document.getElementById("cash_voucher_details_error").innerHTML = "Enter Details";
+        return false;
+    } else {
+        document.getElementById("cash_voucher_type_error").innerHTML = "";
+        document.getElementById("cash_voucher_signature_error").innerHTML = "";
+        document.getElementById("cash_voucher_details_error").innerHTML = "";
+
+        if(cash_voucher_type == "Pay"){ cash_voucher_type = "Credit" }
+        else if(cash_voucher_type == "Receive"){ cash_voucher_type = "Debit" }
+
+        return true;
+    }
+}
+
 function addListener(){
     length = document.getElementById("length").value
     for(var i=0; i<length; i++){
@@ -200,6 +266,32 @@ function getGrandTotal(length){
         sum += parseFloat(inputTotalAmount)
         gate_pass_grand_total.value = sum
     }
+}
+
+var add_cv_checkbox = false;
+function add_cv(){
+    document.getElementById("divAddVoucher").style.display = "none";
+    document.getElementById("divRemoveVoucher").style.display = "block";
+    show_cv_form();
+    add_cv_checkbox = true;
+}
+
+function remove_cv(){
+    document.getElementById("divAddVoucher").style.display = "block";
+    document.getElementById("divRemoveVoucher").style.display = "none";
+    document.getElementById("cv_form").innerHTML = "";
+    add_cv_checkbox = false;
+}
+
+function show_cv_form() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("cv_form").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "/gate_pass/cv_form", true);
+    xhttp.send();
 }
 
 //autocomplete start

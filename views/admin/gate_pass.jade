@@ -19,7 +19,8 @@ include aside
                                         #new_party_name_error(style="color:red")
                                      .col-md-5
                                         .form-group.input-group-md
-                                            input#new_party_contact.form-control(type = "text", placeholder="Enter New Party Contact (Optional)")
+                                            input#new_party_contact.form-control(type = "text", placeholder="Enter New Party Contact")
+                                        #new_party_contact_error(style="color:red")
                                     .col-md-2
                                         .form-group 
                                             button.btn.btn-success(onclick="addNewParty()") Add
@@ -59,7 +60,7 @@ include aside
                                     .col-md-8
                                         .form-group.input-group-md
                                             label Party
-                                            input#gate_pass_party_id.form-control(type="text")
+                                            input#gate_pass_party_id.form-control(type="text" autocomplete="off")
                                             input#gp_party_id.form-control(type="hidden")
                                             //select#gate_pass_party_id.form-control(onchange="getContact()")
                                                 //option(value="" disabled selected) Select Party
@@ -104,7 +105,7 @@ include aside
                                             input#gate_pass_quantity0.form-control(type = "number", placeholder='Enter Seller Weight')
                                         #gate_pass_quantity_error(style="color:red")
                                     //col unit
-                                    .col-md-1
+                                    .col-md-2
                                         .form-group.input-group-md
                                             label Unit
                                             select#gate_pass_unit0.form-control
@@ -125,7 +126,7 @@ include aside
                                             input#gate_pass_total_amount0.form-control(type = "number", placeholder='Enter Total Amount')
                                         #gate_pass_total_amount_error(style="color:red")
                                     //col details
-                                    .col-md-3
+                                    .col-md-2
                                         label Details
                                         input#gate_pass_details0.form-control(type="text", placeholder="Enter Details Here...")
                                     //col buttonX

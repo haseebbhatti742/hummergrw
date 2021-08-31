@@ -34,19 +34,19 @@ app1.use(function (req, res, next) {
 });
 
 //db connection
-// var conn = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "",
-//   database: "hummer_db",
-// });
-
 var conn = mysql.createPool({
   host: "localhost",
-  user: "hummjyxk_hummer",
-  password: "hummergrw@123",
-  database: "hummjyxk_hummer_db",
+  user: "root",
+  password: "",
+  database: "hummer_db",
 });
+
+// var conn = mysql.createPool({
+//   host: "localhost",
+//   user: "hummjyxk_hummer",
+//   password: "hummergrw@123",
+//   database: "hummjyxk_hummer_db",
+// });
 
 var conn;
 conn.getConnection(function (err, con) {
@@ -62,12 +62,14 @@ const loginRoute = require("./routes/admin/login");
 const homeRoute = require("./routes/admin/home");
 const gatePassRoute = require("./routes/admin/gate_pass");
 const cashVoucherRoute = require("./routes/admin/cash_voucher");
+const advanceCashVoucherRoute = require("./routes/admin/advance_cash_voucher");
 const errorRoute = require("./routes/admin/error");
 
 app1.use("/", loginRoute);
 app1.use("/home", homeRoute);
 app1.use("/gate_pass", gatePassRoute);
 app1.use("/cash_voucher", cashVoucherRoute);
+app1.use("/advance_cash_voucher", advanceCashVoucherRoute);
 app1.use("/error", errorRoute);
 
 app1.use("/logout", function (req, res) {

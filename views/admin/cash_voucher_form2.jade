@@ -10,25 +10,25 @@
             select#cash_voucher_type.form-control
                 option(value="Pay") Pay
                 option(value="Receive") Receive
-                option(value="Advance") Advance
         #cash_voucher_type_error(style="color:red")
-    .col-md-4
-        .form-group.input-group-md
-            label Amount
-            input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount')
-        #cash_voucher_amount_error(style="color:red")
-.row.form-group
-    .col-md-4
-        .form-group.input-group-md
-            label Name
-            input#cash_voucher_name.form-control(type = "text", placeholder='Enter Name')
-        #cash_voucher_name_error(style="color:red")
     .col-md-4
         .form-group.input-group-md
             label Signature
             input#cash_voucher_signature.form-control(type = "text", placeholder='Enter Signature')
         #cash_voucher_signature_error(style="color:red")
+    //.col-md-4
+        .form-group.input-group-md
+            label Amount
+            input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount')
+        #cash_voucher_amount_error(style="color:red")
+.row.form-group
+    //.col-md-4
+        .form-group.input-group-md
+            label Name
+            input#cash_voucher_name.form-control(type = "text", placeholder='Enter Name')
+        #cash_voucher_name_error(style="color:red")
 .row.form-group
     .col-md-12
         label Details
-        textarea.form-control(placeholder="Enter Details Here...", rows="5")
+        textarea#cash_voucher_details.form-control(placeholder="Enter Details Here...", rows="5")
+    #cash_voucher_details_error(style="color:red")

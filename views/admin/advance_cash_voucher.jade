@@ -14,17 +14,22 @@ include aside
                                 .col-md-4
                                     .form-group.input-group-md
                                             label Cas Voucher Number
-                                            input#cash_voucher_number.form-control(type = "text", value='#{cv_number}', disabled='true' required)
+                                            input#cash_voucher_number.form-control(type = "text", value="#{cv_number}", disabled='true')
                                     #cash_voucher_number_error(style="color:red")
+                                .col-md-4
+                                    .form-group.input-group-md
+                                        label Amount
+                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' required)
+                                    #cash_voucher_amount_error(style="color:red")
                                 .col-md-4
                                     .form-group.input-group-md
                                         label Date
                                         input#cash_voucher_date.form-control(type = "date" required)
                                     #cash_voucher_date_error(style="color:red")
-                                .col-md-4 
+                                //.col-md-4 
                                     .form-group.input-group-md
                                         label Type
-                                        select#cash_voucher_type.form-control(required)
+                                        select#cash_voucher_type.form-control
                                             option(value="Pay") Pay
                                             option(value="Receive") Receive
                                     #cash_voucher_type_error(style="color:red")
@@ -34,17 +39,12 @@ include aside
                                         label Name
                                         input#cash_voucher_party_id.form-control(type = "text", placeholder='Enter Name' autocomplete="off" required)
                                         input#cv_party_id.form-control(type="hidden")
-                                    #cash_voucher_party_id_error(style="color:red")
+                                    #cash_voucher_name_error(style="color:red")
                                 .col-md-4
                                     .form-group.input-group-md
                                         label Signature
                                         input#cash_voucher_signature.form-control(type = "text", placeholder='Enter Signature' required)
                                     #cash_voucher_signature_error(style="color:red")
-                                .col-md-4
-                                    .form-group.input-group-md
-                                        label Amount
-                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' required)
-                                    #cash_voucher_amount_error(style="color:red")
                             .row.form-group
                                 .col-md-12
                                     label Details
@@ -52,5 +52,6 @@ include aside
                             .row.form-group 
                                 .col-md-3 
                                     button.btn.btn-success(type="submit") Submit
+
 include footer
-script(src='/js/cash_voucher.js')
+script(src='/js/advance_cash_voucher.js')
