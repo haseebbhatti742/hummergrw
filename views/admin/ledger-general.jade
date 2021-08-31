@@ -1,0 +1,28 @@
+include header1
+include aside
+.content-wrapper
+    section.content
+        .container-fluid
+            include sub-header
+            //search input
+            .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Search
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            #tab1
+                                .row.form-group
+                                    .col-md-10
+                                        .form-group.input-group-md
+                                            input#party_name.form-control(type = "text", placeholder="Enter Party..." autofocus)
+                                            input#party_id(type="hidden")
+                                        #party_name_error(style="color:red")
+                                    .col-md-2
+                                        .form-group 
+                                            button#btnSearch.btn.btn-success(onclick="searchLedger()") Search
+            //ledger
+            #general-ledger
+
+include footer
+script(src="/js/ledger.js")

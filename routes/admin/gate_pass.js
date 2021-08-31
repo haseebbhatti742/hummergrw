@@ -28,15 +28,15 @@ router.post("/add-gate-pass", function(req,res){
 })
 
 router.get('/cv_form', (req, res) => {
-    var query_for_gp_number = "select gp_number from gate_pass order by gp_number desc limit 1";
-    app.conn.query(query_for_gp_number, (err,result) => {
+    var query = "select cv_number from cash_voucher order by cv_number desc limit 1";
+    app.conn.query(query, (err,result) => {
         if(err){
             res.send({error: err})
         } else {
             if(result.length == 0)
-                res.render('admin/cash_voucher_form2', {gp_number: 1});
+                res.render('admin/cash_voucher_form2', {cv_number: 1});
             else
-                res.render('admin/cash_voucher_form2', {gp_number: (result[0].gp_number+1)});
+                res.render('admin/cash_voucher_form2', {cv_number: (result[0].cv_number+1)});
         }
     })
 });

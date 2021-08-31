@@ -1,6 +1,6 @@
 aside.main-sidebar.sidebar-dark-primary.elevation-4
     // Brand Logo
-    a.brand-link(href='index3.html')
+    a.brand-link(href='/')
         img.brand-image.img-circle.elevation-3(src='/images/logo.png' alt='AdminLTE Logo' style='opacity: .8')
         |       
         span.brand-text.font-weight-light HUMMER
@@ -10,7 +10,7 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
         .user-panel.mt-3.pb-3.mb-3.d-flex
             .image
                 .info
-                    a.d-block(href='#') #{session.name}
+                    a.d-block(href='/') #{session.name}
         // SidebarSearch Form
         .form-inline
             .input-group(data-widget='sidebar-search')
@@ -70,7 +70,7 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
                                     i.fa.fa-plus-circle &nbsp;
                                     p Add Ledger
                             li.nav-item.ml-2
-                                a.nav-link(href='/ledger')
+                                a.nav-link(href='/ledger/general')
                                     i.fa.fa-list-alt &nbsp;
                                     p View Ledger
                     else
@@ -84,6 +84,6 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
                                     i.fa.fa-plus-circle &nbsp;
                                     p Add Ledger
                             li.nav-item.ml-2
-                                a.nav-link(href='/ledger')
+                                a.nav-link(href='/ledger/general')
                                     i.fa.fa-list-alt &nbsp;
                                     p View Ledger
