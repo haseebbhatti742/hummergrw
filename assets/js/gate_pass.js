@@ -2,7 +2,7 @@ document.getElementById('gate_pass_date').valueAsDate = new Date();
 idCounter = 0;
 idList = [idCounter];
 let data = [];
-let gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_contact = "";
+let gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_grand_total, gate_pass_contact = "";
 let cash_voucher_type, cash_voucher_signature, cash_voucher_details
 var add_cv_checkbox = false;
 
@@ -64,8 +64,11 @@ function addNewParty(){
                 document.getElementById("new_party_name").value = "";
                 document.getElementById("gate_pass_party_id").innerHTML = "";
                 getParty();
+                document.getElementById("new_party_contact_error").innerHTML = ""
             } else if(data.status == "error"){
                 toastr.error("Error: "+data.errorMessage)
+            } else if(data.status == "no"){
+                document.getElementById("new_party_contact_error").innerHTML = data.errorMessage
             }
         })
     }
@@ -126,16 +129,24 @@ inputQuantity = document.getElementById("gate_pass_quantity0");
 inputUnitAmount = document.getElementById("gate_pass_unit_amount0");
 inputTotalAmount = document.getElementById("gate_pass_total_amount0");
 inputQuantity.addEventListener('input', (event) => {
-    if(inputQuantity.value == "")
+    if(inputQuantity.value == ""){
         inputTotalAmount.value = inputUnitAmount.value
-    else
+        getGrandTotal()
+    }
+    else{
         inputTotalAmount.value = inputQuantity.value * inputUnitAmount.value
+        getGrandTotal()
+    }
 })
 inputUnitAmount.addEventListener('input', (event) => {
-    if(inputQuantity.value == "")
+    if(inputQuantity.value == ""){
         inputTotalAmount.value = inputUnitAmount.value
-    else
+        getGrandTotal()
+    }
+    else{
         inputTotalAmount.value = inputQuantity.value * inputUnitAmount.value
+        getGrandTotal()
+    }
 })
 
 function submitWithoutVoucher(){
@@ -146,6 +157,7 @@ function submitWithoutVoucher(){
                                     "gate_pass_date":gate_pass_date, 
                                     "gate_pass_party_id":gate_pass_party_id,
                                     "gate_pass_party_name": gate_pass_party_name,
+                                    "gate_pass_grand_total":gate_pass_grand_total,
                                     "gate_pass_contact": gate_pass_contact,
                                     "gate_pass_payment_type": "Credit",
                                     "gp_entries":data,
@@ -170,6 +182,7 @@ function getGatePass(){
     gate_pass_party_name = document.getElementById('gate_pass_party_id').value;
     gate_pass_type = document.querySelector('input[name="gate_pass_type_in_out"]:checked').value;
     gate_pass_contact = document.getElementById("gate_pass_contact").value;
+    gate_pass_grand_total = document.getElementById('gate_pass_grand_total').value;
 
     if(gate_pass_party_id == ""){
         document.getElementById("gate_pass_name_error").innerHTML = "Enter Party Name";
@@ -201,6 +214,16 @@ function getGatePass(){
             data[i] = row
         }
         return true;
+    }
+}
+
+function getGrandTotal(){
+    gate_pass_grand_total = document.getElementById("gate_pass_grand_total")
+    sum=0;
+    for(var i=0; i<idList.length; i++){
+        let inputTotalAmount = document.getElementById("gate_pass_total_amount"+i).value
+        sum += parseFloat(inputTotalAmount)
+        gate_pass_grand_total.value = sum
     }
 }
 
@@ -239,6 +262,7 @@ function submitWithVoucher(){
                                     "gate_pass_party_id":gate_pass_party_id,
                                     "gate_pass_party_name": gate_pass_party_name,
                                     "gate_pass_contact": gate_pass_contact,
+                                    "gate_pass_grand_total":gate_pass_grand_total,
                                     "gate_pass_payment_type": cash_voucher_type,
                                     "gp_entries":data,
                                     "cash_voucher": "true",
@@ -425,10 +449,14 @@ function addCommodity(){
         inputQuantity.setAttribute("class","form-control");
         inputQuantity.setAttribute("placeholder","Enter Seller Weight");
         inputQuantity.addEventListener('input', (event) => {
-            if(inputQuantity.value == "")
+            if(inputQuantity.value == ""){
                 inputTotalAmount.value = inputUnitAmount.value
-            else
+                getGrandTotal()
+            }
+            else{
                 inputTotalAmount.value = inputQuantity.value * inputUnitAmount.value
+                getGrandTotal()
+            }
             
         })
     
@@ -487,10 +515,14 @@ function addCommodity(){
         inputUnitAmount.setAttribute("class","form-control");
         inputUnitAmount.setAttribute("placeholder","Enter Amount");
         inputUnitAmount.addEventListener('input', (event) => {
-            if(inputQuantity.value == "")
+            if(inputQuantity.value == ""){
                 inputTotalAmount.value = inputUnitAmount.value
-            else
+                getGrandTotal()
+            }
+            else{
                 inputTotalAmount.value = inputQuantity.value * inputUnitAmount.value
+                getGrandTotal()
+            }
             
         })
     

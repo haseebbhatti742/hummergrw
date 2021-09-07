@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const app = require('../../app')
+const ledger = require("../admin/ledger")
 
 router.get('/', (req, res) => {
     // if (req.session.username != undefined && req.session.type == "admin") {
@@ -54,48 +55,79 @@ router.post("/get-contact", function(req,res){
 })
 
 function addGatePass(req,res){
+    ledgerDataObject = []
+
     let gp_type = req.body.gate_pass_type;
     let gp_date = req.body.gate_pass_date;
     let gate_pass_party_id = req.body.gate_pass_party_id;
     let gate_pass_party_name = req.body.gate_pass_party_name;
     let gp_contact = req.body.gate_pass_contact;
+    let gate_pass_grand_total = req.body.gate_pass_grand_total;
     let gp_payment_type = req.body.gate_pass_payment_type;
     let gp_row = req.body.gp_entries;
     let cash_voucher = req.body.cash_voucher
     let gp_total = 0;
     let gp_number = 0;
 
-    if(gp_type == "in") gp_type = "Expense"
-    else if(gp_type == "out") gp_type = "Recovery"
+    if(gp_type == "in") {
+        gp_type = "Expense"
+    }
+    else if(gp_type == "out") {
+        gp_type = "Recovery"
+    }
 
     var query1 = "insert into gate_pass(gp_party_id,gp_type,gp_date,gp_contact, gp_payment_type) values('"+gate_pass_party_id+"','"+gp_type+"','"+gp_date+"','"+gp_contact+"', '"+gp_payment_type+"')";
-    app.conn.query(query1, function(err,result){
+    app.conn.query(query1, async function(err,result){
         if(err){
             res.status(200).json({status:"error", errorMessage:err.message})
             console.log("Error1: "+err.message)
         } else {
             gp_number = result.insertId;
             for(let i=0; i<=gp_row.length; i++){
+                let ledgerData = {}
                 if(i<gp_row.length){
                     let gp_commodity = gp_row[i].commodity 
-                    let gp_quantity = gp_row[i].quantity
+                    var gp_quantity = gp_row[i].quantity
                     let gp_unit = gp_row[i].unit
                     let gp_unit_amount = gp_row[i].unit_amount
                     let gp_total_amount = gp_row[i].total_amount
                     let gp_details = gp_row[i].details;
                     gp_total += parseFloat(gp_total_amount);
+                    
+                    if(gp_payment_type == "Credit"){ ledgerData.l_balance = -ledgerData.l_balance }
+                    ledgerData.l_seller_weight = gp_quantity
+                    ledgerData.l_buyer_weight = 0
+                    ledgerData.l_rate = gp_unit_amount
+                    ledgerData.l_description = gp_details
 
-                    let query2 = "insert into gp_entries(gp_number, gp_commodity, gp_unit, gp_quantity, gp_buyer_weight, gp_tare_weight, gp_net_weight, gp_unit_amount, gp_total_amount, gp_details) values('"+gp_number+"','"+gp_commodity+"','"+gp_unit+"','"+gp_quantity+"', '0', '0', '0', '"+gp_unit_amount+"','"+gp_total_amount+"','"+gp_details+"')"
+                    if(gp_type == "Expense") {
+                        ledgerData.l_debit = 0
+                        ledgerData.l_credit = -gate_pass_grand_total
+                        ledgerData.l_balance = ledgerData.l_credit
+                    }
+                    else if(gp_type == "Recovery") {
+                        ledgerData.l_debit = gate_pass_grand_total
+                        ledgerData.l_balance = ledgerData.l_debit
+                        ledgerData.l_credit = 0
+                    }
+                
+                    ledgerData.party_id = gate_pass_party_id
+                    ledgerData.l_date = gp_date
+                    //ledgerData.l_balance = gate_pass_grand_total
+
+                    let query2 = "insert into gp_entries(gp_number, gp_commodity, gp_unit, gp_quantity, gp_buyer_weight, gp_unit_amount, gp_total_amount, gp_details) values('"+gp_number+"','"+gp_commodity+"','"+gp_unit+"','"+gp_quantity+"', '0', '"+gp_unit_amount+"','"+gp_total_amount+"','"+gp_details+"')"
                     app.conn.query(query2, function(err, result2){
                         if(err) {
                             res.status(200).json({status:"error", errorMessage:err.message})
                             console.log("Error2: "+err.message)
                         }
-                        gp_number  = result2.insertId
+                        //gp_number  = result2.insertId
+                        ledgerData.gp_number = gp_number
+                        ledgerDataObject.push(ledgerData)
                     })
                 } else if (i==gp_row.length){
                     let query3 = "update gate_pass set gp_total = '"+gp_total+"' where gp_number = "+gp_number
-                    app.conn.query(query3, function(err, result3){
+                    app.conn.query(query3,async function(err, result3){
                         if(err) {
                             res.status(200).json({status:"error", errorMessage:err.message})
                             console.log("Error3: "+err.message)
@@ -104,6 +136,7 @@ function addGatePass(req,res){
                             if(gp_payment_type == "Credit"){ gp_total = -gp_total }
 
                             if(cash_voucher == "false"){
+                                if(gp_quantity == 0) l_data = await addIntoLedgerWithGP(ledgerDataObject)
                                 addToAccounts(gate_pass_party_id, gp_total, gp_payment_type,res)
                             } else if(cash_voucher == "true"){
                                 cash_voucher_type = req.body.cash_voucher_type
@@ -121,6 +154,8 @@ function addGatePass(req,res){
 }
 
 function editGatePass(req,res){
+    ledgerDataObject = []
+
     let gp_number = req.body.gate_pass_number;
     let gp_type = req.body.gate_pass_type;
     let gp_date = req.body.gate_pass_date;
@@ -135,33 +170,68 @@ function editGatePass(req,res){
     if(gp_type == "in") gp_type = "Expense"
     else if(gp_type == "out") gp_type = "Recovery"
 
-    let query = "update gate_pass set gp_party_id='"+gp_party_id+"', gp_type='"+gp_type+"', gp_date='"+gp_date+"', gp_contact='"+gp_contact+"', gp_total='"+gp_total+"' where gp_number="+gp_number
-    app.conn.query(query, function(err,result1){
+    var query = "update gate_pass set gp_party_id='"+gp_party_id+"', gp_type='"+gp_type+"', gp_date='"+gp_date+"', gp_contact='"+gp_contact+"', gp_total='"+gp_total+"' where gp_number="+gp_number
+    app.conn.query(query, async function(err,result1){
         if(err){
             res.status(200).json({status:"error", errorMessage:err.message})
         } else {
-            for(var i=0; i<=gp_entries.length; i++){
+            for(let i=0; i<=gp_entries.length; i++){
+                let ledgerData = {}
                 if(i<gp_entries.length){
+
+                    if(gp_payment_type == "Credit"){ ledgerData.l_balance = -ledgerData.l_balance }
+                    ledgerData.l_seller_weight = gp_entries[i].quantity
+                    ledgerData.l_buyer_weight = gp_entries[i].buyer_weight
+                    ledgerData.l_rate = gp_entries[i].unit_amount
+                    ledgerData.l_description = gp_entries[i].details
+
+                    if(gp_type == "Expense") {
+                        ledgerData.l_debit = 0
+                        ledgerData.l_credit = -gp_total
+                        ledgerData.l_balance = ledgerData.l_credit
+                    }
+                    else if(gp_type == "Recovery") {
+                        ledgerData.l_debit = gp_total
+                        ledgerData.l_balance = ledgerData.l_debit
+                        ledgerData.l_credit = 0
+                    }
+                
+                    ledgerData.party_id = gp_party_id
+                    ledgerData.l_date = gp_date
+                    //ledgerData.l_balance = gate_pass_grand_total
+
                     let query2 = "update gp_entries set gp_commodity='"+gp_entries[i].commodity+"', gp_unit='"+gp_entries[i].unit+"', gp_quantity='"+gp_entries[i].quantity+"', gp_buyer_weight='"+gp_entries[i].buyer_weight+"', gp_unit_amount='"+gp_entries[i].unit_amount+"', gp_total_amount='"+gp_entries[i].total_amount+"', gp_details='"+gp_entries[i].details+"' where gp_entry_id="+gp_entries[i].entry_id
                     app.conn.query(query2, function(err,result2){
                         if(err){
                             console.log(err.message)
                             res.status(200).json({status:"error", errorMessage:err.message})
                         }
+                        //gp_number  = result2.insertId
+                        ledgerData.gp_number = gp_number
+                        ledgerDataObject.push(ledgerData)
                     })
                 } else if(i==gp_entries.length){
-                    if(gp_payment_type == "Credit"){ gp_total = -gp_total }
+                    let query3 = "select * from gate_pass order by gp_number desc limit 1"
+                    app.conn.query(query3,async function(err, result3){
+                        if(err) {
+                            res.status(200).json({status:"error", errorMessage:err.message})
+                            console.log("Error3: "+err.message)
+                        }
+                        else {
+                            if(gp_payment_type == "Credit"){ gp_total = -gp_total }
 
-                    if(cash_voucher == "false"){
-                        // res.status(200).json({status:"ok"})
-                        addToAccounts(gp_party_id, gp_total, gp_payment_type,res)
-                    } else if(cash_voucher == "true"){
-                        cash_voucher_type = req.body.cash_voucher_type
-                        cash_voucher_signature = req.body.cash_voucher_signature
-                        cash_voucher_details = req.body.cash_voucher_details
+                            if(cash_voucher == "false"){
+                                if(0 == 0) l_data = await addIntoLedgerWithGP(ledgerDataObject)
+                                addToAccounts(gp_party_id, gp_total, gp_payment_type,res)
+                            } else if(cash_voucher == "true"){
+                                cash_voucher_type = req.body.cash_voucher_type
+                                cash_voucher_signature = req.body.cash_voucher_signature
+                                cash_voucher_details = req.body.cash_voucher_details
 
-                        addCashVoucher(gp_number, gp_party_id,gp_date,gp_type,cash_voucher_type,gate_pass_party_name,cash_voucher_signature,gp_total, cash_voucher_details, res)
-                    }
+                                addCashVoucher(gp_number, gp_party_id,gp_date,gp_type,cash_voucher_type,gate_pass_party_name,cash_voucher_signature,gp_total, cash_voucher_details, res)
+                            }
+                        }
+                    })
                 }
             }
         }
@@ -169,11 +239,19 @@ function editGatePass(req,res){
 }
 
 router.post("/add-party", function(req,res){
-    app.conn.query("insert into party_info(party_name, party_contact) values('"+req.body.party_name+"','"+req.body.party_contact+"')", function(err,result){
+    app.conn.query("select * from party_info where party_contact='"+req.body.party_contact+"'", function(err,result1){
         if(err){
             res.status(200).json({ status: "error", errorMessage:err.message});
-        } else {
-            res.status(200).json({ status: "ok"});
+        } else if(result1.length > 0){
+            res.status(200).json({ status: "no", errorMessage:"Contact Already Exists...!"});
+        } else if(result1.length == 0){
+            app.conn.query("insert into party_info(party_name, party_contact) values('"+req.body.party_name+"','"+req.body.party_contact+"')", function(err,result){
+                if(err){
+                    res.status(200).json({ status: "error", errorMessage:err.message});
+                } else {
+                    res.status(200).json({ status: "ok"});
+                }
+            })
         }
     })
 })
@@ -250,10 +328,19 @@ function addCashVoucher(gp_number, party_id,cv_date,cv_type,cv_payment_type,cv_n
     }
 
     query1 = "insert into cash_voucher (gp_number, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details) values ('"+gp_number+"', '"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"')"
-    app.conn.query(query1, function(err,result1){
+    app.conn.query(query1, async function(err,result1){
         if(err){
             res.status(200).json({status: "error", errorMessage:err.message})
         } else {
+            cv_number = result1.insertId
+            for(let i=0; i<ledgerDataObject.length; i++){
+                ledgerDataObject[i].cv_number = cv_number
+                if(cv_type == "Expense") { 
+                    ledgerDataObject[i].l_balance = -ledgerDataObject[i].l_balance
+                } 
+            }
+
+            l_data = await addIntoLedger(ledgerDataObject)
             addToAccounts(party_id, cv_amount, cv_payment_type,res)
         }
     })
@@ -288,6 +375,60 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 }
             })
         } 
+    })
+}
+
+function addIntoLedger(data){
+    return new Promise(function(resolve,reject){
+        query1 = "select l_balance from ledger where party_id='"+data[0].party_id+"' order by l_id desc limit 1"
+        balance = 0;
+        app.conn.query(query1, function(err,result1){
+            if(err){
+                resolve({status:"error", errorMessage:err.message})
+            } else if (result1.length == 0){
+                balance = 0;
+            } else {
+                balance = result1[0].l_balance
+            }
+
+            data[0].l_balance = parseFloat(data[0].l_balance) + parseFloat(balance)
+            for(let i=0; i<=data.length; i++){   
+                if(i<data.length){
+                    query = "insert into ledger(party_id,gp_number,cv_number,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].cv_number+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
+                    app.conn.query(query, function(err,result){})
+                } else if (i==data.length){
+                    resolve({status:"ok", message:"Added to Ledger"})
+                }
+            }
+
+        })
+    })
+}
+
+function addIntoLedgerWithGP(data){
+    return new Promise(function(resolve,reject){
+        query1 = "select l_balance from ledger where party_id='"+data[0].party_id+"' order by l_id desc limit 1"
+        balance = 0;
+        app.conn.query(query1, function(err,result1){
+            if(err){
+                resolve({status:"error", errorMessage:err.message})
+            } else if (result1.length == 0){
+                balance = 0;
+            } else {
+                balance = result1[0].l_balance
+            }
+
+            data[0].l_balance = parseFloat(data[0].l_balance) + parseFloat(balance)
+            for(let i=0; i<=data.length; i++){   
+                if(i<data.length){
+                    query = "insert into ledger(party_id,gp_number,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
+                    app.conn.query(query, function(err,result){})
+                } else if (i==data.length){
+                    resolve({status:"ok", message:"Added to Ledger"})
+                }
+            }
+
+        })
     })
 }
 

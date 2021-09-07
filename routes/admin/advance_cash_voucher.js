@@ -39,7 +39,17 @@ router.post('/add', (req, res) => {
 });
 
 function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
-    
+    let ledgerData = []
+    ledgerData.party_id = party_id
+    ledgerData.l_date = cv_date
+    ledgerData.l_description = cv_details
+    ledgerData.l_seller_weight = 0
+    ledgerData.l_buyer_weight = 0
+    ledgerData.l_rate = 0
+    ledgerData.l_balance = cv_amount
+    ledgerData.l_debit = cv_amount
+    ledgerData.l_credit = 0
+
     // if(cv_type == "Pay") { 
     //     cv_type = "Expense"
     //     cv_payment_type = "Credit"
@@ -49,10 +59,12 @@ function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_sign
     // }
 
     query1 = "insert into cash_voucher (party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details) values ('"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"')"
-    app.conn.query(query1, function(err,result1){
+    app.conn.query(query1, async function(err,result1){
         if(err){
             res.status(200).json({status: "error", errorMessage:err.message})
         } else {
+            ledgerData.cv_number = result1.insertId
+            l_data = await addIntoLedgerWithCV(ledgerData)
             addToAccounts(party_id, cv_amount, cv_payment_type,res)
         }
     })
@@ -87,6 +99,33 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 }
             })
         } 
+    })
+}
+
+function addIntoLedgerWithCV(data){
+    return new Promise(function(resolve,reject){
+        query1 = "select l_balance from ledger where party_id='"+data.party_id+"' order by l_id desc limit 1"
+        balance = 0;
+        app.conn.query(query1, function(err,result1){
+            if(err){
+                resolve({status:"error", errorMessage:err.message})
+            } else if (result1.length == 0){
+                balance = 0;
+            } else {
+                balance = result1[0].l_balance
+            }
+
+            data.l_balance = parseFloat(data.l_balance) + parseFloat(balance)
+            
+            query1 = "insert into ledger(party_id,cv_number,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.party_id+"','"+data.cv_number+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
+            app.conn.query(query1, function(err,result){
+                if(err){
+                    resolve({status:"error", errorMessage:err.message})
+                } else {
+                    resolve({status:"ok", message:"Added to Ledger"})
+                }
+            })
+        })
     })
 }
 

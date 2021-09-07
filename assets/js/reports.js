@@ -1,4 +1,4 @@
-function searchLedger(){
+function searchReport(){
     party_name = document.getElementById("party_name").value
     party_id = document.getElementById("party_id").value
 
@@ -6,14 +6,14 @@ function searchLedger(){
         document.getElementById("party_name_error").innerHTML = "Enter Party"
     } else {
         document.getElementById("party_name_error").innerHTML = ""
-        document.getElementById("general-ledger").innerHTML = ""
+        document.getElementById("report").innerHTML = ""
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("general-ledger").innerHTML = this.responseText;
+                document.getElementById("report").innerHTML = this.responseText;
             }
         };
-        xhttp.open("GET", "/ledger/get_general_ledger/"+party_id, true);
+        xhttp.open("GET", "/reports/get_general_ledger/"+party_id, true);
         xhttp.send();
     }
 }
@@ -157,11 +157,3 @@ function autocomplete(inp, arr) {
   }
   /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 //autocomplete end
-
-function printLedger(){
-  var printContents = document.getElementById("ledgerReport").innerHTML;
-  var originalContents = document.body.innerHTML;
-  document.body.innerHTML = printContents;
-  window.print();
-  document.body.innerHTML = originalContents;
-}

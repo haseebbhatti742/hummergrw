@@ -57,7 +57,7 @@ include aside
                                                     label.form-check-label Out
                                                 #gate_pass_out_error(style="color:red")
                                 .row.form-group
-                                    .col-md-8
+                                    .col-md-6
                                         .form-group.input-group-md
                                             label Party
                                             input#gate_pass_party_id.form-control(type="text" autocomplete="off")
@@ -65,6 +65,11 @@ include aside
                                             //select#gate_pass_party_id.form-control(onchange="getContact()")
                                                 //option(value="" disabled selected) Select Party
                                         #gate_pass_name_error(style="color:red")
+                                    .col-md-2
+                                            .form-group.input-group-md
+                                                label Gand Total
+                                                input#gate_pass_grand_total.form-control(type="text" disabled)
+                                            #gate_pass_name_error(style="color:red")
                                     .col-md-4
                                         .form-group.input-group-md
                                             label Contact (Optional)

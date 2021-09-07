@@ -33,6 +33,7 @@ function getGatePass(searchId){
         if (this.readyState == 4 && this.status == 200) {
             document.getElementById("gatePassDiv").innerHTML = this.responseText;
             autocomplete(document.getElementById("gate_pass_party_id"), partyNameArray);
+            document.getElementById('gate_pass_date').valueAsDate = new Date();
             addListener();
         }
     };

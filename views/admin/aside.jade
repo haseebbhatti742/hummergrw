@@ -58,32 +58,33 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
                         a.nav-link(href='/advance_cash_voucher')
                             i.nav-icon.fas.fa-file-contract
                             p Advance Cash Voucher
-                li.nav-item
+                li.nav-item    
                     if title == "Ledger"
+                        a.nav-link.active(href='/ledger/general')
+                            i.nav-icon.fas.fa-file
+                            p Ledger
+                    else
+                        a.nav-link(href='/ledger/general')
+                            i.nav-icon.fas.fa-file
+                            p Ledger
+                li.nav-item
+                    if title == "Reports"
                         a.nav-link.active.ml-2(href='#')
                             i.fa.fa-file.fa-lg &nbsp;
-                            p Ledger
+                            p Reports
                                 i.fas.fa-angle-left.right
                         ul.nav.nav-treeview
                             li.nav-item.ml-2
-                                a.nav-link(href='/ledger')
-                                    i.fa.fa-plus-circle &nbsp;
-                                    p Add Ledger
-                            li.nav-item.ml-2
-                                a.nav-link(href='/ledger/general')
+                                a.nav-link(href='/reports')
                                     i.fa.fa-list-alt &nbsp;
-                                    p View Ledger
+                                    p Reports
                     else
                         a.nav-link.ml-2(href='#')
                             i.fa.fa-file.fa-lg &nbsp;
-                            p Ledger
+                            p Reports
                                 i.fas.fa-angle-left.right
                         ul.nav.nav-treeview
                             li.nav-item.ml-2
-                                a.nav-link(href='/ledger')
-                                    i.fa.fa-plus-circle &nbsp;
-                                    p Add Ledger
-                            li.nav-item.ml-2
-                                a.nav-link(href='/ledger/general')
+                                a.nav-link(href='/reports')
                                     i.fa.fa-list-alt &nbsp;
-                                    p View Ledger
+                                    p Reports
