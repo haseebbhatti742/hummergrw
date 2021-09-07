@@ -68,24 +68,28 @@
                                 .table-responsive
                                     table.table
                                         tr
-                                            th(style='width:50%') Subtotal:
+                                            th Total Seller Weight
                                             |                         
-                                            td $250.30
+                                            td #{dataset.total_seller_weight}
                                         |                       
                                         tr
-                                            th Tax (9.3%)
+                                            th Total Buyer Weight
                                             |                         
-                                            td $10.34
+                                            td #{dataset.total_buyer_weight}
                                         |                       
                                         tr
-                                            th Shipping:
+                                            th Total Debit
                                             |                         
-                                            td $5.80
+                                            td #{dataset.total_debit}
                                         |                       
                                         tr
-                                            th Total:
+                                            th Total Credit
                                             |                         
-                                            td $265.24
+                                            td #{dataset.total_credit}
+                                        tr
+                                            th Balance
+                                            |                         
+                                            td #{dataset.balance}
                             // /.col
                         // /.row
                         // this row will not appear when printing

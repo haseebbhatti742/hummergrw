@@ -1,0 +1,29 @@
+include header1
+include aside
+.content-wrapper
+    section.content
+        .container-fluid
+            include sub-header
+            //add party
+            .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Add New Party
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            #tab1
+                                .row.form-group
+                                    .col-md-5
+                                        .form-group.input-group-md
+                                            input#new_party_name.form-control(type = "text", placeholder="Enter New Party Name")
+                                        #new_party_name_error(style="color:red")
+                                     .col-md-5
+                                        .form-group.input-group-md
+                                            input#new_party_contact.form-control(type = "text", placeholder="Enter New Party Contact")
+                                        #new_party_contact_error(style="color:red")
+                                    .col-md-2
+                                        .form-group 
+                                            button.btn.btn-success(onclick="addNewParty()") Add
+
+include footer
+script(src='/js/party.js')

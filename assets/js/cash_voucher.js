@@ -27,6 +27,7 @@ function getParty() {
 }
 
 function addCashVoucher(){
+    document.getElementById("btn2").disabled = true
     party_id = document.getElementById("cv_party_id").value
     cv_date = document.getElementById("cash_voucher_date").value
     cv_type = document.getElementById("cash_voucher_type").value
@@ -45,8 +46,10 @@ function addCashVoucher(){
     }).then(data => data.json()).then(data => {
         if (data.status == "ok") {
             toastr.success("Cash Voucher Added")
+            window.location.replace("/cash_voucher")
         } else if (data.status == "error") {
             toastr.error("Error: "+data.errorMessage)
+            document.getElementById("btn2").disabled = false
         }
     })
 }

@@ -118,6 +118,7 @@ function show_cv_form() {
 }
 
 function submitForm(){
+    document.getElementById("btn2").disabled = true
     if(add_cv_checkbox == false){
         submitWithoutVoucher()
     } else if(add_cv_checkbox == true){
@@ -168,9 +169,10 @@ function submitWithoutVoucher(){
         }).then(data => data.json()).then(data => {
             if (data.status == "ok") {
                 toastr.success("Gate Pass Added")
-                window.location.replace("/gate_pass")
+                window.location.replace("/gate_pass/view-gate-pass/"+data.gp_number)
             } else if (data.status == "error") {
                 toastr.error("Error: "+data.errorMessage)
+                document.getElementById("btn2").disabled = false
             }
         })
     }
@@ -278,6 +280,7 @@ function submitWithVoucher(){
                 window.location.replace("/gate_pass")
             } else if (data.status == "error") {
                 toastr.error("Error: "+data.errorMessage)
+                document.getElementById("btn2").disabled = false
             }
         })
     }

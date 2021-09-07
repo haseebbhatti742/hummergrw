@@ -112,7 +112,7 @@ function editGatePassWithoutVoucher(){
         }).then(data => data.json()).then(data => {
             if (data.status == "ok") {
                 toastr.success("Gate Pass Edited")
-                //window.location.replace("/gate_pass")
+                window.location.replace("/home")
             } else if (data.status == "error") {
                 toastr.error("Error: "+data.errorMessage)
             }

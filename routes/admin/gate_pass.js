@@ -28,6 +28,31 @@ router.post("/add-gate-pass", function(req,res){
     addGatePass(req,res);
 })
 
+router.get("/view-gate-pass/:gp_number", function(req,res){
+    res.locals.title = "Gate Pass"
+    res.locals.subtitle = "View Gate Pass"
+    dataset = []
+    app.conn.query("select * from gate_pass join party_info on gate_pass.gp_party_id=party_info.party_id where gp_number="+req.params.gp_number, function(err,result){
+        if(err){
+            res.locals.errorMessage = err.message
+            res.redirect("/error")
+        } else if (result.length == 0){
+            res.render("view-gate-pass", {status:"error", errorMessage:"No Record Found"})
+        } else {
+            dataset.gate_pass = result[0]
+            app.conn.query("select * from gp_entries where gp_number="+req.params.gp_number, function(err,result2){
+                if(err){
+                    res.locals.errorMessage = err.message
+                    res.redirect("/error")
+                } else {
+                    dataset.gp_entries = result2
+                    res.render("admin/view-gate-pass", {status:"ok", dataset:dataset})
+                }
+            })
+        }
+    })
+})
+
 router.get('/cv_form', (req, res) => {
     var query = "select cv_number from cash_voucher order by cv_number desc limit 1";
     app.conn.query(query, (err,result) => {
@@ -54,6 +79,7 @@ router.post("/get-contact", function(req,res){
     })
 })
 
+gp_number =0
 function addGatePass(req,res){
     ledgerDataObject = []
 
@@ -67,7 +93,7 @@ function addGatePass(req,res){
     let gp_row = req.body.gp_entries;
     let cash_voucher = req.body.cash_voucher
     let gp_total = 0;
-    let gp_number = 0;
+    //let gp_number = 0;
 
     if(gp_type == "in") {
         gp_type = "Expense"
@@ -238,24 +264,6 @@ function editGatePass(req,res){
     })
 }
 
-router.post("/add-party", function(req,res){
-    app.conn.query("select * from party_info where party_contact='"+req.body.party_contact+"'", function(err,result1){
-        if(err){
-            res.status(200).json({ status: "error", errorMessage:err.message});
-        } else if(result1.length > 0){
-            res.status(200).json({ status: "no", errorMessage:"Contact Already Exists...!"});
-        } else if(result1.length == 0){
-            app.conn.query("insert into party_info(party_name, party_contact) values('"+req.body.party_name+"','"+req.body.party_contact+"')", function(err,result){
-                if(err){
-                    res.status(200).json({ status: "error", errorMessage:err.message});
-                } else {
-                    res.status(200).json({ status: "ok"});
-                }
-            })
-        }
-    })
-})
-
 router.post('/getParty', async function(req, res) {
     var party = await getParty();
     res.status(200).json({ status: "yes", party: party });
@@ -362,7 +370,7 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 if(err) {
                     res.status(200).json({status:"error", errorMessage:err.message})
                 } else {
-                    res.status(200).json({status: "ok"})
+                    res.status(200).json({status: "ok", gp_number:gp_number})
                 }
             })
         } else if(result1.length > 0){
@@ -371,7 +379,7 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 if(err) {
                     res.status(200).json({status:"error", errorMessage:err.message})
                 } else {
-                    res.status(200).json({status: "ok"})
+                    res.status(200).json({status: "ok", gp_number:gp_number})
                 }
             })
         } 

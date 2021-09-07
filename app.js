@@ -65,6 +65,7 @@ const cashVoucherRoute = require("./routes/admin/cash_voucher");
 const advanceCashVoucherRoute = require("./routes/admin/advance_cash_voucher");
 const ledgerRoute = require("./routes/admin/ledger");
 const reportsRoute = require("./routes/admin/reports");
+const partyRoute = require("./routes/admin/party");
 const errorRoute = require("./routes/admin/error");
 
 app1.use("/", loginRoute);
@@ -74,6 +75,7 @@ app1.use("/cash_voucher", cashVoucherRoute);
 app1.use("/advance_cash_voucher", advanceCashVoucherRoute);
 app1.use("/ledger", ledgerRoute);
 app1.use("/reports", reportsRoute);
+app1.use("/party", partyRoute);
 app1.use("/error", errorRoute);
 
 app1.use("/logout", function (req, res) {

@@ -1,18 +1,20 @@
 aside.main-sidebar.sidebar-dark-primary.elevation-4
-    // Brand Logo
-    a.brand-link(href='/')
-        img.brand-image.img-circle.elevation-3(src='/images/logo.png' alt='AdminLTE Logo' style='opacity: .8')
-        |       
-        span.brand-text.font-weight-light HUMMER
     // Sidebar
     .sidebar
+        // Brand Logo
+        a.brand-link(href='/')
+            //img.brand-image.img-circle.elevation-3(src='/images/logo.png' alt='AdminLTE Logo' style='opacity: .8')
+            span.brand-text.font-weight-light HUMMER
+        //username
+        a.brand-link(href='/')
+            span.brand-text.font-weight-light  #{session.name}
         // Sidebar user panel (optional)
-        .user-panel.mt-3.pb-3.mb-3.d-flex
+        //.user-panel.mt-3.pb-3.mb-3.d-flex
             .image
                 .info
                     a.d-block(href='/') #{session.name}
         // SidebarSearch Form
-        .form-inline
+        //.form-inline
             .input-group(data-widget='sidebar-search')
                 input.form-control.form-control-sidebar(type='search' placeholder='Search' aria-label='Search')
                 |           
@@ -22,7 +24,7 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
         // Sidebar Menu
         nav.mt-2
             ul.nav.nav-pills.nav-sidebar.flex-column(data-widget='treeview' role='menu' data-accordion='false')
-                li.nav-item.menu-open
+                li.nav-item
                     if title == "Home"
                         a.nav-link.active(href='/home')
                             i.nav-icon.fas.fa-home
@@ -31,7 +33,16 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
                         a.nav-link(href='/home')
                             i.nav-icon.fas.fa-home
                             p Home 
-                li.nav-item.menu-open
+                li.nav-item
+                    if title == "Party"
+                        a.nav-link.active(href='/party/add-party')
+                            i.nav-icon.fas.fa-user-plus
+                            p Add Party
+                    else
+                        a.nav-link(href='/party/add-party')
+                            i.nav-icon.fas.fa-user-plus
+                            p Add Party 
+                li.nav-item
                     if title == "Gate Pass"
                         a.nav-link.active(href='/gate_pass')
                             i.nav-icon.fas.fa-id-badge

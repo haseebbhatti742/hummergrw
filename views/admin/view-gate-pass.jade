@@ -1,0 +1,78 @@
+include header1
+include aside
+.content-wrapper
+    section.content
+        .container-fluid
+            include sub-header
+            //gate pass from
+            #ledgerReport.col-md-12
+                if status == "error"
+                    h3 #{errorMessage}
+                else
+                    .invoice.p-3.mb-3
+                        // title row
+                        .row
+                            .col-12
+                                h4
+                                    i.fas.fa-globe &nbsp; Hummer Grw
+                                    //small.float-right Date: #{dataset.date.date}/#{dataset.date.month}/#{dataset.date.year}
+                            // /.col
+                        // info row
+                        .row.invoice-info
+                            .col-sm-4.invoice-col Party Info
+                                address
+                                    strong #{dataset.gate_pass.party_name}
+                                    br
+                                    |                     Phone: #{dataset.gate_pass.party_contact}
+                        .row
+                            .col-12.table-responsive
+                                table.table.table-striped
+                                    thead
+                                        tr
+                                            th Commodity
+                                            th Unit
+                                            th Seller Weight
+                                            th Buyer Weight
+                                            th Rate
+                                            th Total
+                                    tbody
+                                        -for(let i=0; i<dataset.gp_entries.length; i++){
+                                            tr
+                                                td #{dataset.gp_entries[i].gp_commodity}
+                                                td #{dataset.gp_entries[i].gp_unit}
+                                                td #{dataset.gp_entries[i].gp_quantity}
+                                                td #{dataset.gp_entries[i].gp_buyer_weight}
+                                                td #{dataset.gp_entries[i].gp_unit_amount}
+                                                td #{dataset.gp_entries[i].gp_total_amount}
+                                        -}
+                        .row
+                            .col-6
+                            // /.col
+                            .col-6
+                                .table-responsive
+                                    table.table
+                                        tr
+                                            th Grand Total
+                                            |                         
+                                            td #{dataset.gate_pass.gp_total}
+                            // /.col
+                        // /.row
+                        // this row will not appear when printing
+            .col-md-12
+                .row.no-print
+                    .col-12
+                        a.btn.btn-default.float-right(onclick="printGatePass()")
+                            i.fas.fa-print Print
+                        //- button.btn.btn-success.float-right(type='button')
+                        //-     i.far.fa-credit-card Submit Payment
+                        //- button.btn.btn-primary.float-right(type='button', style='margin-right: 5px;')
+                        //-     i.fas.fa-download Generate PDF
+include footer
+script.
+    function printGatePass(){
+        var printContents = document.getElementById("ledgerReport").innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
