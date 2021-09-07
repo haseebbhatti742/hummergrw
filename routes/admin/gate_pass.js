@@ -40,6 +40,14 @@ router.get("/view-gate-pass/:gp_number", function(req,res){
             res.render("view-gate-pass", {status:"error", errorMessage:"No Record Found"})
         } else {
             dataset.gate_pass = result[0]
+            date1 = new Date(result[0].gp_date)
+            date2={
+                date: date1.getDate(),
+                month: (date1.getMonth()+1),
+                year: date1.getFullYear(),
+            }
+
+            dataset.gate_pass.gp_date = date2.date+"/"+date2.month+"/"+date2.year
             app.conn.query("select * from gp_entries where gp_number="+req.params.gp_number, function(err,result2){
                 if(err){
                     res.locals.errorMessage = err.message

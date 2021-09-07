@@ -46,7 +46,7 @@ function addCashVoucher(){
     }).then(data => data.json()).then(data => {
         if (data.status == "ok") {
             toastr.success("Cash Voucher Added")
-            window.location.replace("/cash_voucher")
+            window.location.replace("/cash_voucher/view-cash-voucher/"+data.cv_number)
         } else if (data.status == "error") {
             toastr.error("Error: "+data.errorMessage)
             document.getElementById("btn2").disabled = false

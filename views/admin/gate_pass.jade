@@ -4,6 +4,22 @@ include aside
     section.content
         .container-fluid
             include sub-header
+            //search
+            .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Search
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            #tab1
+                                .row.form-group
+                                    .col-md-10
+                                        .form-group.input-group-md
+                                            input#searchId.form-control(type = "number", placeholder="Enter Gate Pass #...")
+                                        #searchId_error(style="color:red")
+                                    .col-md-2
+                                        .form-group 
+                                            button#btnSearch.btn.btn-success(onclick="searchGatePass()") Search
             //gate pass from
             .col-md-12
                 .card.card-primary.card-outline
@@ -13,18 +29,23 @@ include aside
                         .card-tools
                             #tab1
                                 .row.form-group
-                                    .col-md-4
+                                    .col-md-3
                                         .form-group.input-group-md
                                             label Gate Pass Number
                                             input#gate_pass_number.form-control(type = "text", value='#{gp_number}', disabled='true')
                                         #gate_pass_number_error(style="color:red")
-                                    .col-md-4
+                                    .col-md-3
+                                        .form-group.input-group-md
+                                            label Manual GP Number
+                                            input#gate_pass_number_manual.form-control(type = "text", placeholder="Enter Manual Gate Pass Number")
+                                        #gate_pass_number_manual_error(style="color:red")
+                                    .col-md-3
                                         .form-group.input-group-md
                                             label Date
                                             input#gate_pass_date.form-control(type = "date")
                                         #gate_pass_date_error(style="color:red")
-                                    .col-md-4.px-5
-                                        label Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    .col-md-3.px-5
+                                        label Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         .row
                                             .col-md-6
                                                 .form-check.form-group-md
@@ -142,3 +163,13 @@ include aside
 
 include footer
 script(src='/js/gate_pass.js')
+script.
+    function searchGatePass(){
+        gp_number = document.getElementById("searchId").value
+        if(gp_number == ""){
+            document.getElementById("searchId_error").innerHTML = "Enter Gate Pass Number"
+        } else {
+            document.getElementById("searchId_error").innerHTML = ""
+            window.location.replace("/gate_pass/view-gate-pass/"+gp_number)
+        }
+    }

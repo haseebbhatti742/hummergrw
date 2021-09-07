@@ -23,6 +23,39 @@ router.get('/', (req, res) => {
     // }
 });
 
+router.get("/view-cash-voucher/:cv_number", function(req,res){
+    res.locals.title = "Cash Voucher"
+    res.locals.subtitle = "View Cash Voucher"
+    dataset = []
+    app.conn.query("select * from cash_voucher join party_info on cash_voucher.party_id=party_info.party_id where cv_number="+req.params.cv_number, function(err,result){
+        if(err){
+            res.locals.errorMessage = err.message
+            res.redirect("/error")
+        } else if (result.length == 0){
+            res.render("admin/view_cash_voucher", {status:"error", errorMessage:"No Record Found"})
+        } else {
+            dataset.cash_voucher = result[0]
+            date1 = new Date(result[0].cv_date)
+            date2={
+                date: date1.getDate(),
+                month: (date1.getMonth()+1),
+                year: date1.getFullYear(),
+            }
+
+            dataset.cash_voucher.cv_date = date2.date+"/"+date2.month+"/"+date2.year
+            res.render("admin/view_cash_voucher", {status:"ok", dataset:dataset})
+            // app.conn.query("select * from gp_entries where gp_number="+req.params.gp_number, function(err,result2){
+            //     if(err){
+            //         res.locals.errorMessage = err.message
+            //         res.redirect("/error")
+            //     } else {
+            //         dataset.gp_entries = result2
+            //         res.render("admin/view-gate-pass", {status:"ok", dataset:dataset})
+            //     }
+            // })
+        }
+    })
+})
 
 router.post('/add', (req, res) => {
     party_id = req.body.party_id
@@ -38,6 +71,7 @@ router.post('/add', (req, res) => {
 
 });
 
+let cv_number
 function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
     let ledgerData = []
     ledgerData.party_id = party_id
@@ -67,6 +101,7 @@ function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_sign
             res.status(200).json({status: "error", errorMessage:err.message})
         } else {
             ledgerData.cv_number = result1.insertId
+            cv_number = result1.insertId
             l_data = await addIntoLedgerWithCV(ledgerData)
             addToAccounts(party_id, cv_amount, cv_payment_type,res)
         }
@@ -88,7 +123,7 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 if(err) {
                     res.status(200).json({status:"error", errorMessage:err.message})
                 } else {
-                    res.status(200).json({status: "ok"})
+                    res.status(200).json({status: "ok", cv_number:cv_number})
                 }
             })
         } else if(result1.length > 0){
@@ -97,7 +132,7 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 if(err) {
                     res.status(200).json({status:"error", errorMessage:err.message})
                 } else {
-                    res.status(200).json({status: "ok"})
+                    res.status(200).json({status: "ok", cv_number:cv_number})
                 }
             })
         } 

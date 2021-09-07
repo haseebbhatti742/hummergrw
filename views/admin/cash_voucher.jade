@@ -4,6 +4,24 @@ include aside
     section.content
         .container-fluid
             include sub-header
+            //search
+            .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Search
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            #tab1
+                                .row.form-group
+                                    .col-md-10
+                                        .form-group.input-group-md
+                                            input#searchId.form-control(type = "number", placeholder="Enter Cash Voucher #..." autofocus)
+                                        #searchId_error(style="color:red")
+                                    .col-md-2
+                                        .form-group 
+                                            button#btnSearch.btn.btn-success(onclick="searchGatePass()") Search
+            
+            //cash voucher form
             .col-md-12
                 .card.card-primary.card-outline
                     .card-header
@@ -54,3 +72,13 @@ include aside
                                     button#btn2.btn.btn-success(type="submit") Submit
 include footer
 script(src='/js/cash_voucher.js')
+script.
+    function searchGatePass(){
+        gp_number = document.getElementById("searchId").value
+        if(gp_number == ""){
+            document.getElementById("searchId_error").innerHTML = "Enter Cash Vocuher Number"
+        } else {
+            document.getElementById("searchId_error").innerHTML = ""
+            window.location.replace("/cash_voucher/view-cash-voucher/"+gp_number)
+        }
+    }

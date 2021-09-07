@@ -15,38 +15,43 @@ include aside
                             .col-12
                                 h4
                                     i.fas.fa-globe &nbsp; Hummer Grw
-                                    strong.float-right Gate Pass #:  #{dataset.gate_pass.gp_number}
+                                    strong.float-right Cash Voucher #:  #{dataset.cash_voucher.cv_number}
                         // info row
                         .row.invoice-info
                             .col-sm-6.invoice-col Party Info
                                 address
-                                    strong #{dataset.gate_pass.party_name}
+                                    strong #{dataset.cash_voucher.party_name}
                                     br
-                                    |                     Phone: #{dataset.gate_pass.party_contact}
+                                    |                     Phone: #{dataset.cash_voucher.party_contact}
                             .col-sm-6.invoice-col.float-right
                                 address.float-right
-                                    | Date: #{dataset.gate_pass.gp_date}
+                                    | Date: #{dataset.cash_voucher.cv_date}
                         .row
                             .col-12.table-responsive
                                 table.table.table-striped
                                     thead
                                         tr
-                                            th Commodity
-                                            th Unit
-                                            th Seller Weight
-                                            th Buyer Weight
-                                            th Rate
-                                            th Total
+                                            th Type
+                                            th Payment Type
+                                            th Signature
+                                            th Amount
+                                            th Details
                                     tbody
-                                        -for(let i=0; i<dataset.gp_entries.length; i++){
-                                            tr
-                                                td #{dataset.gp_entries[i].gp_commodity}
-                                                td #{dataset.gp_entries[i].gp_unit}
-                                                td #{dataset.gp_entries[i].gp_quantity}
-                                                td #{dataset.gp_entries[i].gp_buyer_weight}
-                                                td #{dataset.gp_entries[i].gp_unit_amount}
-                                                td #{dataset.gp_entries[i].gp_total_amount}
-                                        -}
+                                        tr
+                                            td #{dataset.cash_voucher.cv_type}
+                                            td #{dataset.cash_voucher.cv_payment_type}
+                                            td #{dataset.cash_voucher.cv_signature}
+                                            td #{dataset.cash_voucher.cv_amount}
+                                            td #{dataset.cash_voucher.cv_details}
+                                        //- -for(let i=0; i<dataset.cash_voucher.length; i++){
+                                        //-     tr
+                                        //-         td #{dataset.cash_voucher[i].gp_commodity}
+                                        //-         td #{dataset.cash_voucher[i].gp_unit}
+                                        //-         td #{dataset.cash_voucher[i].gp_quantity}
+                                        //-         td #{dataset.cash_voucher[i].gp_buyer_weight}
+                                        //-         td #{dataset.cash_voucher[i].gp_unit_amount}
+                                        //-         td #{dataset.cash_voucher[i].gp_total_amount}
+                                        //- -}
                         .row
                             .col-6
                             // /.col
@@ -56,7 +61,7 @@ include aside
                                         tr
                                             th Grand Total
                                             |                         
-                                            td #{dataset.gate_pass.gp_total}
+                                            td #{dataset.cash_voucher.cv_amount}
             .col-md-12
                 .row.no-print
                     .col-12
