@@ -13,16 +13,70 @@ include aside
                          .card-tools
                             #tab1
                                 .row.form-group
-                                    .col-md-10
+                                    .col-md-2
                                         .form-group.input-group-md
-                                            input#party_name.form-control(type = "text", placeholder="Enter Party..." autofocus autocomplete="off")
+                                            label Type
+                                            select#report_type.form-control
+                                                option(value="" selected disabled) Select Type
+                                                option(value="Expense") Expense
+                                                option(value="Recovery") Recovery
+                                        #report_type_error(style="color:red")
+                                    .col-md-2
+                                        .form-group.input-group-md
+                                            label Commodity
+                                            select#report_commodity.form-control
+                                                option(value="" selected disabled) Select Head
+                                                option(value="Raw Material") Raw Material 
+                                                option(value="Tools & Consumables") Tools & Consumables 
+                                                option(value="Services") Services 
+                                                option(value="Personal") Personal 
+                                                option(value="Food, Welfare & Entertainment") Food, Welfare & Entertainment
+                                                option(value="Iron Scrap") Iron Scrap 
+                                                option(value="Rotor") Rotor 
+                                                option(value="Cast Iron") Cast Iron 
+                                                option(value="Silver") Silver 
+                                                option(value="Copper") Copper 
+                                                option(value="Khulaai") Khulaai 
+                                                option(value="Wages") Wages
+                                                option(value="Brass") Brass
+                                                option(value="Zinc") Zinc
+                                                option(value="SS") SS
+                                                option(value="Bacha Part") Bacha Part
+                                                option(value="Weight Loss") Weight Loss
+                                                option(value="Chalu") Chalu
+                                                option(value="Misc") Misc
+                                                option(value="Transport") Transport
+                                        #report_commodity_error(style="color:red")
+                                    .col-md-2
+                                        .form-group.input-group-md
+                                            label Party
+                                            input#party_name.form-control(type = "text", placeholder="Enter Party..." autocomplete="off")
                                             input#party_id(type="hidden")
                                         #party_name_error(style="color:red")
                                     .col-md-2
-                                        .form-group 
+                                        .form-group.input-group-md
+                                            label Date From
+                                            input#report_date_from.form-control(type = "date")
+                                        #report_date_from_error(style="color:red")
+                                    .col-md-2
+                                        .form-group.input-group-md
+                                            label Date To
+                                            input#report_date_to.form-control(type = "date")
+                                        #report_date_to_error(style="color:red")
+                                    .col-md-2
+                                        .form-group
+                                            label &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             button#btnSearch.btn.btn-success(onclick="searchReport()") Search
             //report
             #report
 
 include footer
 script(src="/js/reports.js")
+script.
+    function printReport(){
+        var printContents = document.getElementById("ledgerReport").innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }

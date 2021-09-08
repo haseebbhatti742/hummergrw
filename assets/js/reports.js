@@ -1,11 +1,23 @@
+var today = new Date();
+var day=today.getDate()>9?today.getDate():"0"+today.getDate(); // format should be "DD" not "D" e.g 09
+var month=(today.getMonth()+1)>9?(today.getMonth()+1):"0"+(today.getMonth()+1);
+var year=today.getFullYear();
+$("#report_date_to").attr('max', year + "-" + month + "-" + day);
+
+let party_id = ""
+
 function searchReport(){
     party_name = document.getElementById("party_name").value
-    party_id = document.getElementById("party_id").value
+    report_type = document.getElementById("report_type").value
+    report_commodity = document.getElementById("report_commodity").value
+    report_date_from = document.getElementById("report_date_from").value
+    report_date_to = document.getElementById("report_date_to").value
 
-    if(party_name == ""){
-        document.getElementById("party_name_error").innerHTML = "Enter Party"
+    if(party_name=="" && report_type=="" && report_commodity=="" && report_date_from=="" && report_date_to==""){
+        toastr.error("Enter Any Field")
     } else {
-        document.getElementById("party_name_error").innerHTML = ""
+        if(party_name != "") party_id = document.getElementById("party_id").value
+        else party_id = ""
         document.getElementById("report").innerHTML = ""
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -13,8 +25,9 @@ function searchReport(){
                 document.getElementById("report").innerHTML = this.responseText;
             }
         };
-        xhttp.open("GET", "/reports/get_general_ledger/"+party_id, true);
-        xhttp.send();
+        xhttp.open("POST", "/reports/get_report/", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("party_id="+party_id+"&report_type="+report_type+"&report_commodity="+report_commodity+"&report_date_from="+report_date_from+"&report_date_to="+report_date_to);
     }
 }
 
@@ -86,6 +99,7 @@ function autocomplete(inp, arr) {
                 inp.value = this.getElementsByTagName("input")[0].value;
                 index = partyNameArray.indexOf(inp.value)
                 document.getElementById("party_id").value = partyIdArray[index];
+                party_id = partyIdArray[index];
                 getContact(partyIdArray[index]);
                 /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/

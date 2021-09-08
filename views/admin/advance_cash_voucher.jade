@@ -16,16 +16,12 @@ include aside
                                             label Cas Voucher Number
                                             input#cash_voucher_number.form-control(type = "text", value="#{cv_number}", disabled='true')
                                     #cash_voucher_number_error(style="color:red")
-                                .col-md-4
+                                .col-md-8
                                     .form-group.input-group-md
-                                        label Amount
-                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' required)
-                                    #cash_voucher_amount_error(style="color:red")
-                                .col-md-4
-                                    .form-group.input-group-md
-                                        label Date
-                                        input#cash_voucher_date.form-control(type = "date" required)
-                                    #cash_voucher_date_error(style="color:red")
+                                        label Name
+                                        input#cash_voucher_party_id.form-control(type = "text", placeholder='Enter Name' autocomplete="off" required)
+                                        input#cv_party_id.form-control(type="hidden")
+                                    #cash_voucher_name_error(style="color:red")
                                 //.col-md-4 
                                     .form-group.input-group-md
                                         label Type
@@ -36,9 +32,28 @@ include aside
                             .row.form-group
                                 .col-md-4
                                     .form-group.input-group-md
+                                        label Amount
+                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' required)
+                                    #cash_voucher_amount_error(style="color:red")
+                                .col-md-4
+                                    .form-group.input-group-md
+                                        label Date
+                                        input#cash_voucher_date.form-control(type = "date" required)
+                                    #cash_voucher_date_error(style="color:red")
+                                .col-md-4
+                                    .form-group.input-group-md
+                                        label Signature
+                                        input#cash_voucher_signature.form-control(type = "text", placeholder='Enter Signature' required)
+                                    #cash_voucher_signature_error(style="color:red")
+                            .row.form-group
+                                .col-md-6
+                                    label Details
+                                    input(type="text")#cash_voucher_details.form-control(placeholder="Enter Details Here...", rows="5" required)
+                                #div_commodity.col-md-6(style="display:none")
+                                    .form-group.input-group-md
                                             label Head
                                             select#cv_commodity.form-control(required)
-                                                option(value="" selected disabled) Select Commodity
+                                                option(value="" selected disabled) Select Head
                                                 option(value="Raw Material") Raw Material 
                                                 option(value="Tools & Consumables") Tools & Consumables 
                                                 option(value="Services") Services 
@@ -60,24 +75,30 @@ include aside
                                                 option(value="Misc") Misc
                                                 option(value="Transport") Transport
                                         #gate_pass_commodity_type_error(style="color:red")
-                                .col-md-4
-                                    .form-group.input-group-md
-                                        label Name
-                                        input#cash_voucher_party_id.form-control(type = "text", placeholder='Enter Name' autocomplete="off" required)
-                                        input#cv_party_id.form-control(type="hidden")
-                                    #cash_voucher_name_error(style="color:red")
-                                .col-md-4
-                                    .form-group.input-group-md
-                                        label Signature
-                                        input#cash_voucher_signature.form-control(type = "text", placeholder='Enter Signature' required)
-                                    #cash_voucher_signature_error(style="color:red")
-                            .row.form-group
-                                .col-md-12
-                                    label Details
-                                    textarea#cash_voucher_details.form-control(placeholder="Enter Details Here...", rows="5" required)
-                            .row.form-group 
-                                .col-md-3 
-                                    button#btn2.btn.btn-success(type="submit") Submit
+                            #voucherButtons
+                                .row.form-group
+                                    #divAddVoucher.col-md-2
+                                        button#btnAddVoucher.btn.btn-primary(type="button" onclick="add_commodity()") Add Head
+                                    #divRemoveVoucher.col-md-2(style="display: none")
+                                        button#btnRemoveVoucher.btn.btn-warning(type="button" onclick="remove_commodity()") Remove Head
+                            .col-md-12
+                                #submitButtons
+                                    .row.form-group
+                                        button#btn2.col-md-12.btn.btn-success(type="submit") Submit
 
 include footer
 script(src='/js/advance_cash_voucher.js')
+script.
+    function add_commodity(){
+        document.getElementById("divAddVoucher").style.display = "none"
+        document.getElementById("divRemoveVoucher").style.display = "block"
+        document.getElementById("div_commodity").style.display = "block"
+        document.getElementById("cv_commodity").required = true
+    }
+
+    function remove_commodity(){
+        document.getElementById("divAddVoucher").style.display = "block"
+        document.getElementById("divRemoveVoucher").style.display = "none"
+        document.getElementById("div_commodity").style.display = "none"
+        document.getElementById("cv_commodity").required = false
+    }

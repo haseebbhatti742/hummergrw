@@ -2,7 +2,7 @@ document.getElementById('gate_pass_date').valueAsDate = new Date();
 idCounter = 0;
 idList = [idCounter];
 let data = [];
-let gp_number_manual, gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_grand_total, gate_pass_contact = "";
+let gp_number_manual, gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_grand_total, gate_pass_contact = "", final_weights;
 let cash_voucher_type, cash_voucher_signature, cash_voucher_details
 var add_cv_checkbox = false;
 
@@ -163,6 +163,7 @@ function submitWithoutVoucher(){
                                     "gate_pass_grand_total":gate_pass_grand_total,
                                     "gate_pass_contact": gate_pass_contact,
                                     "gate_pass_payment_type": "Credit",
+                                    "final_weights": final_weights,
                                     "gp_entries":data,
                                     "cash_voucher": "false" }),
             headers: new Headers({
@@ -188,7 +189,8 @@ function getGatePass(){
     gate_pass_type = document.querySelector('input[name="gate_pass_type_in_out"]:checked').value;
     gate_pass_contact = document.getElementById("gate_pass_contact").value;
     gate_pass_grand_total = document.getElementById('gate_pass_grand_total').value;
-
+    final_weights = document.getElementById('gate_pass_final_weights').checked;
+    
     if(gate_pass_party_id == ""){
         document.getElementById("gate_pass_name_error").innerHTML = "Enter Party Name";
         return false;

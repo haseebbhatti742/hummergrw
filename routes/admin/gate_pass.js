@@ -102,8 +102,11 @@ function addGatePass(req,res){
     let gp_payment_type = req.body.gate_pass_payment_type;
     let gp_row = req.body.gp_entries;
     let cash_voucher = req.body.cash_voucher
+    let final_weights = req.body.final_weights
     let gp_total = 0;
     //let gp_number = 0;
+
+    console.log(final_weights)
 
     if(gp_type == "in") {
         gp_type = "Expense"
@@ -132,6 +135,7 @@ function addGatePass(req,res){
                     
                     if(gp_payment_type == "Credit"){ ledgerData.l_balance = -ledgerData.l_balance }
                     ledgerData.l_seller_weight = gp_quantity
+                    ledgerData.l_commodity = gp_commodity
                     ledgerData.l_buyer_weight = 0
                     ledgerData.l_rate = gp_unit_amount
                     ledgerData.l_description = gp_details
@@ -172,7 +176,7 @@ function addGatePass(req,res){
                             if(gp_payment_type == "Credit"){ gp_total = -gp_total }
 
                             if(cash_voucher == "false"){
-                                if(gp_quantity == 0) l_data = await addIntoLedgerWithGP(ledgerDataObject)
+                                if(gp_quantity == 0 || final_weights == true) l_data = await addIntoLedgerWithGP(ledgerDataObject)
                                 addToAccounts(gate_pass_party_id, gp_total, gp_payment_type,res)
                             } else if(cash_voucher == "true"){
                                 cash_voucher_type = req.body.cash_voucher_type
@@ -216,6 +220,7 @@ function editGatePass(req,res){
                 if(i<gp_entries.length){
 
                     if(gp_payment_type == "Credit"){ ledgerData.l_balance = -ledgerData.l_balance }
+                    ledgerData.l_commodity = gp_entries[i].commodity
                     ledgerData.l_seller_weight = gp_entries[i].quantity
                     ledgerData.l_buyer_weight = gp_entries[i].buyer_weight
                     ledgerData.l_rate = gp_entries[i].unit_amount
@@ -365,11 +370,6 @@ function addCashVoucher(gp_number, party_id,cv_date,cv_type,cv_payment_type,cv_n
 }
 
 function addToAccounts(party_id, cv_amount, cv_payment_type,res){
-
-    // if(cv_payment_type == "Credit") { 
-    //     cv_amount = -cv_amount
-    // }
-
     let query1 = "select acc_balance from accounts where party_id="+party_id+" order by acc_id desc limit 1"
     app.conn.query(query1, function(err, result1){
         if(err) {
@@ -412,7 +412,7 @@ function addIntoLedger(data){
             data[0].l_balance = parseFloat(data[0].l_balance) + parseFloat(balance)
             for(let i=0; i<=data.length; i++){   
                 if(i<data.length){
-                    query = "insert into ledger(party_id,gp_number,cv_number,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].cv_number+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
+                    query = "insert into ledger(party_id,gp_number,cv_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].cv_number+"','"+data[i].l_commodity+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
                     app.conn.query(query, function(err,result){})
                 } else if (i==data.length){
                     resolve({status:"ok", message:"Added to Ledger"})
@@ -439,7 +439,7 @@ function addIntoLedgerWithGP(data){
             data[0].l_balance = parseFloat(data[0].l_balance) + parseFloat(balance)
             for(let i=0; i<=data.length; i++){   
                 if(i<data.length){
-                    query = "insert into ledger(party_id,gp_number,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
+                    query = "insert into ledger(party_id,gp_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].l_commodity+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
                     app.conn.query(query, function(err,result){})
                 } else if (i==data.length){
                     resolve({status:"ok", message:"Added to Ledger"})

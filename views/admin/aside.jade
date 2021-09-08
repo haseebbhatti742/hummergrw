@@ -8,19 +8,6 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
         //username
         a.brand-link(href='/')
             span.brand-text.font-weight-light  #{session.name}
-        // Sidebar user panel (optional)
-        //.user-panel.mt-3.pb-3.mb-3.d-flex
-            .image
-                .info
-                    a.d-block(href='/') #{session.name}
-        // SidebarSearch Form
-        //.form-inline
-            .input-group(data-widget='sidebar-search')
-                input.form-control.form-control-sidebar(type='search' placeholder='Search' aria-label='Search')
-                |           
-                .input-group-append
-                    button.btn.btn-sidebar
-                        i.fas.fa-search.fa-fw
         // Sidebar Menu
         nav.mt-2
             ul.nav.nav-pills.nav-sidebar.flex-column(data-widget='treeview' role='menu' data-accordion='false')
@@ -98,24 +85,12 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
                         a.nav-link(href='/ledger/general')
                             i.nav-icon.fas.fa-file
                             p Ledger
-                li.nav-item
+                li.nav-item    
                     if title == "Reports"
-                        a.nav-link.active.ml-2(href='#')
-                            i.fa.fa-file.fa-lg &nbsp;
+                        a.nav-link.active(href='/reports')
+                            i.nav-icon.fas.fa-file
                             p Reports
-                                i.fas.fa-angle-left.right
-                        ul.nav.nav-treeview
-                            li.nav-item.ml-2
-                                a.nav-link(href='/reports')
-                                    i.fa.fa-list-alt &nbsp;
-                                    p Reports
                     else
-                        a.nav-link.ml-2(href='#')
-                            i.fa.fa-file.fa-lg &nbsp;
+                        a.nav-link(href='/reports')
+                            i.nav-icon.fas.fa-file
                             p Reports
-                                i.fas.fa-angle-left.right
-                        ul.nav.nav-treeview
-                            li.nav-item.ml-2
-                                a.nav-link(href='/reports')
-                                    i.fa.fa-list-alt &nbsp;
-                                    p Reports

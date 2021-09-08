@@ -68,6 +68,7 @@ let cv_number
 function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
     let ledgerData = []
     ledgerData.party_id = party_id
+    ledgerData.l_commodity = cv_commodity
     ledgerData.l_date = cv_date
     ledgerData.l_description = cv_details
     ledgerData.l_seller_weight = 0
@@ -145,7 +146,7 @@ function addIntoLedgerWithCV(data){
 
             data.l_balance = parseFloat(data.l_balance) + parseFloat(balance)
             
-            query1 = "insert into ledger(party_id,cv_number,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.party_id+"','"+data.cv_number+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
+            query1 = "insert into ledger(party_id,cv_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.party_id+"','"+data.cv_number+"','"+data.l_commodity+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
             app.conn.query(query1, function(err,result){
                 if(err){
                     resolve({status:"error", errorMessage:err.message})
