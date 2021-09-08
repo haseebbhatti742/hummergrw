@@ -58,7 +58,7 @@ include aside
                                                     label.form-check-label Out
                                                 #gate_pass_out_error(style="color:red")
                                 .row.form-group
-                                    .col-md-6
+                                    .col-md-4
                                         .form-group.input-group-md
                                             label Party
                                             input#gate_pass_party_id.form-control(type="text" autocomplete="off")
@@ -69,10 +69,16 @@ include aside
                                                 label Gand Total
                                                 input#gate_pass_grand_total.form-control(type="text" disabled)
                                             #gate_pass_name_error(style="color:red")
-                                    .col-md-4
+                                    .col-md-3
                                         .form-group.input-group-md
                                             label Contact (Optional)
                                             input#gate_pass_contact.form-control(type = "text", placeholder='Enter Contact Number')
+                                        #gate_pass_name_error(style="color:red")
+                                    .col-md-3
+                                        .form-check
+                                            label &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            input#gate_pass_contact.form-check-input.lg(type = "checkbox", placeholder='Enter Contact Number')
+                                            label.form-check-label Final Weights
                                         #gate_pass_name_error(style="color:red")
                             #tab2
                                 #gp_row0.row.form-group

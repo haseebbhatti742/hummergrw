@@ -36,10 +36,11 @@ function addCashVoucher(){
     cv_signature = document.getElementById("cash_voucher_signature").value
     cv_amount = document.getElementById("cash_voucher_amount").value
     cv_details = document.getElementById("cash_voucher_details").value
+    cv_commodity = document.getElementById("cv_commodity").value
 
     fetch("/advance_cash_voucher/add", {
         method: "POST",
-        body: JSON.stringify({ party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details }),
+        body: JSON.stringify({ party_id, cv_date, cv_type, cv_commodity, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details }),
         headers: new Headers({
             'Content-Type': 'application/json'
         }),

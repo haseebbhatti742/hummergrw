@@ -36,6 +36,32 @@ include aside
                             .row.form-group
                                 .col-md-4
                                     .form-group.input-group-md
+                                            label Head
+                                            select#cv_commodity.form-control(required)
+                                                option(value="" selected disabled) Select Commodity
+                                                option(value="Raw Material") Raw Material 
+                                                option(value="Tools & Consumables") Tools & Consumables 
+                                                option(value="Services") Services 
+                                                option(value="Personal") Personal 
+                                                option(value="Food, Welfare & Entertainment") Food, Welfare & Entertainment
+                                                option(value="Iron Scrap") Iron Scrap 
+                                                option(value="Rotor") Rotor 
+                                                option(value="Cast Iron") Cast Iron 
+                                                option(value="Silver") Silver 
+                                                option(value="Copper") Copper 
+                                                option(value="Khulaai") Khulaai 
+                                                option(value="Wages") Wages
+                                                option(value="Brass") Brass
+                                                option(value="Zinc") Zinc
+                                                option(value="SS") SS
+                                                option(value="Bacha Part") Bacha Part
+                                                option(value="Weight Loss") Weight Loss
+                                                option(value="Chalu") Chalu
+                                                option(value="Misc") Misc
+                                                option(value="Transport") Transport
+                                        #gate_pass_commodity_type_error(style="color:red")
+                                .col-md-4
+                                    .form-group.input-group-md
                                         label Name
                                         input#cash_voucher_party_id.form-control(type = "text", placeholder='Enter Name' autocomplete="off" required)
                                         input#cv_party_id.form-control(type="hidden")
