@@ -15,7 +15,7 @@ include aside
                                 .row.form-group
                                     .col-md-10
                                         .form-group.input-group-md
-                                            input#searchId.form-control(type = "number", placeholder="Enter Cash Voucher #..." autofocus)
+                                            input#searchId.form-control(type = "number", placeholder="Enter Cash Voucher #...")
                                         #searchId_error(style="color:red")
                                     .col-md-2
                                         .form-group 
@@ -29,40 +29,72 @@ include aside
                     .card-body.p-2.mt-2
                         form.card-tools
                             .row.form-group
-                                .col-md-4
+                                .col-md-3
                                     .form-group.input-group-md
                                             label Cas Voucher Number
                                             input#cash_voucher_number.form-control(type = "text", value='#{cv_number}', disabled='true' required)
                                     #cash_voucher_number_error(style="color:red")
-                                .col-md-4
+                                .col-md-3
                                     .form-group.input-group-md
                                         label Date
                                         input#cash_voucher_date.form-control(type = "date" required)
                                     #cash_voucher_date_error(style="color:red")
-                                .col-md-4 
+                                .col-md-3 
                                     .form-group.input-group-md
                                         label Type
                                         select#cash_voucher_type.form-control(required)
                                             option(value="Pay") Pay
                                             option(value="Receive") Receive
                                     #cash_voucher_type_error(style="color:red")
+                                .col-md-3
+                                    .form-group.input-group-md
+                                        label Amount
+                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' required)
+                                    #cash_voucher_amount_error(style="color:red")
                             .row.form-group
-                                .col-md-4
+                                //col commodity
+                                .col-md-3
+                                    .form-group.input-group-md
+                                            label Commodity
+                                            select#cv_commodity.form-control(required)
+                                                option(value="" selected disabled) Select Commodity
+                                                option(value="Raw Material") Raw Material 
+                                                option(value="Tools & Consumables") Tools & Consumables 
+                                                option(value="Services") Services 
+                                                option(value="Personal") Personal 
+                                                option(value="Food, Welfare & Entertainment") Food, Welfare & Entertainment
+                                                option(value="Iron Scrap") Iron Scrap 
+                                                option(value="Rotor") Rotor 
+                                                option(value="Cast Iron") Cast Iron 
+                                                option(value="Silver") Silver 
+                                                option(value="Copper") Copper 
+                                                option(value="Khulaai") Khulaai 
+                                                option(value="Wages") Wages
+                                                option(value="Brass") Brass
+                                                option(value="Zinc") Zinc
+                                                option(value="SS") SS
+                                                option(value="Bacha Part") Bacha Part
+                                                option(value="Weight Loss") Weight Loss
+                                                option(value="Chalu") Chalu
+                                                option(value="Misc") Misc
+                                                option(value="Transport") Transport
+                                        #gate_pass_commodity_type_error(style="color:red")
+                                .col-md-3
                                     .form-group.input-group-md
                                         label Name
                                         input#cash_voucher_party_id.form-control(type = "text", placeholder='Enter Name' autocomplete="off" required)
                                         input#cv_party_id.form-control(type="hidden")
                                     #cash_voucher_party_id_error(style="color:red")
-                                .col-md-4
+                                .col-md-3
                                     .form-group.input-group-md
                                         label Signature
                                         input#cash_voucher_signature.form-control(type = "text", placeholder='Enter Signature' required)
                                     #cash_voucher_signature_error(style="color:red")
-                                .col-md-4
+                                .col-md-3
                                     .form-group.input-group-md
-                                        label Amount
-                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' required)
-                                    #cash_voucher_amount_error(style="color:red")
+                                        label Contact (Optional)
+                                        input#cash_voucher_contact.form-control(type = "text", placeholder='Enter Contact' required)
+                                    #cash_voucher_signature_error(style="color:red")
                             .row.form-group
                                 .col-md-12
                                     label Details

@@ -23,6 +23,31 @@ router.get('/', (req, res) => {
     // }
 });
 
+router.get('/view_all', (req, res) => {
+    // if (req.session.username != undefined && req.session.type == "admin") {
+        res.locals.title = 'Advance Cash Voucher';
+        res.locals.subtitle = 'View All';
+
+        var query = "select * from cash_voucher join party_info on cash_voucher.party_id=party_info.party_id where cv_type='Advance' order by cv_number desc";
+        app.conn.query(query, (err,result) => {
+            if(err){
+                res.render('admin/view_all_advance', {status:"error", errorMessage:err.message});
+            } else {
+                if(result.length == 0)
+                    res.render('admin/view_all_advance', {status:"error", errorMessage:"No Record Found"});
+                else{
+                    for(let i=0; i<result.length; i++){
+                        date1 = new Date(result[i].cv_date)
+                        result[i].cv_date = date1.getDate()+"/"+(date1.getMonth()+1)+"/"+date1.getFullYear()
+                    }
+                    res.render('admin/view_all_advance', {status:"ok", dataset:result});
+                }
+            }
+        })  
+    // } else {
+    //     res.redirect('/');
+    // }
+});
 
 router.post('/add', (req, res) => {
     party_id = req.body.party_id
@@ -38,6 +63,7 @@ router.post('/add', (req, res) => {
 
 });
 
+let cv_number
 function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
     let ledgerData = []
     ledgerData.party_id = party_id
@@ -64,6 +90,7 @@ function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_sign
             res.status(200).json({status: "error", errorMessage:err.message})
         } else {
             ledgerData.cv_number = result1.insertId
+            cv_number = result1.insertId
             l_data = await addIntoLedgerWithCV(ledgerData)
             addToAccounts(party_id, cv_amount, cv_payment_type,res)
         }
@@ -86,7 +113,7 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 if(err) {
                     res.status(200).json({status:"error", errorMessage:err.message})
                 } else {
-                    res.status(200).json({status: "ok"})
+                    res.status(200).json({status: "ok", cv_number:cv_number})
                 }
             })
         } else if(result1.length > 0){
@@ -95,7 +122,7 @@ function addToAccounts(party_id, cv_amount, cv_payment_type,res){
                 if(err) {
                     res.status(200).json({status:"error", errorMessage:err.message})
                 } else {
-                    res.status(200).json({status: "ok"})
+                    res.status(200).json({status: "ok", cv_number:cv_number})
                 }
             })
         } 

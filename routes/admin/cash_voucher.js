@@ -63,16 +63,18 @@ router.post('/add', (req, res) => {
     cv_type = req.body.cv_type
     cv_payment_type = req.body.cv_payment_type
     cv_name = req.body.cv_name
+    cv_contact = req.body.cv_contact
     cv_signature = req.body.cv_signature
     cv_amount = req.body.cv_amount
     cv_details = req.body.cv_details
+    cv_commodity = req.body.cv_commodity
 
-    addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res)
+    addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_contact,cv_name,cv_signature,cv_amount, cv_details, res)
 
 });
 
 let cv_number
-function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
+function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_contact,cv_name,cv_signature,cv_amount, cv_details, res){
     let ledgerData = []
     ledgerData.party_id = party_id
     ledgerData.l_date = cv_date
@@ -95,7 +97,7 @@ function addCashVoucher(party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_sign
         ledgerData.l_credit = 0
     }
 
-    query1 = "insert into cash_voucher (party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details) values ('"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"')"
+    query1 = "insert into cash_voucher (cv_commodity, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details,cv_contact) values ('"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"', '"+cv_contact+"')"
     app.conn.query(query1, async function(err,result1){
         if(err){
             res.status(200).json({status: "error", errorMessage:err.message})

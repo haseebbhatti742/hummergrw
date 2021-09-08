@@ -26,6 +26,23 @@ function getParty() {
     })
 }
 
+function getContact(party_id){
+  //party_id = document.getElementById("gate_pass_party_id").value
+  fetch("/gate_pass/get-contact", {
+      method: "POST",
+      body: JSON.stringify({ party_id }),
+      headers: new Headers({
+          'Content-Type': 'application/json'
+      }),
+  }).then(data => data.json()).then(data => {
+      if (data.status == "ok") {
+          document.getElementById("cash_voucher_contact").value = data.contact
+      } else if(data.status == "error"){
+          toastr.error("Error: "+data.errorMessage)
+      }
+  })
+}
+
 function addCashVoucher(){
     document.getElementById("btn2").disabled = true
     party_id = document.getElementById("cv_party_id").value
@@ -33,13 +50,15 @@ function addCashVoucher(){
     cv_type = document.getElementById("cash_voucher_type").value
     cv_payment_type = "Debit"
     cv_name = document.getElementById("cash_voucher_party_id").value
+    cv_contact = document.getElementById("cash_voucher_contact").value
     cv_signature = document.getElementById("cash_voucher_signature").value
     cv_amount = document.getElementById("cash_voucher_amount").value
     cv_details = document.getElementById("cash_voucher_details").value
+    cv_commodity = document.getElementById("cv_commodity").value
 
     fetch("/cash_voucher/add", {
         method: "POST",
-        body: JSON.stringify({ party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details }),
+        body: JSON.stringify({ party_id, cv_date, cv_type, cv_commodity, cv_contact, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details }),
         headers: new Headers({
             'Content-Type': 'application/json'
         }),
@@ -95,6 +114,7 @@ function autocomplete(inp, arr) {
                 inp.value = this.getElementsByTagName("input")[0].value;
                 index = partyNameArray.indexOf(inp.value)
                 document.getElementById("cv_party_id").value = partyIdArray[index];
+                getContact(partyIdArray[index]);
                 /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
                 closeAllLists();

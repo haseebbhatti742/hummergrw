@@ -12,8 +12,10 @@ router.get('/general', (req, res, next) => {
     // }
 });
 
-router.get("/get_general_ledger/:party_id", function(req,res){
+router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res){
     party_id = req.params.party_id
+    date_from = req.params.date_from
+    date_to = req.params.date_to
     dataset = []
     date1 = new Date()
     date2 = {
@@ -37,7 +39,7 @@ router.get("/get_general_ledger/:party_id", function(req,res){
         } else {
             dataset.party_info = result1[0]
 
-            query2 = "select * from ledger where party_id = '"+party_id+"'"
+            query2 = "select * from ledger where l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
             app.conn.query(query2, function(err,result2){
                 if(err){
                     res.render("admin/general-ledger", {status:"error", errorMessage:err.message})
@@ -61,7 +63,7 @@ router.get("/get_general_ledger/:party_id", function(req,res){
 
                             dataset.ledger.push(data)
                         } else if(i==result2.length){
-                            res.render("admin/general-ledger", {status:"ok", dataset})       
+                            res.render("admin/general-ledger", {status:"ok", dataset:dataset, date_from:date_from, date_to:date_to})       
                         }
                     }
                 }

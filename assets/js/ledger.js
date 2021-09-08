@@ -1,11 +1,25 @@
+var today = new Date();
+var day=today.getDate()>9?today.getDate():"0"+today.getDate(); // format should be "DD" not "D" e.g 09
+var month=(today.getMonth()+1)>9?(today.getMonth()+1):"0"+(today.getMonth()+1);
+var year=today.getFullYear();
+$("#date_to").attr('max', year + "-" + month + "-" + day);
+
 function searchLedger(){
     party_name = document.getElementById("party_name").value
     party_id = document.getElementById("party_id").value
+    date_from = document.getElementById("date_from").value
+    date_to = document.getElementById("date_to").value
 
     if(party_name == ""){
         document.getElementById("party_name_error").innerHTML = "Enter Party"
+    } else if(date_from == ""){
+      document.getElementById("date_from_error").innerHTML = "Enter From Date"
+    } else if(date_to == ""){
+      document.getElementById("date_to_error").innerHTML = "Enter To Date"
     } else {
         document.getElementById("party_name_error").innerHTML = ""
+        document.getElementById("date_from_error").innerHTML = ""
+        document.getElementById("date_to_error").innerHTML = ""
         document.getElementById("general-ledger").innerHTML = ""
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -13,7 +27,7 @@ function searchLedger(){
                 document.getElementById("general-ledger").innerHTML = this.responseText;
             }
         };
-        xhttp.open("GET", "/ledger/get_general_ledger/"+party_id, true);
+        xhttp.open("GET", "/ledger/get_general_ledger/"+party_id+"/"+date_from+"/"+date_to, true);
         xhttp.send();
     }
 }

@@ -26,6 +26,8 @@ include aside
                             .col-sm-6.invoice-col.float-right
                                 address.float-right
                                     | Date: #{dataset.gate_pass.gp_date}
+                                address
+                                    | Manual GP# : #{dataset.gate_pass.gp_number_manual}
                         .row
                             .col-12.table-responsive
                                 table.table.table-striped

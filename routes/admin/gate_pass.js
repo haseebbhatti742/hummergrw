@@ -32,7 +32,8 @@ router.get("/view-gate-pass/:gp_number", function(req,res){
     res.locals.title = "Gate Pass"
     res.locals.subtitle = "View Gate Pass"
     dataset = []
-    app.conn.query("select * from gate_pass join party_info on gate_pass.gp_party_id=party_info.party_id where gp_number="+req.params.gp_number, function(err,result){
+    query = "select * from gate_pass join party_info on gate_pass.gp_party_id=party_info.party_id where gp_number='"+req.params.gp_number+"' OR gp_number_manual='"+req.params.gp_number+"'"
+    app.conn.query(query, function(err,result){
         if(err){
             res.locals.errorMessage = err.message
             res.redirect("/error")
@@ -48,7 +49,7 @@ router.get("/view-gate-pass/:gp_number", function(req,res){
             }
 
             dataset.gate_pass.gp_date = date2.date+"/"+date2.month+"/"+date2.year
-            app.conn.query("select * from gp_entries where gp_number="+req.params.gp_number, function(err,result2){
+            app.conn.query("select * from gp_entries where gp_number="+dataset.gate_pass.gp_number, function(err,result2){
                 if(err){
                     res.locals.errorMessage = err.message
                     res.redirect("/error")
@@ -91,6 +92,7 @@ gp_number =0
 function addGatePass(req,res){
     ledgerDataObject = []
 
+    let gp_number_manual = req.body.gp_number_manual;
     let gp_type = req.body.gate_pass_type;
     let gp_date = req.body.gate_pass_date;
     let gate_pass_party_id = req.body.gate_pass_party_id;
@@ -110,7 +112,7 @@ function addGatePass(req,res){
         gp_type = "Recovery"
     }
 
-    var query1 = "insert into gate_pass(gp_party_id,gp_type,gp_date,gp_contact, gp_payment_type) values('"+gate_pass_party_id+"','"+gp_type+"','"+gp_date+"','"+gp_contact+"', '"+gp_payment_type+"')";
+    var query1 = "insert into gate_pass(gp_number_manual,gp_party_id,gp_type,gp_date,gp_contact, gp_payment_type) values('"+gp_number_manual+"','"+gate_pass_party_id+"','"+gp_type+"','"+gp_date+"','"+gp_contact+"', '"+gp_payment_type+"')";
     app.conn.query(query1, async function(err,result){
         if(err){
             res.status(200).json({status:"error", errorMessage:err.message})

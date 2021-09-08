@@ -60,15 +60,35 @@ aside.main-sidebar.sidebar-dark-primary.elevation-4
                         a.nav-link(href='/cash_voucher')
                             i.nav-icon.fas.fa-file-contract
                             p Cash Voucher
-                li.nav-item    
+                li.nav-item
                     if title == "Advance Cash Voucher"
-                        a.nav-link.active(href='/advance_cash_voucher')
-                            i.nav-icon.fas.fa-file-contract
+                        a.nav-link.active.ml-2(href='#')
+                            i.fa.fa-file.fa-lg &nbsp;
                             p Advance Cash Voucher
+                                i.fas.fa-angle-left.right
+                        ul.nav.nav-treeview
+                            li.nav-item.ml-2
+                                a.nav-link(href='/advance_cash_voucher')
+                                    i.fas.fa-file-invoice-dollar &nbsp;&nbsp;
+                                    p Add New
+                            li.nav-item.ml-2
+                                a.nav-link(href='/advance_cash_voucher/view_all')
+                                    i.fa.fa-list-alt &nbsp;&nbsp;
+                                    p View All
                     else
-                        a.nav-link(href='/advance_cash_voucher')
-                            i.nav-icon.fas.fa-file-contract
+                        a.nav-link.ml-2(href='#')
+                            i.fa.fa-file.fa-lg &nbsp;
                             p Advance Cash Voucher
+                                i.fas.fa-angle-left.right
+                        ul.nav.nav-treeview
+                            li.nav-item.ml-2
+                                a.nav-link(href='/advance_cash_voucher')
+                                    i.fas.fa-file-invoice-dollar &nbsp;&nbsp;
+                                    p Add New
+                            li.nav-item.ml-2
+                                a.nav-link(href='/advance_cash_voucher/view_all')
+                                    i.fa.fa-list-alt &nbsp;&nbsp;
+                                    p View All
                 li.nav-item    
                     if title == "Ledger"
                         a.nav-link.active(href='/ledger/general')

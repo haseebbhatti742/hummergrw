@@ -15,7 +15,7 @@ include aside
                                 .row.form-group
                                     .col-md-10
                                         .form-group.input-group-md
-                                            input#searchId.form-control(type = "number", placeholder="Enter Gate Pass #...")
+                                            input#searchId.form-control(type = "text", placeholder="Enter Gate Pass #...")
                                         #searchId_error(style="color:red")
                                     .col-md-2
                                         .form-group 
@@ -37,8 +37,8 @@ include aside
                                     .col-md-3
                                         .form-group.input-group-md
                                             label Manual GP Number
-                                            input#gate_pass_number_manual.form-control(type = "text", placeholder="Enter Manual Gate Pass Number")
-                                        #gate_pass_number_manual_error(style="color:red")
+                                            input#gp_number_manual.form-control(type = "text", placeholder="Enter Manual Gate Pass Number")
+                                        #gp_number_manual_error(style="color:red")
                                     .col-md-3
                                         .form-group.input-group-md
                                             label Date

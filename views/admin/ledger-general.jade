@@ -13,13 +13,25 @@ include aside
                          .card-tools
                             #tab1
                                 .row.form-group
-                                    .col-md-10
+                                    .col-md-4
                                         .form-group.input-group-md
+                                            label Party Name
                                             input#party_name.form-control(type = "text", placeholder="Enter Party..." autofocus autocomplete="off")
                                             input#party_id(type="hidden")
                                         #party_name_error(style="color:red")
+                                    .col-md-3
+                                        .form-group.input-group-md
+                                            label Date From
+                                            input#date_from.form-control(type = "date")
+                                        #date_from_error(style="color:red")
+                                    .col-md-3
+                                        .form-group.input-group-md
+                                            label Date To
+                                            input#date_to.form-control(type = "date")
+                                        #date_to_error(style="color:red")
                                     .col-md-2
                                         .form-group 
+                                            label &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             button#btnSearch.btn.btn-success(onclick="searchLedger()") Search
             //ledger
             #general-ledger

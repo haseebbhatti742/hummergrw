@@ -1,0 +1,38 @@
+include header1
+include aside
+.content-wrapper
+    section.content
+        .container-fluid
+            include sub-header
+            //gate pass from
+            #ledgerReport.col-md-12
+                if status == "error"
+                    h3 #{errorMessage}
+                else
+                    .invoice.p-3.mb-3
+                        .row
+                            .col-12.table-responsive
+                                table.table.table-striped
+                                    thead
+                                        tr
+                                            th CV Number
+                                            th Party
+                                            th Date
+                                            //th Commodity
+                                            th Contact
+                                            th Signature
+                                            th Amount
+                                            th Details
+                                    tbody
+                                        -for(let i=0; i<dataset.length; i++){
+                                            tr
+                                                td #{dataset[i].cv_number}
+                                                td #{dataset[i].cv_name}
+                                                td #{dataset[i].cv_date}
+                                                //td #{dataset[i].cv_commodity}
+                                                td #{dataset[i].party_contact}
+                                                td #{dataset[i].cv_signature}
+                                                td #{dataset[i].cv_amount}
+                                                td #{dataset[i].cv_details}
+                                        -}
+include footer

@@ -2,7 +2,7 @@ document.getElementById('gate_pass_date').valueAsDate = new Date();
 idCounter = 0;
 idList = [idCounter];
 let data = [];
-let gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_grand_total, gate_pass_contact = "";
+let gp_number_manual, gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_grand_total, gate_pass_contact = "";
 let cash_voucher_type, cash_voucher_signature, cash_voucher_details
 var add_cv_checkbox = false;
 
@@ -118,7 +118,6 @@ function show_cv_form() {
 }
 
 function submitForm(){
-    document.getElementById("btn2").disabled = true
     if(add_cv_checkbox == false){
         submitWithoutVoucher()
     } else if(add_cv_checkbox == true){
@@ -152,9 +151,12 @@ inputUnitAmount.addEventListener('input', (event) => {
 
 function submitWithoutVoucher(){
     if(getGatePass()){
+        document.getElementById("btn2").disabled = true
         fetch("/gate_pass/add-gate-pass", {
             method: "POST",
-            body: JSON.stringify({ "gate_pass_type":gate_pass_type, 
+            body: JSON.stringify({ 
+                                    "gp_number_manual":gp_number_manual,                                        
+                                    "gate_pass_type":gate_pass_type, 
                                     "gate_pass_date":gate_pass_date, 
                                     "gate_pass_party_id":gate_pass_party_id,
                                     "gate_pass_party_name": gate_pass_party_name,
@@ -179,6 +181,7 @@ function submitWithoutVoucher(){
 }
 
 function getGatePass(){
+    gp_number_manual = document.getElementById("gp_number_manual").value
     gate_pass_date = document.getElementById('gate_pass_date').value;
     gate_pass_party_id = document.getElementById('gp_party_id').value;
     gate_pass_party_name = document.getElementById('gate_pass_party_id').value;
@@ -189,7 +192,10 @@ function getGatePass(){
     if(gate_pass_party_id == ""){
         document.getElementById("gate_pass_name_error").innerHTML = "Enter Party Name";
         return false;
-    } else {
+    } else if(gp_number_manual == ""){
+        document.getElementById("gp_number_manual_error").innerHTML = "Enter Manual GP Number";
+        return false;
+    }else {
         document.getElementById("gate_pass_name_error").innerHTML = "";
         let gate_pass_commodity, gate_pass_unit, gate_pass_unit_amount, gate_pass_details;
         for(let i=0; i<=idList.length; i++){

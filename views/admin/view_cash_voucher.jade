@@ -31,6 +31,7 @@ include aside
                                 table.table.table-striped
                                     thead
                                         tr
+                                            th Commodity
                                             th Type
                                             th Payment Type
                                             th Signature
@@ -38,6 +39,7 @@ include aside
                                             th Details
                                     tbody
                                         tr
+                                            td #{dataset.cash_voucher.cv_commodity}
                                             td #{dataset.cash_voucher.cv_type}
                                             td #{dataset.cash_voucher.cv_payment_type}
                                             td #{dataset.cash_voucher.cv_signature}

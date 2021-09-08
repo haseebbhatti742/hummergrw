@@ -8,15 +8,18 @@
                             .col-12
                                 h4
                                     i.fas.fa-globe &nbsp; Hummer Grw
-                                    small.float-right Date: #{dataset.date.date}/#{dataset.date.month}/#{dataset.date.year}
+                                    small.float-right Date From: #{date_from}
                             // /.col
                         // info row
                         .row.invoice-info
-                            .col-sm-4.invoice-col Party Info
+                            .col-sm-6.invoice-col Party Info
                                 address
                                     strong #{dataset.party_info.party_name}
                                     br
                                     |                     Phone: #{dataset.party_info.party_contact}
+                            .col-sm-6.invoice-col.float-right
+                                h4
+                                    small.float-right Date To : #{date_to}
                         .row
                             .col-12.table-responsive
                                 table.table.table-striped
