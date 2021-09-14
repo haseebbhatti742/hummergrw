@@ -40,7 +40,7 @@ router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res
             dataset.party_info = result1[0]
 
             query2 = "select * from ledger where l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
-            app.conn.query(query2, function(err,result2){
+            app.conn.query(query2, async function(err,result2){
                 if(err){
                     res.render("admin/general-ledger", {status:"error", errorMessage:err.message})
                 } else if(result2.length ==0 ){
@@ -63,7 +63,12 @@ router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res
 
                             dataset.ledger.push(data)
                         } else if(i==result2.length){
-                            res.render("admin/general-ledger", {status:"ok", dataset:dataset, date_from:date_from, date_to:date_to})       
+                            total_expense = await getTotalExpenses(party_id, date_from, date_to)
+                            total_recoveries = await getTotalRecoveries(party_id, date_from, date_to)
+                            balance_amount = await getTotalBalance(party_id, date_from, date_to)
+                            total_weight_in = await getTotalWeightsIn(party_id, date_from, date_to)
+                            total_weight_out = await getTotalWeightsOut(party_id, date_from, date_to)
+                            res.render("admin/general-ledger", {status:"ok", dataset:dataset, date_from:date_from, date_to:date_to, total_expense:total_expense, total_recoveries: total_recoveries, balance_amount: balance_amount, total_weight_in:total_weight_in, total_weight_out:total_weight_out})       
                         }
                     }
                 }
@@ -156,6 +161,60 @@ function addIntoLedgerWithCV(data){
         })
     })
 }
+
+function getTotalExpenses(party_id, date_from, date_to){
+    return new Promise(function(resolve,reject){
+        query = "select ifnull(sum(l_seller_weight*l_rate),0) as total_expense from ledger where l_debit=0 and l_credit!=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
+        app.conn.query(query, function(err,result){
+            if(err) console.log(err.message)
+            resolve(result[0].total_expense)
+        })
+    })
+}
+
+function getTotalRecoveries(party_id, date_from, date_to){
+    return new Promise(function(resolve,reject){
+        query = "select ifnull(sum(l_seller_weight*l_rate),0) as total_recoveries from ledger where l_debit!=0 and l_credit=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
+        app.conn.query(query, function(err,result){
+            if(err) console.log(err.message)
+            resolve(result[0].total_recoveries)
+        })
+    })
+}
+
+function getTotalBalance(party_id, date_from, date_to){
+    return new Promise(function(resolve,reject){
+        query = "select l_balance as balance from ledger where l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"' order by l_id desc limit 1"
+        app.conn.query(query, function(err,result){
+            if(err) {console.log(err.message)}
+            else if(result.length>0) {resolve(result[0].balance)}
+            else if(result.length==0) {resolve("0")}
+        })
+    })
+}
+
+function getTotalWeightsIn(party_id, date_from, date_to){
+    return new Promise(function(resolve,reject){
+        query = "select ifnull(sum(l_seller_weight),0) as total_weight_in from ledger where l_debit=0 and l_credit!=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
+        app.conn.query(query, function(err,result){
+            if(err) {console.log(err.message)}
+            else if(result.length>0) {resolve(result[0].total_weight_in)}
+            else if(result.length==0) {resolve("0")}
+        })
+    })
+}
+
+function getTotalWeightsOut(party_id, date_from, date_to){
+    return new Promise(function(resolve,reject){
+        query = "select ifnull(sum(l_seller_weight),0) as total_weight_out from ledger where l_debit!=0 and l_credit=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
+        app.conn.query(query, function(err,result){
+            if(err) {console.log(err.message)}
+            else if(result.length>0) {resolve(result[0].total_weight_out)}
+            else if(result.length==0) {resolve("0")}
+        })
+    })
+}
+
 module.exports.addIntoLedger = addIntoLedger
 module.exports.addIntoLedgerWithGP = addIntoLedgerWithGP
 module.exports.addIntoLedgerWithCV = addIntoLedgerWithCV

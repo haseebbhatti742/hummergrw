@@ -12,17 +12,17 @@ include aside
                          .card-tools
                             .row
                                 .col-md-4
+                                    .small-box.bg-danger
+                                        .inner 
+                                            h4 #{total_expense}
+                                            p Total Purchase Amount
+                                .col-md-4
                                     .small-box.bg-success
                                         .inner 
                                             h4 #{total_recoveries}
                                             p Total Sale Amount
                                         //.icon
                                             i.fas.fa-arrow-up(style="color:red")
-                                .col-md-4
-                                    .small-box.bg-danger
-                                        .inner 
-                                            h4 #{total_expense}
-                                            p Total Purchase Amount
                                 .col-md-4
                                     .small-box.bg-info
                                         .inner 
@@ -36,21 +36,21 @@ include aside
                          .card-tools
                             .row
                                 .col-md-4
-                                    .small-box.bg-success
+                                    .small-box.bg-danger
                                         .inner 
-                                            h4 150000000
+                                            h4 #{total_weight_in}
                                             p Total Weight In
                                         //.icon
                                             i.fas.fa-arrow-up(style="color:red")
                                 .col-md-4
-                                    .small-box.bg-danger
+                                    .small-box.bg-success
                                         .inner 
-                                            h4 150000000
+                                            h4 #{total_weight_out}
                                             p Total Weight Out
                                 .col-md-4
                                     .small-box.bg-info
                                         .inner 
-                                            h4 150000000
+                                            h4 #{balance_weight}
                                             p Balance Weight
             //add party
             //.col-md-12

@@ -26,13 +26,14 @@
                                 table.table.table-striped
                                     thead
                                         tr
+                                            th Party
                                             th Date
                                             th GP #
                                             th CV #
                                             th Head
                                             th Description
-                                            th Seller Weight
-                                            th Buyer Weight
+                                            th Weight
+                                            //th Buyer Weight
                                             th Rate
                                             th Debit
                                             th Credit
@@ -40,13 +41,14 @@
                                     tbody
                                         -for(let i=0; i<dataset.length; i++){
                                             tr
+                                                td #{dataset[i].party_name}
                                                 td #{dataset[i].l_date}
                                                 td #{dataset[i].gp_number}
                                                 td #{dataset[i].cv_number}
                                                 td #{dataset[i].l_commodity}
                                                 td #{dataset[i].l_description}
                                                 td #{dataset[i].l_seller_weight}
-                                                td #{dataset[i].l_buyer_weight}
+                                                //td #{dataset[i].l_buyer_weight}
                                                 td #{dataset[i].l_rate}
                                                 td #{dataset[i].l_debit}
                                                 td #{dataset[i].l_credit}
@@ -56,47 +58,24 @@
                         .row
                             // accepted payments column
                             .col-6
-                                //- p.lead Payment Methods:
-                                //- |                   
-                                //- img(src='../../dist/img/credit/visa.png', alt='Visa')
-                                //- |                   
-                                //- img(src='../../dist/img/credit/mastercard.png', alt='Mastercard')
-                                //- |                   
-                                //- img(src='../../dist/img/credit/american-express.png', alt='American Express')
-                                //- |                   
-                                //- img(src='../../dist/img/credit/paypal2.png', alt='Paypal')
-                                //- |                   
-                                //- p.text-muted.well.well-sm.shadow-none(style='margin-top: 10px;')
-                                //-     | Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-                                //-     | plugg
-                                //-     | dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                            // /.col
-                            //- .col-6
-                            //-     .table-responsive
-                            //-         table.table
-                            //-             tr
-                            //-                 th Total Seller Weight
-                            //-                 |                         
-                            //-                 td #{dataset.total_seller_weight}
-                            //-             |                       
-                            //-             tr
-                            //-                 th Total Buyer Weight
-                            //-                 |                         
-                            //-                 td #{dataset.total_buyer_weight}
-                            //-             |                       
-                            //-             tr
-                            //-                 th Total Debit
-                            //-                 |                         
-                            //-                 td #{dataset.total_debit}
-                            //-             |                       
-                            //-             tr
-                            //-                 th Total Credit
-                            //-                 |                         
-                            //-                 td #{dataset.total_credit}
-                            //-             tr
-                            //-                 th Balance
-                            //-                 |                         
-                            //-                 td #{dataset.balance}
+                            .col-6
+                                .table-responsive
+                                    table.table
+                                        tr
+                                            th Total Weight In
+                                            td #{total_weight_in}
+                                        tr
+                                            th Total Weight Out
+                                            td #{total_weight_out}
+                                        tr
+                                            th Total Debit
+                                            td #{total_recoveries}
+                                        tr
+                                            th Total Credit
+                                            td #{total_expense}
+                                        tr
+                                            th Balance Amount
+                                            td #{balance_amount}
                             // /.col
                         // /.row
                         // this row will not appear when printing
