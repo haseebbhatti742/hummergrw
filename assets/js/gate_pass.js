@@ -2,7 +2,7 @@ document.getElementById('gate_pass_date').valueAsDate = new Date();
 idCounter = 0;
 idList = [idCounter];
 let data = [];
-let gp_number_manual, gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_grand_total, gate_pass_contact = "", final_weights;
+let gp_number_manual, gate_pass_date, gate_pass_party_id, gate_pass_party_name, gate_pass_type, gate_pass_grand_total, gate_pass_contact = "";
 let cash_voucher_type, cash_voucher_signature, cash_voucher_details
 var add_cv_checkbox = false;
 
@@ -163,7 +163,6 @@ function submitWithoutVoucher(){
                                     "gate_pass_grand_total":gate_pass_grand_total,
                                     "gate_pass_contact": gate_pass_contact,
                                     "gate_pass_payment_type": "Credit",
-                                    "final_weights": final_weights,
                                     "gp_entries":data,
                                     "cash_voucher": "false" }),
             headers: new Headers({
@@ -188,16 +187,16 @@ function getGatePass(){
     gate_pass_party_name = document.getElementById('gate_pass_party_id').value;
     gate_pass_type = document.querySelector('input[name="gate_pass_type_in_out"]:checked').value;
     gate_pass_contact = document.getElementById("gate_pass_contact").value;
-    gate_pass_grand_total = document.getElementById('gate_pass_grand_total').value;
-    final_weights = document.getElementById('gate_pass_final_weights').checked;
+    gate_pass_grand_total = document.getElementById('gate_pass_grand_total').value;    
     
     if(gate_pass_party_id == ""){
         document.getElementById("gate_pass_name_error").innerHTML = "Enter Party Name";
         return false;
     } else if(gp_number_manual == ""){
+        document.getElementById("gate_pass_name_error").innerHTML = "";
         document.getElementById("gp_number_manual_error").innerHTML = "Enter Manual GP Number";
         return false;
-    }else {
+    } else {
         document.getElementById("gate_pass_name_error").innerHTML = "";
         let gate_pass_commodity, gate_pass_unit, gate_pass_unit_amount, gate_pass_details;
         for(let i=0; i<=idList.length; i++){
@@ -225,6 +224,22 @@ function getGatePass(){
         }
         return true;
     }
+}
+
+function isGpManualExists(gp_number_manual){
+    fetch("/gate_pass/check-gp-manual", {
+        method: "POST",
+        body: JSON.stringify({ gp_number_manual }),
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        }),
+    }).then(data => data.json()).then(data => {
+        if (data.status == "yes") {
+            isGp = true
+        } else if (data.status == "no") {
+            isGp = false
+        }
+    })
 }
 
 function getGrandTotal(){
@@ -452,13 +467,13 @@ function addCommodity(){
         form_group.setAttribute("class", "form-group input-group-md");
     
     var label = document.createElement("label");
-        label.innerHTML = "Seller Weight";
+        label.innerHTML = "Weight";
 
     var inputQuantity = document.createElement("input");
         inputQuantity.setAttribute("id","gate_pass_quantity"+idCounter);
         inputQuantity.setAttribute("type","number");
         inputQuantity.setAttribute("class","form-control");
-        inputQuantity.setAttribute("placeholder","Enter Seller Weight");
+        inputQuantity.setAttribute("placeholder","Enter Weight");
         inputQuantity.addEventListener('input', (event) => {
             if(inputQuantity.value == ""){
                 inputTotalAmount.value = inputUnitAmount.value

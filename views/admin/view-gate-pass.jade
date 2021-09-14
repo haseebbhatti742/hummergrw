@@ -35,19 +35,21 @@ include aside
                                         tr
                                             th Commodity
                                             th Unit
-                                            th Seller Weight
-                                            th Buyer Weight
+                                            th Weight
+                                            //th Buyer Weight
                                             th Rate
                                             th Total
+                                            th Details 
                                     tbody
                                         -for(let i=0; i<dataset.gp_entries.length; i++){
                                             tr
                                                 td #{dataset.gp_entries[i].gp_commodity}
                                                 td #{dataset.gp_entries[i].gp_unit}
                                                 td #{dataset.gp_entries[i].gp_quantity}
-                                                td #{dataset.gp_entries[i].gp_buyer_weight}
+                                                //td #{dataset.gp_entries[i].gp_buyer_weight}
                                                 td #{dataset.gp_entries[i].gp_unit_amount}
                                                 td #{dataset.gp_entries[i].gp_total_amount}
+                                                td #{dataset.gp_entries[i].gp_details}
                                         -}
                         .row
                             .col-6

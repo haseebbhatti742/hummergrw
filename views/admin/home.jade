@@ -4,8 +4,56 @@ include aside
     section.content
         .container-fluid
             include sub-header
-            //add party
             .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Amounts
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            .row
+                                .col-md-4
+                                    .small-box.bg-success
+                                        .inner 
+                                            h4 #{total_recoveries}
+                                            p Total Sale Amount
+                                        //.icon
+                                            i.fas.fa-arrow-up(style="color:red")
+                                .col-md-4
+                                    .small-box.bg-danger
+                                        .inner 
+                                            h4 #{total_expense}
+                                            p Total Purchase Amount
+                                .col-md-4
+                                    .small-box.bg-info
+                                        .inner 
+                                            h4 #{balance_amount}
+                                            p Balance Amount
+            .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Weights
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            .row
+                                .col-md-4
+                                    .small-box.bg-success
+                                        .inner 
+                                            h4 150000000
+                                            p Total Weight In
+                                        //.icon
+                                            i.fas.fa-arrow-up(style="color:red")
+                                .col-md-4
+                                    .small-box.bg-danger
+                                        .inner 
+                                            h4 150000000
+                                            p Total Weight Out
+                                .col-md-4
+                                    .small-box.bg-info
+                                        .inner 
+                                            h4 150000000
+                                            p Balance Weight
+            //add party
+            //.col-md-12
                 .card.card-success.card-outline
                     .card-header
                         h3.card-title Search
