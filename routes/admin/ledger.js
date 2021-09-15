@@ -3,13 +3,13 @@ const router = express.Router()
 const app = require('../../app')
 
 router.get('/general', (req, res, next) => {
-    // if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Ledger'
         res.locals.subtitle = 'General'
         res.render('admin/ledger-general')
-    // } else if (req.session.username == undefined) {
-    //     res.render('admin/login');
-    // }
+    } else if (req.session.username == undefined) {
+        res.render('admin/login');
+    }
 });
 
 router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res){
@@ -68,6 +68,7 @@ router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res
                             balance_amount = await getTotalBalance(party_id, date_from, date_to)
                             total_weight_in = await getTotalWeightsIn(party_id, date_from, date_to)
                             total_weight_out = await getTotalWeightsOut(party_id, date_from, date_to)
+                            
                             res.render("admin/general-ledger", {status:"ok", dataset:dataset, date_from:date_from, date_to:date_to, total_expense:total_expense, total_recoveries: total_recoveries, balance_amount: balance_amount, total_weight_in:total_weight_in, total_weight_out:total_weight_out})       
                         }
                     }
@@ -164,23 +165,48 @@ function addIntoLedgerWithCV(data){
 
 function getTotalExpenses(party_id, date_from, date_to){
     return new Promise(function(resolve,reject){
-        query = "select ifnull(sum(l_seller_weight*l_rate),0) as total_expense from ledger where l_debit=0 and l_credit!=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
+        query = "select * from ledger where l_debit=0 and l_credit!=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
         app.conn.query(query, function(err,result){
             if(err) console.log(err.message)
-            resolve(result[0].total_expense)
+            else if(result.length==0) resolve(0)
+            else if(result.length>0) {
+                let total_expense = 0
+                for(let i=0; i<result.length; i++){
+                    if(i==0) total_expense = result[i].l_credit
+                    else {
+                        if(result[i].l_credit != result[i-1].l_credit){
+                            total_expense = parseFloat(total_expense)+parseFloat(result[i].l_credit)
+                        }
+                    }
+                }
+                resolve(total_expense)
+            }
         })
     })
 }
 
 function getTotalRecoveries(party_id, date_from, date_to){
     return new Promise(function(resolve,reject){
-        query = "select ifnull(sum(l_seller_weight*l_rate),0) as total_recoveries from ledger where l_debit!=0 and l_credit=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
+        query = "select * from ledger where l_debit!=0 and l_credit=0 and l_date>='"+date_from+"' AND l_date<='"+date_to+"' AND party_id = '"+party_id+"'"
         app.conn.query(query, function(err,result){
             if(err) console.log(err.message)
-            resolve(result[0].total_recoveries)
+            else if(result.length==0) resolve(0)
+            else if(result.length>0) {
+                let total_recoveries = 0
+                for(let i=0; i<result.length; i++){
+                    if(i==0) total_recoveries = result[i].l_debit
+                    else {
+                        if(result[i].l_debit != result[i-1].l_debit){
+                            total_recoveries = parseFloat(total_recoveries)+parseFloat(result[i].l_debit)
+                        }
+                    }
+                }
+                resolve(total_recoveries)
+            }
         })
     })
 }
+
 
 function getTotalBalance(party_id, date_from, date_to){
     return new Promise(function(resolve,reject){

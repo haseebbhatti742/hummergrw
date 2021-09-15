@@ -4,7 +4,7 @@ const app = require('../../app')
 const ledger = require("../admin/ledger")
 
 router.get('/', (req, res) => {
-    // if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Gate Pass';
         res.locals.subtitle = 'Gate Pass';
 
@@ -19,9 +19,9 @@ router.get('/', (req, res) => {
                     res.render('admin/gate_pass', {gp_number: (result[0].gp_number+1)});
             }
         })
-    // } else {
-    //     res.redirect('/');
-    // }
+    } else {
+        res.redirect('/');
+    }
 });
 
 router.post("/add-gate-pass", function(req,res){
@@ -106,9 +106,11 @@ async function addGatePass(req,res){
 
     if(gp_type == "in") {
         gp_type = "Expense"
+        gp_payment_type = "Credit"
     }
     else if(gp_type == "out") {
         gp_type = "Recovery"
+        gp_payment_type = "Debit"
     }
 
     isGp = await checkGp(gp_number_manual)
@@ -415,8 +417,8 @@ function addIntoLedger(data){
             data[0].l_balance = parseFloat(data[0].l_balance) + parseFloat(balance)
             for(let i=0; i<=data.length; i++){   
                 if(i<data.length){
-                    query = "insert into ledger(party_id,gp_number,gp_number_manual,cv_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].gp_number_manual+"','"+data[i].cv_number+"','"+data[i].l_commodity+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
-                    app.conn.query(query, function(err,result){})
+                    query2 = "insert into ledger(party_id,gp_number,gp_number_manual,cv_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].gp_number_manual+"','"+data[i].cv_number+"','"+data[i].l_commodity+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
+                    app.conn.query(query2, function(err,result){})
                 } else if (i==data.length){
                     resolve({status:"ok", message:"Added to Ledger"})
                 }
@@ -442,8 +444,8 @@ function addIntoLedgerWithGP(data){
             data[0].l_balance = parseFloat(data[0].l_balance) + parseFloat(balance)
             for(let i=0; i<=data.length; i++){   
                 if(i<data.length){
-                    query = "insert into ledger(party_id,gp_number,gp_number_manual,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].gp_number_manual+"','"+data[i].l_commodity+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
-                    app.conn.query(query, function(err,result){
+                    query2 = "insert into ledger(party_id,gp_number,gp_number_manual,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data[i].party_id+"','"+data[i].gp_number+"','"+data[i].gp_number_manual+"','"+data[i].l_commodity+"','"+data[i].l_description+"','"+data[i].l_seller_weight+"','"+data[i].l_buyer_weight+"','"+data[i].l_rate+"','"+data[i].l_debit+"','"+data[i].l_credit+"','"+data[0].l_balance+"','"+data[i].l_date+"')"
+                    app.conn.query(query2, function(err,result){
                         if(err){
                             console.log(err.message)
                         }

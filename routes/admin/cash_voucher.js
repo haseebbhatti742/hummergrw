@@ -3,7 +3,7 @@ const router = express.Router();
 const app = require('../../app')
 
 router.get('/', (req, res) => {
-    // if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Cash Voucher';
         res.locals.subtitle = 'Cash Voucher';
 
@@ -18,16 +18,16 @@ router.get('/', (req, res) => {
                     res.render('admin/cash_voucher', {cv_number: (result[0].cv_number+1)});
             }
         })
-    // } else {
-    //     res.redirect('/');
-    // }
+    } else {
+        res.redirect('/');
+    }
 });
 
 router.get("/view-cash-voucher/:cv_number", function(req,res){
     res.locals.title = "Cash Voucher"
     res.locals.subtitle = "View Cash Voucher"
     dataset = []
-    app.conn.query("select * from cash_voucher join party_info on cash_voucher.party_id=party_info.party_id where cv_number="+req.params.cv_number, function(err,result){
+    app.conn.query("select * from cash_voucher join party_info on cash_voucher.party_id=party_info.party_id where cv_number='"+req.params.cv_number+"' or cv_number_manual='"+req.params.cv_number+"'", function(err,result){
         if(err){
             res.locals.errorMessage = err.message
             res.redirect("/error")
@@ -48,7 +48,8 @@ router.get("/view-cash-voucher/:cv_number", function(req,res){
     })
 })
 
-router.post('/add', (req, res) => {
+router.post('/add', async function (req, res) {
+    cash_voucher_number_manual = req.body.cash_voucher_number_manual
     party_id = req.body.party_id
     cv_date = req.body.cv_date
     cv_type = req.body.cv_type
@@ -60,12 +61,31 @@ router.post('/add', (req, res) => {
     cv_details = req.body.cv_details
     cv_commodity = req.body.cv_commodity
 
-    addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_contact,cv_name,cv_signature,cv_amount, cv_details, res)
+    isCV = await checkCV(cash_voucher_number_manual)
+    if(isCV == true){
+        res.status(200).json({status:"error", errorMessage:"Manual Cash Voucher Number Already Exists"})
+    } else {
+        addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_contact,cv_name,cv_signature,cv_amount, cv_details, res)
+    }
 
 });
 
+function checkCV(cash_voucher_number_manual){
+    return new Promise(function(resolve,reject){
+        app.conn.query("select * from cash_voucher where cv_number_manual='"+cash_voucher_number_manual+"'", function(err,result){
+            if(err){
+                console.log(err.message)
+            } else if(result.length == 0){
+                resolve(false)
+            } else if(result.length > 0){
+                resolve(true)
+            } 
+        })
+    })
+}
+
 let cv_number
-function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_contact,cv_name,cv_signature,cv_amount, cv_details, res){
+function addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_contact,cv_name,cv_signature,cv_amount, cv_details, res){
     let ledgerData = []
     ledgerData.party_id = party_id
     ledgerData.l_commodity = cv_commodity
@@ -74,11 +94,13 @@ function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv
     ledgerData.l_seller_weight = 0
     ledgerData.l_buyer_weight = 0
     ledgerData.l_rate = 0
+    ledgerData.cv_number_manual = cash_voucher_number_manual
 
     if(cv_type == "Pay") { 
         cv_type = "Expense"
         cv_payment_type = "Credit"
-        ledgerData.l_balance = -cv_amount
+        cv_amount = -cv_amount
+        ledgerData.l_balance = cv_amount
         ledgerData.l_debit = 0
         ledgerData.l_credit = cv_amount
     } else if(cv_type == "Receive") { 
@@ -89,7 +111,7 @@ function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv
         ledgerData.l_credit = 0
     }
 
-    query1 = "insert into cash_voucher (cv_commodity, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details,cv_contact) values ('"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"', '"+cv_contact+"')"
+    query1 = "insert into cash_voucher (cv_number_manual,cv_commodity, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details,cv_contact) values ('"+cash_voucher_number_manual+"','"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"', '"+cv_contact+"')"
     app.conn.query(query1, async function(err,result1){
         if(err){
             res.status(200).json({status: "error", errorMessage:err.message})
@@ -148,9 +170,9 @@ function addIntoLedgerWithCV(data){
 
             data.l_balance = parseFloat(data.l_balance) + parseFloat(balance)
             
-            query1 = "insert into ledger(party_id,cv_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.party_id+"','"+data.cv_number+"','"+data.l_commodity+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
+            query2 = "insert into ledger(party_id,cv_number,cv_number_manual,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.party_id+"','"+data.cv_number+"','"+data.cv_number_manual+"','"+data.l_commodity+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
             
-            app.conn.query(query1, function(err,result){
+            app.conn.query(query2, function(err,result){
                 if(err){
                     resolve({status:"error", errorMessage:err.message})
                 } else {

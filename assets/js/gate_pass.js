@@ -162,7 +162,7 @@ function submitWithoutVoucher(){
                                     "gate_pass_party_name": gate_pass_party_name,
                                     "gate_pass_grand_total":gate_pass_grand_total,
                                     "gate_pass_contact": gate_pass_contact,
-                                    "gate_pass_payment_type": "Credit",
+                                    "gate_pass_payment_type": gate_pass_type,
                                     "gp_entries":data,
                                     "cash_voucher": "false" }),
             headers: new Headers({

@@ -3,7 +3,7 @@ const router = express.Router();
 const app = require('../../app')
 
 router.get('/', (req, res) => {
-    // if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Advance Cash Voucher';
         res.locals.subtitle = 'Cash Voucher';
 
@@ -18,13 +18,13 @@ router.get('/', (req, res) => {
                     res.render('admin/advance_cash_voucher', {cv_number: (result[0].cv_number+1)});
             }
         })  
-    // } else {
-    //     res.redirect('/');
-    // }
+    } else {
+        res.redirect('/');
+    }
 });
 
 router.get('/view_all', (req, res) => {
-    // if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Advance Cash Voucher';
         res.locals.subtitle = 'View All';
 
@@ -44,9 +44,9 @@ router.get('/view_all', (req, res) => {
                 }
             }
         })  
-    // } else {
-    //     res.redirect('/');
-    // }
+    } else {
+        res.redirect('/');
+    }
 });
 
 router.post('/add', (req, res) => {

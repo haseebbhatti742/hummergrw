@@ -3,7 +3,7 @@ const router = express.Router();
 const app = require('../../app');
 
 router.get('/', async function(req, res){
-    // if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Home';
         res.locals.subtitle = 'Home';
 
@@ -15,27 +15,51 @@ router.get('/', async function(req, res){
         balance_weight = total_weight_in - total_weight_out
 
         res.render('admin/home', {total_expense,total_recoveries,balance_amount,total_weight_in, total_weight_out, balance_weight});
-    // } else if (req.session.username == undefined) {
-    //     res.render('admin/login');
-    // }
+    } else if (req.session.username == undefined) {
+        res.render('admin/login');
+    }
 });
 
 function getTotalExpenses(){
     return new Promise(function(resolve,reject){
-        query = "select ifnull(sum(l_seller_weight*l_rate),0) as total_expense from ledger where l_debit=0 and l_credit!=0"
+        query = "select * from ledger where l_debit=0 and l_credit!=0"
         app.conn.query(query, function(err,result){
             if(err) console.log(err.message)
-            resolve(result[0].total_expense)
+            else if(result.length==0) resolve(0)
+            else if(result.length>0) {
+                let total_expense = 0
+                for(let i=0; i<result.length; i++){
+                    if(i==0) total_expense = result[i].l_credit
+                    else {
+                        if(result[i].l_credit != result[i-1].l_credit){
+                            total_expense = parseFloat(total_expense)+parseFloat(result[i].l_credit)
+                        }
+                    }
+                }
+                resolve(total_expense)
+            }
         })
     })
 }
 
 function getTotalRecoveries(){
     return new Promise(function(resolve,reject){
-        query = "select ifnull(sum(l_seller_weight*l_rate),0) as total_recoveries from ledger where l_debit!=0 and l_credit=0"
+        query = "select * from ledger where l_debit!=0 and l_credit=0"
         app.conn.query(query, function(err,result){
             if(err) console.log(err.message)
-            resolve(result[0].total_recoveries)
+            else if(result.length==0) resolve(0)
+            else if(result.length>0) {
+                let total_recoveries = 0
+                for(let i=0; i<result.length; i++){
+                    if(i==0) total_recoveries = result[i].l_debit
+                    else {
+                        if(result[i].l_debit != result[i-1].l_debit){
+                            total_recoveries = parseFloat(total_recoveries)+parseFloat(result[i].l_debit)
+                        }
+                    }
+                }
+                resolve(total_recoveries)
+            }
         })
     })
 }

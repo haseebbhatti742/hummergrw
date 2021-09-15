@@ -26,12 +26,10 @@
                                     thead
                                         tr
                                             th Date
-                                            th GP #
                                             th Manual GP #
-                                            th CV #
+                                            th Manual CV #
                                             th Description
                                             th Weight
-                                            //th Buyer Weight
                                             th Rate
                                             th Debit
                                             th Credit
@@ -40,12 +38,10 @@
                                         -for(let i=0; i<dataset.ledger.length; i++){
                                             tr
                                                 td #{dataset.ledger[i].l_date}
-                                                td #{dataset.ledger[i].gp_number}
                                                 td #{dataset.ledger[i].gp_number_manual}
-                                                td #{dataset.ledger[i].cv_number}
+                                                td #{dataset.ledger[i].cv_number_manual}
                                                 td #{dataset.ledger[i].l_description}
                                                 td #{dataset.ledger[i].l_seller_weight}
-                                                //td #{dataset.ledger[i].l_buyer_weight}
                                                 td #{dataset.ledger[i].l_rate}
                                                 td #{dataset.ledger[i].l_debit}
                                                 td #{dataset.ledger[i].l_credit}
