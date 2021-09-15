@@ -16,7 +16,7 @@ router.get('/', async function(req, res){
 
         res.render('admin/home', {total_expense,total_recoveries,balance_amount,total_weight_in, total_weight_out, balance_weight});
     } else if (req.session.username == undefined) {
-        res.render('admin/login');
+        res.redirect('/');
     }
 });
 

@@ -8,7 +8,7 @@ router.get('/general', (req, res, next) => {
         res.locals.subtitle = 'General'
         res.render('admin/ledger-general')
     } else if (req.session.username == undefined) {
-        res.render('admin/login');
+        res.redirect('/');
     }
 });
 

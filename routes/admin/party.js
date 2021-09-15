@@ -8,7 +8,7 @@ router.get('/add-party', (req, res, next) => {
         res.locals.subtitle = 'Add Party'
         res.render('admin/party')
     } else if (req.session.username == undefined) {
-        res.render('admin/login');
+        res.redirect('/');
     }
 });
 

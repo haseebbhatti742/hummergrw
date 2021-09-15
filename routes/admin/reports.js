@@ -10,7 +10,7 @@ router.get('/', (req, res, next) => {
         res.locals.subtitle = 'Reports';
         res.render('admin/reports');
     } else if (req.session.username == undefined) {
-        res.render('admin/login');
+        res.redirect('/');
     }
 });
 
