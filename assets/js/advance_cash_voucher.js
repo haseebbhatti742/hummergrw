@@ -28,6 +28,7 @@ function getParty() {
 
 function addCashVoucher(){
     document.getElementById("btn2").disabled = true
+    cash_voucher_number_manual = document.getElementById("cash_voucher_number_manual").value
     party_id = document.getElementById("cv_party_id").value
     cv_date = document.getElementById("cash_voucher_date").value
     cv_type = "Advance"
@@ -40,7 +41,7 @@ function addCashVoucher(){
 
     fetch("/advance_cash_voucher/add", {
         method: "POST",
-        body: JSON.stringify({ party_id, cv_date, cv_type, cv_commodity, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details }),
+        body: JSON.stringify({ cash_voucher_number_manual,party_id, cv_date, cv_type, cv_commodity, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details }),
         headers: new Headers({
             'Content-Type': 'application/json'
         }),

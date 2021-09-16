@@ -2,7 +2,7 @@
 const express = require("express");
 const app1 = express();
 const bodyParser = require("body-parser");
-const session = require("cookie-session");
+const session = require("express-session");
 const mysql = require("mysql");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
@@ -48,7 +48,7 @@ var conn = mysql.createPool({
   database: "hummjyxk_hummer_db",
 });
 
-var conn;
+var conn; 
 conn.getConnection(function (err, con) {
   if (err) {
     console.log("DB Error!");

@@ -15,7 +15,8 @@ include aside
                                 table.table.table-striped
                                     thead
                                         tr
-                                            th CV Number
+                                            th CV Manual #
+                                            th Commodity
                                             th Party
                                             th Date
                                             //th Commodity
@@ -26,7 +27,8 @@ include aside
                                     tbody
                                         -for(let i=0; i<dataset.length; i++){
                                             tr
-                                                td #{dataset[i].cv_number}
+                                                td #{dataset[i].cv_number_manual}
+                                                td #{dataset[i].cv_commodity}
                                                 td #{dataset[i].cv_name}
                                                 td #{dataset[i].cv_date}
                                                 //td #{dataset[i].cv_commodity}

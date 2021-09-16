@@ -12,22 +12,42 @@ function searchReport(){
     report_commodity = document.getElementById("report_commodity").value
     report_date_from = document.getElementById("report_date_from").value
     report_date_to = document.getElementById("report_date_to").value
-
+    
     if(party_name=="" && report_type=="" && report_commodity=="" && report_date_from=="" && report_date_to==""){
         toastr.error("Enter Any Field")
     } else {
         if(party_name != "") party_id = document.getElementById("party_id").value
         else party_id = ""
         document.getElementById("report").innerHTML = ""
+
+        if(party_id=="") party_id="null"
+        if(report_type=="") report_type="null"
+        if(report_commodity=="") report_commodity="null"
+        if(report_date_from=="") report_date_from="null"
+        if(report_date_to=="") report_date_to="null"
+
+        url = "/reports/get_report/"+party_id+"/"+report_type+"/"+report_commodity+"/"+report_date_from+"/"+report_date_to
+        
+        // fetch(url)
+        // alert(url)
+        // fetch("/reports/get_report/", {
+        //     method: "POST",
+        //     body: JSON.stringify({ party_id,report_type,report_commodity,report_date_from, report_date_to }),
+        //     headers: new Headers({
+        //         'Content-Type': 'application/json'
+        //     })
+        // })
+
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("report").innerHTML = this.responseText;
             }
         };
-        xhttp.open("POST", "/reports/get_report/", true);
+        xhttp.open("GET", url, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("party_id="+party_id+"&report_type="+report_type+"&report_commodity="+report_commodity+"&report_date_from="+report_date_from+"&report_date_to="+report_date_to);
+        xhttp.send()
+        // xhttp.send("party_id="+party_id+"&report_type="+report_type+"&report_commodity="+report_commodity+"&report_date_from="+report_date_from+"&report_date_to="+report_date_to);
     }
 }
 

@@ -49,7 +49,8 @@ router.get('/view_all', (req, res) => {
     }
 });
 
-router.post('/add', (req, res) => {
+router.post('/add', async (req, res) => {
+    cash_voucher_number_manual = req.body.cash_voucher_number_manual
     party_id = req.body.party_id
     cv_date = req.body.cv_date
     cv_type = req.body.cv_type
@@ -60,12 +61,30 @@ router.post('/add', (req, res) => {
     cv_details = req.body.cv_details
     cv_commodity = req.body.cv_commodity
 
-    addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res)
-
+    isCV = await checkCV(cash_voucher_number_manual)
+    if(isCV == true){
+        res.status(200).json({status:"error", errorMessage:"Manual Cash Voucher Number Already Exists"})
+    } else {
+        addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res)
+    }
 });
 
+function checkCV(cash_voucher_number_manual){
+    return new Promise(function(resolve,reject){
+        app.conn.query("select * from cash_voucher where cv_number_manual='"+cash_voucher_number_manual+"'", function(err,result){
+            if(err){
+                console.log(err.message)
+            } else if(result.length == 0){
+                resolve(false)
+            } else if(result.length > 0){
+                resolve(true)
+            } 
+        })
+    })
+}
+
 let cv_number
-function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
+function addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_name,cv_signature,cv_amount, cv_details, res){
     let ledgerData = []
     ledgerData.party_id = party_id
     ledgerData.l_commodity = cv_commodity
@@ -77,6 +96,7 @@ function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv
     ledgerData.l_balance = cv_amount
     ledgerData.l_debit = cv_amount
     ledgerData.l_credit = 0
+    ledgerData.cv_number_manual = cash_voucher_number_manual
 
     // if(cv_type == "Pay") { 
     //     cv_type = "Expense"
@@ -86,7 +106,7 @@ function addCashVoucher(cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv
     //     cv_payment_type = "Debit"
     // }
 
-    query1 = "insert into cash_voucher (cv_commodity,party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details) values ('"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"')"
+    query1 = "insert into cash_voucher (cv_number_manual,cv_commodity,party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details) values ('"+cash_voucher_number_manual+"','"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"')"
     app.conn.query(query1, async function(err,result1){
         if(err){
             res.status(200).json({status: "error", errorMessage:err.message})
@@ -146,7 +166,7 @@ function addIntoLedgerWithCV(data){
 
             data.l_balance = parseFloat(data.l_balance) + parseFloat(balance)
             
-            query1 = "insert into ledger(party_id,cv_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.party_id+"','"+data.cv_number+"','"+data.l_commodity+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
+            query1 = "insert into ledger(cv_number_manual,party_id,cv_number,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.cv_number_manual+"','"+data.party_id+"','"+data.cv_number+"','"+data.l_commodity+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
             app.conn.query(query1, function(err,result){
                 if(err){
                     resolve({status:"error", errorMessage:err.message})

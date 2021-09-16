@@ -5,29 +5,29 @@ const app = require('../../app');
 let filter_party,filter_report_type,filter_commodity,filter_date
 
 router.get('/', (req, res, next) => {
-    if (req.session.username != undefined && req.session.type == "admin") {
+    // if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Reports';
         res.locals.subtitle = 'Reports';
         res.render('admin/reports');
-    } else if (req.session.username == undefined) {
-        res.redirect('/');
-    }
+    // } else if (req.session.username == undefined) {
+    //     res.redirect('/');
+    // }
 });
 
-router.post("/get_report", function(req,res){
-    party_id = req.body.party_id
-    report_type = req.body.report_type
-    report_commodity = req.body.report_commodity
-    report_date_from = req.body.report_date_from
-    report_date_to = req.body.report_date_to
+router.get("/get_report/:party_id/:report_type/:report_commodity/:report_date_from/:report_date_to", function(req,res){
+    party_id = req.params.party_id
+    report_type = req.params.report_type
+    report_commodity = req.params.report_commodity
+    report_date_from = req.params.report_date_from
+    report_date_to = req.params.report_date_to
 
     filter_party = " ledger.party_id='"+party_id+"' AND "
     filter_report_type = " "
     filter_commodity = " "
 
-    if(report_date_from == "") {report_date_from = new Date(1960,01,01)}
-    if(report_date_to == "") {report_date_to = new Date()}
-    if(party_id == "") { filter_party = " " }
+    if(report_date_from == "" || report_date_from == "null") {report_date_from = new Date(1960,01,01)}
+    if(report_date_to == "" || report_date_to == "null") {report_date_to = new Date()}
+    if(party_id == "" || party_id == "null") { filter_party = " " }
     
     report_date_from = new Date(report_date_from)
     report_date_to = new Date(report_date_to)
@@ -35,15 +35,18 @@ router.post("/get_report", function(req,res){
     report_date_to = report_date_to.getFullYear()+"-0"+(report_date_to.getMonth()+1)+"-0"+report_date_to.getDate()
     
     let query    
-    if(report_type == "") { filter_report_type = " " }
+    if(report_type == "" || report_type == "null") { filter_report_type = " " }
+    if(report_commodity == "" || report_commodity == "null") { report_commodity = "" }
     if(report_type == "Expense") { filter_report_type = " l_debit=0 AND l_credit!=0 AND " }
     if(report_type == "Recovery"){ filter_report_type = " l_debit!=0 AND l_credit=0 AND " }
     if(report_commodity != ""){ filter_commodity = " l_commodity='"+report_commodity+"' AND " }
+    console.log(report_commodity)
     filter_date = " l_date>='"+report_date_from+"' AND l_date<='"+report_date_to+"'"
     
     let party_join = " join party_info on ledger.party_id=party_info.party_id "
 
     query = "select * from ledger "+party_join+" where "+filter_party+filter_report_type+filter_commodity+filter_date
+    console.log(query)
     app.conn.query(query, async function(err,result){
         if(err) res.render("admin/reports-page", {status:"error", erroeMessage: err.message})
         else {
