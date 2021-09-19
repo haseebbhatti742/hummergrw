@@ -103,12 +103,14 @@ function addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date
         ledgerData.l_balance = cv_amount
         ledgerData.l_debit = 0
         ledgerData.l_credit = cv_amount
+        ledgerData.l_type = "Expense"
     } else if(cv_type == "Receive") { 
         cv_type = "Recovery"
         cv_payment_type = "Debit"
         ledgerData.l_balance = cv_amount
         ledgerData.l_debit = cv_amount
         ledgerData.l_credit = 0
+        ledgerData.l_type = "Recovery"
     }
 
     query1 = "insert into cash_voucher (cv_number_manual,cv_commodity, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details,cv_contact) values ('"+cash_voucher_number_manual+"','"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"', '"+cv_contact+"')"
@@ -171,7 +173,7 @@ function addIntoLedgerWithCV(data){
 
             data.l_balance = parseFloat(data.l_balance) + parseFloat(balance)
             
-            query2 = "insert into ledger(party_id,cv_number,cv_number_manual,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date) values('"+data.party_id+"','"+data.cv_number+"','"+data.cv_number_manual+"','"+data.l_commodity+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"')"
+            query2 = "insert into ledger(party_id,cv_number,cv_number_manual,l_commodity,l_description,l_seller_weight,l_buyer_weight,l_rate,l_debit,l_credit,l_balance,l_date,l_type) values('"+data.party_id+"','"+data.cv_number+"','"+data.cv_number_manual+"','"+data.l_commodity+"','"+data.l_description+"','"+data.l_seller_weight+"','"+data.l_buyer_weight+"','"+data.l_rate+"', '"+data.l_debit+"','"+data.l_credit+"','"+data.l_balance+"','"+data.l_date+"','"+data.l_type+"')"
             
             app.conn.query(query2, function(err,result){
                 if(err){

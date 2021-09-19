@@ -24,8 +24,6 @@ router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res
     date_to = new Date(date_to)
     date_from = date_from.getFullYear()+"-0"+(date_from.getMonth()+1)+"-0"+date_from.getDate()
     date_to = date_to.getFullYear()+"-0"+(date_to.getMonth()+1)+"-0"+date_to.getDate()
-    console.log(date_from)
-    console.log(date_to)
 
     dataset = []
     date1 = new Date()

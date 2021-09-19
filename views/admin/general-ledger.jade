@@ -32,8 +32,8 @@
                                             th Type
                                             th Weight
                                             th Rate
-                                            th Debit
-                                            th Credit
+                                            th Taken
+                                            th Given
                                             th Balance
                                     tbody
                                         -for(let i=0; i<dataset.ledger.length; i++){
@@ -71,16 +71,16 @@
                                 .table-responsive
                                     table.table
                                         tr
-                                            th Total Weight In
+                                            th Total Weight Out
                                             td #{total_weight_in}
                                         tr
-                                            th Total Weight Out
+                                            th Total Weight In
                                             td #{total_weight_out}
                                         tr
-                                            th Total Debit
+                                            th Total Taken
                                             td #{total_recoveries}
                                         tr
-                                            th Total Credit
+                                            th Total Given
                                             td #{total_expense}
                                         tr
                                             th Balance Amount
