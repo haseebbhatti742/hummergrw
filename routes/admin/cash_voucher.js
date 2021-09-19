@@ -119,7 +119,8 @@ function addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date
             ledgerData.cv_number = result1.insertId
             cv_number = result1.insertId
             l_data = await addIntoLedgerWithCV(ledgerData)
-            addToAccounts(party_id, cv_amount, cv_payment_type,res)
+            res.status(200).json({status: "ok", cv_number:cv_number})
+            //addToAccounts(party_id, cv_amount, cv_payment_type,res)
         }
     })
 }

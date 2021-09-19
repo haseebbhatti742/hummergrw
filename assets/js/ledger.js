@@ -12,22 +12,19 @@ function searchLedger(){
 
     if(party_name == ""){
         document.getElementById("party_name_error").innerHTML = "Enter Party"
-    } else if(date_from == ""){
-      document.getElementById("date_from_error").innerHTML = "Enter From Date"
-    } else if(date_to == ""){
-      document.getElementById("date_to_error").innerHTML = "Enter To Date"
     } else {
+        if(date_from == "")date_from = "null"
+        if(date_to == "")date_to = "null"
+          
         document.getElementById("party_name_error").innerHTML = ""
-        document.getElementById("date_from_error").innerHTML = ""
-        document.getElementById("date_to_error").innerHTML = ""
-        document.getElementById("general-ledger").innerHTML = ""
+        url = "/ledger/get_general_ledger/"+party_id+"/"+date_from+"/"+date_to
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("general-ledger").innerHTML = this.responseText;
             }
         };
-        xhttp.open("GET", "/ledger/get_general_ledger/"+party_id+"/"+date_from+"/"+date_to, true);
+        xhttp.open("GET", url, true);
         xhttp.send();
     }
 }

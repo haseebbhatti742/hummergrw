@@ -27,17 +27,6 @@ function searchReport(){
         if(report_date_to=="") report_date_to="null"
 
         url = "/reports/get_report/"+party_id+"/"+report_type+"/"+report_commodity+"/"+report_date_from+"/"+report_date_to
-        
-        // fetch(url)
-        // alert(url)
-        // fetch("/reports/get_report/", {
-        //     method: "POST",
-        //     body: JSON.stringify({ party_id,report_type,report_commodity,report_date_from, report_date_to }),
-        //     headers: new Headers({
-        //         'Content-Type': 'application/json'
-        //     })
-        // })
-
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -47,7 +36,6 @@ function searchReport(){
         xhttp.open("GET", url, true);
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhttp.send()
-        // xhttp.send("party_id="+party_id+"&report_type="+report_type+"&report_commodity="+report_commodity+"&report_date_from="+report_date_from+"&report_date_to="+report_date_to);
     }
 }
 

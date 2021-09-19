@@ -107,13 +107,13 @@ async function addGatePass(req,res){
     let gp_row = req.body.gp_entries;
     let cash_voucher = req.body.cash_voucher
 
-    if(gp_type == "in") {
-        gp_type = "Expense"
+    if(gp_type == "out") {
+        gp_type = "Recovery"
         gp_payment_type = "Credit"
         gate_pass_grand_total = -gate_pass_grand_total;
     }
-    else if(gp_type == "out") {
-        gp_type = "Recovery"
+    else if(gp_type == "in") {
+        gp_type = "Expense"
         gp_payment_type = "Debit"
     }
 
@@ -143,17 +143,17 @@ async function addGatePass(req,res){
                     ledgerData.l_rate = gp_unit_amount
                     ledgerData.l_description = gp_details
 
-                    if(gp_type == "Expense") {
+                    if(gp_type == "Recovery") {
                         ledgerData.l_debit = 0
                         ledgerData.l_credit = gate_pass_grand_total
                         ledgerData.l_balance = ledgerData.l_credit
-                        ledgerData.l_type = "Expense"
+                        ledgerData.l_type = "Recovery"
                     }
-                    else if(gp_type == "Recovery") {
+                    else if(gp_type == "Expense") {
                         ledgerData.l_debit = gate_pass_grand_total
                         ledgerData.l_balance = ledgerData.l_debit
                         ledgerData.l_credit = 0
-                        ledgerData.l_type = "Recovery"
+                        ledgerData.l_type = "Expense"
                     }
                     
                     ledgerData.party_id = gate_pass_party_id
