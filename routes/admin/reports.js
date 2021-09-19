@@ -5,13 +5,13 @@ const app = require('../../app');
 let filter_party,filter_report_type,filter_commodity,filter_date
 
 router.get('/', (req, res, next) => {
-    // if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Reports';
         res.locals.subtitle = 'Reports';
         res.render('admin/reports');
-    // } else if (req.session.username == undefined) {
-    //     res.redirect('/');
-    // }
+    } else if (req.session.username == undefined) {
+        res.redirect('/');
+    }
 });
 
 router.get("/get_report/:party_id/:report_type/:report_commodity/:report_date_from/:report_date_to", function(req,res){
