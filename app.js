@@ -34,19 +34,19 @@ app1.use(function (req, res, next) {
 });
 
 //db connection
-// var conn = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "",
-//   database: "hummer_db",
-// });
-
 var conn = mysql.createPool({
   host: "localhost",
-  user: "hummjyxk_hummer",
-  password: "hummergrw@123",
-  database: "hummjyxk_hummer_db",
+  user: "root",
+  password: "",
+  database: "hummer_db",
 });
+
+// var conn = mysql.createPool({
+//   host: "localhost",
+//   user: "hummjyxk_hummer",
+//   password: "hummergrw@123",
+//   database: "hummjyxk_hummer_db",
+// });
 
 var conn; 
 conn.getConnection(function (err, con) {
@@ -84,52 +84,52 @@ app1.use("/logout", function (req, res) {
   });
 });
 
-var XLSX = require('xlsx')
-app1.use("/read-excel", function(req,res){
-  var workbook = XLSX.readFile('HUMMER1.xlsx');
-  var worksheet = workbook.Sheets[workbook.SheetNames[0]];
-  const allData = [];
-  let data = {};
+// var XLSX = require('xlsx')
+// app1.use("/read-excel", function(req,res){
+//   var workbook = XLSX.readFile('HUMMER1.xlsx');
+//   var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+//   const allData = [];
+//   let data = {};
 
-  for(let cell in worksheet){
-    const cellAsString = cell.toString();
+//   for(let cell in worksheet){
+//     const cellAsString = cell.toString();
 
-    if(cellAsString[1] !== 'r' && cellAsString !== 'm' && cellAsString[1] > 1){
-      if(cellAsString[0] === 'A')
-        data.date = worksheet[cell].v;
-      else if(cellAsString[0] === 'B')
-        data.type = worksheet[cell].v;
-      else if(cellAsString[0] === 'C')
-        data.quantity = worksheet[cell].v;
-      else if(cellAsString[0] === 'D')
-        data.unit = worksheet[cell].v;
-      else if(cellAsString[0] === 'E')
-        data.unit_price = worksheet[cell].v;
-      else if(cellAsString[0] === 'F')
-        data.total_amount = worksheet[cell].v;
-      else if(cellAsString[0] === 'G')
-        data.details = worksheet[cell].v;
-      else if(cellAsString[0] === 'H')
-        data.part_name = worksheet[cell].v;
-      else if(cellAsString[0] === 'I')
-        data.commodity = worksheet[cell].v;
-      else if(cellAsString[0] === 'J')
-        data.balance = worksheet[cell].v;
-      else if(cellAsString[0] === 'K')
-        data.entry_code = worksheet[cell].v;
-      else if(cellAsString[0] === 'L')
-        data.cv_number = worksheet[cell].v;
-      else if(cellAsString[0] === 'M'){
-        data.gp_number = worksheet[cell].v;
-        allData.push(data);
-        data = {};
-      }
-    }
-  }
+//     if(cellAsString[1] !== 'r' && cellAsString !== 'm' && cellAsString[1] > 1){
+//       if(cellAsString[0] === 'A')
+//         data.date = worksheet[cell].v;
+//       else if(cellAsString[0] === 'B')
+//         data.type = worksheet[cell].v;
+//       else if(cellAsString[0] === 'C')
+//         data.quantity = worksheet[cell].v;
+//       else if(cellAsString[0] === 'D')
+//         data.unit = worksheet[cell].v;
+//       else if(cellAsString[0] === 'E')
+//         data.unit_price = worksheet[cell].v;
+//       else if(cellAsString[0] === 'F')
+//         data.total_amount = worksheet[cell].v;
+//       else if(cellAsString[0] === 'G')
+//         data.details = worksheet[cell].v;
+//       else if(cellAsString[0] === 'H')
+//         data.part_name = worksheet[cell].v;
+//       else if(cellAsString[0] === 'I')
+//         data.commodity = worksheet[cell].v;
+//       else if(cellAsString[0] === 'J')
+//         data.balance = worksheet[cell].v;
+//       else if(cellAsString[0] === 'K')
+//         data.entry_code = worksheet[cell].v;
+//       else if(cellAsString[0] === 'L')
+//         data.cv_number = worksheet[cell].v;
+//       else if(cellAsString[0] === 'M'){
+//         data.gp_number = worksheet[cell].v;
+//         allData.push(data);
+//         data = {};
+//       }
+//     }
+//   }
 
-  console.log(allData)
-  res.send(allData)
-})
+//   console.log(allData)
+//   res.send(allData)
+// })
 
 module.exports.app = app1;
 module.exports.conn = conn;

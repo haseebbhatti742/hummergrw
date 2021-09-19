@@ -26,9 +26,10 @@
                                     thead
                                         tr
                                             th Date
-                                            th Manual GP #
-                                            th Manual CV #
+                                            th GP #
+                                            th CV #
                                             th Description
+                                            th Type
                                             th Weight
                                             th Rate
                                             th Debit
@@ -41,6 +42,7 @@
                                                 td #{dataset.ledger[i].gp_number_manual}
                                                 td #{dataset.ledger[i].cv_number_manual}
                                                 td #{dataset.ledger[i].l_description}
+                                                td #{dataset.ledger[i].l_type}
                                                 td #{dataset.ledger[i].l_seller_weight}
                                                 td #{dataset.ledger[i].l_rate}
                                                 td #{dataset.ledger[i].l_debit}

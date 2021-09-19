@@ -133,10 +133,6 @@ include aside
                                     .col-md-2
                                         label Details
                                         input#gate_pass_details0.form-control(type="text", placeholder="Enter Details Here...")
-                                    //col buttonX
-                                    //- .col-md-1 
-                                    //-     label &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    //-     button#buttonX0.btn.btn-danger(onclick='buttonXgpRowDelete()') X
                                 .row
                                     .col-md-12 
                                         hr
@@ -147,15 +143,6 @@ include aside
                                             span.fa.fa-plus-circle.mt-1(style="float:left") &nbsp;
                                         button.btn.btn-warning.ml-2(onclick="remove_last_gp_row()" style="color:black") Remove Last
                                             i.fa.fa-minus.mt-1(style="float:left") &nbsp;
-                            //#voucherButtons
-                                .row.form-group
-                                    #divAddVoucher.col-md-2
-                                        button#btnAddVoucher.btn.btn-primary(onclick="add_cv()") Add Voucher
-                                    #divRemoveVoucher.col-md-2(style="display: none")
-                                        button#btnRemoveVoucher.btn.btn-warning(onclick="remove_cv()") Remove Voucher
-                                .row.form-group 
-                                    .col-md-12
-                                        #cv_form
                         .col-md-12
                             #submitButtons
                                 .row.form-group
