@@ -37,19 +37,19 @@ router.get("/get_report/:party_id/:report_type/:report_commodity/:report_date_fr
     let query    
     if(report_type == "" || report_type == "null") { filter_report_type = " " }
     if(report_commodity == "" || report_commodity == "null") { report_commodity = "" }
-    if(report_type == "Expense") { filter_report_type = " l_debit=0 AND l_credit!=0 AND " }
-    if(report_type == "Recovery"){ filter_report_type = " l_debit!=0 AND l_credit=0 AND " }
+    if(report_type == "Expense") { filter_report_type = " l_type='Expense' AND " }
+    if(report_type == "Recovery"){ filter_report_type = " l_type='Recovery' AND " }
     if(report_commodity != ""){ filter_commodity = " l_commodity='"+report_commodity+"' AND " }
-    console.log(report_commodity)
     filter_date = " l_date>='"+report_date_from+"' AND l_date<='"+report_date_to+"'"
     
     let party_join = " join party_info on ledger.party_id=party_info.party_id "
 
     query = "select * from ledger "+party_join+" where "+filter_party+filter_report_type+filter_commodity+filter_date
-    console.log(query)
     app.conn.query(query, async function(err,result){
-        if(err) res.render("admin/reports-page", {status:"error", erroeMessage: err.message})
-        else {
+        if(err) { res.render("admin/reports-page", {status:"error", erroeMessage: err.message}) }
+        else if(result.length == 0){
+            res.render("admin/reports-page", {status:"error", errorMessage:"Record Not Found"})
+        } else {
             for(let i=0; i<result.length; i++){
                 date = new Date(result[i].l_date)
                 result[i].l_date = date.getDate()+"-"+(date.getMonth()+1)+"-"+date.getFullYear()
@@ -62,6 +62,12 @@ router.get("/get_report/:party_id/:report_type/:report_commodity/:report_date_fr
             balance_amount = await getTotalBalance()
             total_weight_in = await getTotalWeightsIn()
             total_weight_out = await getTotalWeightsOut()
+
+            total_expense = total_expense.toLocaleString('en-US')
+            total_recoveries = total_recoveries.toLocaleString('en-US')
+            balance_amount = balance_amount.toLocaleString('en-US')
+            total_weight_in = total_weight_in.toLocaleString('en-US')
+            total_weight_out = total_weight_out.toLocaleString('en-US')
 
             res.render("admin/reports-page", {status:"ok", dataset: result, total_expense:total_expense, total_recoveries: total_recoveries, balance_amount: balance_amount, total_weight_in:total_weight_in, total_weight_out:total_weight_out})
         }

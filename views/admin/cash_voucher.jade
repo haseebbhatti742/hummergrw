@@ -55,8 +55,8 @@ include aside
                             .row.form-group
                                 .col-md-3
                                     .form-group.input-group-md
-                                        label Amount
-                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' required)
+                                        label Amount (RS)
+                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' data-a-sign="," data-a-dec="," data-a-sep="." required)
                                     #cash_voucher_amount_error(style="color:red")
                                 .col-md-3
                                     .form-group.input-group-md
@@ -140,3 +140,29 @@ script.
         document.getElementById("div_commodity").style.display = "none"
         document.getElementById("cv_commodity").required = false
     }
+
+    function updateTextView(_obj){
+        var num = getNumber(_obj.val());
+        if(num==0){
+            _obj.val('');
+        }else{
+            _obj.val(num.toLocaleString());
+        }
+    }
+
+    function getNumber(_str){
+        var arr = _str.split('');
+        var out = new Array();
+        for(var cnt=0;cnt<arr.length;cnt++){
+            if(isNaN(arr[cnt])==false){
+            out.push(arr[cnt]);
+            }
+        }
+        return Number(out.join(''));
+    }
+    
+    $(document).ready(function(){
+        $('#cash_voucher_amount').on('keyup',function(){
+            updateTextView($(this));
+        });
+    });

@@ -12,7 +12,14 @@ router.get('/', async function(req, res){
         balance_amount = await getTotalBalance()
         total_weight_in = await getTotalWeightsIn()
         total_weight_out = await getTotalWeightsOut()
-        balance_weight = total_weight_in - total_weight_out
+        balance_weight = total_weight_out - total_weight_in
+
+        total_expense = total_expense.toLocaleString('en-US')
+        total_recoveries = total_recoveries.toLocaleString('en-US')
+        balance_amount = balance_amount.toLocaleString('en-US')
+        total_weight_in = total_weight_in.toLocaleString('en-US')
+        total_weight_out = total_weight_out.toLocaleString('en-US')
+        balance_weight = balance_weight.toLocaleString('en-US')
 
         res.render('admin/home', {total_expense,total_recoveries,balance_amount,total_weight_in, total_weight_out, balance_weight});
     } else if (req.session.username == undefined) {

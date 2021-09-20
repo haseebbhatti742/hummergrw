@@ -66,7 +66,7 @@ include aside
                                         #gate_pass_name_error(style="color:red")
                                     .col-md-3
                                             .form-group.input-group-md
-                                                label Grand Total
+                                                label Grand Total (RS)
                                                 input#gate_pass_grand_total.form-control(type="text" disabled)
                                             #gate_pass_name_error(style="color:red")
                                     .col-md-3
@@ -150,13 +150,3 @@ include aside
 
 include footer
 script(src='/js/gate_pass.js')
-script.
-    function searchGatePass(){
-        gp_number = document.getElementById("searchId").value
-        if(gp_number == ""){
-            document.getElementById("searchId_error").innerHTML = "Enter Gate Pass Number"
-        } else {
-            document.getElementById("searchId_error").innerHTML = ""
-            window.location.replace("/gate_pass/view-gate-pass/"+gp_number)
-        }
-    }

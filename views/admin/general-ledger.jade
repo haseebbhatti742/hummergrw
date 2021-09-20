@@ -22,8 +22,8 @@
                                     small.float-right Date To: #{date_to}
                         .row
                             .col-12.table-responsive
-                                table.table.table-striped
-                                    thead
+                                table.table.table-bordered
+                                    thead.thead-dark
                                         tr
                                             th Date
                                             th GP #
@@ -32,8 +32,8 @@
                                             th Type
                                             th Weight
                                             th Rate
-                                            th Taken
-                                            th Given
+                                            th Debit
+                                            th Credit
                                             th Balance
                                     tbody
                                         -for(let i=0; i<dataset.ledger.length; i++){
@@ -50,23 +50,12 @@
                                                 td #{dataset.ledger[i].l_balance}
                                         -}
                         .row
-                            // accepted payments column
                             .col-6
-                                //- p.lead Payment Methods:
-                                //- |                   
-                                //- img(src='../../dist/img/credit/visa.png', alt='Visa')
-                                //- |                   
-                                //- img(src='../../dist/img/credit/mastercard.png', alt='Mastercard')
-                                //- |                   
-                                //- img(src='../../dist/img/credit/american-express.png', alt='American Express')
-                                //- |                   
-                                //- img(src='../../dist/img/credit/paypal2.png', alt='Paypal')
-                                //- |                   
-                                //- p.text-muted.well.well-sm.shadow-none(style='margin-top: 10px;')
-                                //-     | Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-                                //-     | plugg
-                                //-     | dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                            // /.col
+                                p 
+                                    strong NOTE:
+                                    br
+                                    | Negative Balance shows Client Payable
+                                    | Positive Balance shows HUMMER Payable
                             .col-6
                                 .table-responsive
                                     table.table
@@ -77,10 +66,10 @@
                                             th Total Weight In
                                             td #{total_weight_out}
                                         tr
-                                            th Total Taken
+                                            th Total Debit
                                             td #{total_recoveries}
                                         tr
-                                            th Total Given
+                                            th Total Credit
                                             td #{total_expense}
                                         tr
                                             th Balance Amount

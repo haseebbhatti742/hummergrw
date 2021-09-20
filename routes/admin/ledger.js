@@ -77,6 +77,12 @@ router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res
                             balance_amount = await getTotalBalance(party_id, date_from, date_to)
                             total_weight_in = await getTotalWeightsIn(party_id, date_from, date_to)
                             total_weight_out = await getTotalWeightsOut(party_id, date_from, date_to)
+
+                            total_expense = total_expense.toLocaleString('en-US')
+                            total_recoveries = total_recoveries.toLocaleString('en-US')
+                            balance_amount = balance_amount.toLocaleString('en-US')
+                            total_weight_in = total_weight_in.toLocaleString('en-US')
+                            total_weight_out = total_weight_out.toLocaleString('en-US')
                             
                             res.render("admin/general-ledger", {status:"ok", dataset:dataset, date_from:date_from, date_to:date_to, total_expense:total_expense, total_recoveries: total_recoveries, balance_amount: balance_amount, total_weight_in:total_weight_in, total_weight_out:total_weight_out})       
                         }

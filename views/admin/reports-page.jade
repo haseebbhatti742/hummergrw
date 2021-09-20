@@ -21,10 +21,11 @@
                             .col-sm-6.invoice-col.float-right
                                 h4
                                     small.float-right Date To: #{dataset.date_to}
+                        br
                         .row
                             .col-12.table-responsive
-                                table.table.table-striped
-                                    thead
+                                table.table.table-bordered
+                                    thead.thead-dark
                                         tr
                                             th Party
                                             th Date
@@ -32,11 +33,12 @@
                                             th CV #
                                             th Head
                                             th Description
+                                            th Type
                                             th Weight
                                             //th Buyer Weight
                                             th Rate
-                                            th Taken
-                                            th Given
+                                            th Debit
+                                            th Credit
                                             th Balance
                                     tbody
                                         -for(let i=0; i<dataset.length; i++){
@@ -47,6 +49,7 @@
                                                 td #{dataset[i].cv_number_manual}
                                                 td #{dataset[i].l_commodity}
                                                 td #{dataset[i].l_description}
+                                                td #{dataset[i].l_type}
                                                 td #{dataset[i].l_seller_weight}
                                                 //td #{dataset[i].l_buyer_weight}
                                                 td #{dataset[i].l_rate}
@@ -58,6 +61,11 @@
                         .row
                             // accepted payments column
                             .col-6
+                                p 
+                                    strong NOTE:
+                                    br
+                                    | Negative Balance shows Client Payable
+                                    | Positive Balance shows HUMMER Payable
                             .col-6
                                 .table-responsive
                                     table.table
@@ -68,10 +76,10 @@
                                             th Total Weight In
                                             td #{total_weight_out}
                                         tr
-                                            th Total Taken
+                                            th Total Debit
                                             td #{total_recoveries}
                                         tr
-                                            th Total Given
+                                            th Total Credit
                                             td #{total_expense}
                                         tr
                                             th Balance Amount

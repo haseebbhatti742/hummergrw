@@ -38,42 +38,18 @@ include aside
                                 .col-md-4
                                     .small-box.bg-danger
                                         .inner 
-                                            h4 #{total_weight_in}
-                                            p Total Weight Out
-                                        //.icon
-                                            i.fas.fa-arrow-up(style="color:red")
+                                            h4 #{total_weight_out}
+                                            p Total Weight In
                                 .col-md-4
                                     .small-box.bg-success
                                         .inner 
-                                            h4 #{total_weight_out}
-                                            p Total Weight In
+                                            h4 #{total_weight_in}
+                                            p Total Weight Out
                                 .col-md-4
                                     .small-box.bg-info
                                         .inner 
                                             h4 #{balance_weight}
                                             p Balance Weight
-            //add party
-            //.col-md-12
-                .card.card-success.card-outline
-                    .card-header
-                        h3.card-title Search
-                    .card-body.p-2.mt-2
-                         .card-tools
-                            #tab1
-                                .row.form-group
-                                    .col-md-5
-                                        .form-group.input-group-md
-                                            input#searchId.form-control(type = "number", placeholder="Enter ID..." autofocus)
-                                        #searchId_error(style="color:red")
-                                     .col-md-5
-                                        .form-group.input-group-md
-                                            select#searchType.form-control
-                                                option(value="gate_pass") Gate Pass
-                                                option(value="cash_voucher") Cash Voucher
-                                    .col-md-2
-                                        .form-group 
-                                            button#btnSearch.btn.btn-success(onclick="searchById()") Search
-            //form to show
             #gatePassDiv
 
 include footer
