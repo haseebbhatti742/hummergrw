@@ -3,13 +3,13 @@ const router = express.Router()
 const app = require('../../app')
 
 router.get('/general', (req, res, next) => {
-    if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username == undefined) {
+        res.redirect('/');
+    } else if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Ledger'
         res.locals.subtitle = 'General'
         res.render('admin/ledger-general')
-    } else if (req.session.username == undefined) {
-        res.redirect('/');
-    }
+    } 
 });
 
 router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res){

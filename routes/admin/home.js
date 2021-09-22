@@ -3,7 +3,9 @@ const router = express.Router();
 const app = require('../../app');
 
 router.get('/', async function(req, res){
-    if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username == undefined) {
+        res.redirect('/');
+    } else if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Home';
         res.locals.subtitle = 'Home';
 
@@ -22,8 +24,6 @@ router.get('/', async function(req, res){
         balance_weight = balance_weight.toLocaleString('en-US')
 
         res.render('admin/home', {total_expense,total_recoveries,balance_amount,total_weight_in, total_weight_out, balance_weight});
-    } else if (req.session.username == undefined) {
-        res.redirect('/');
     }
 });
 

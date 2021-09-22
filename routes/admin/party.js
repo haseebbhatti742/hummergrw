@@ -3,12 +3,12 @@ const router = express.Router()
 const app = require('../../app')
 
 router.get('/add-party', (req, res, next) => {
-    if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username == undefined) {
+        res.redirect('/');
+    } else if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Party'
         res.locals.subtitle = 'Add Party'
         res.render('admin/party')
-    } else if (req.session.username == undefined) {
-        res.redirect('/');
     }
 });
 

@@ -3,7 +3,9 @@ const router = express.Router();
 const app = require('../../app')
 
 router.get('/', (req, res) => {
-    if (req.session.username != undefined && req.session.type == "admin") {
+    if (req.session.username == undefined) {
+        res.redirect('/');
+    } else if (req.session.username != undefined && req.session.type == "admin") {
         res.locals.title = 'Cash Voucher';
         res.locals.subtitle = 'Cash Voucher';
 
@@ -18,9 +20,7 @@ router.get('/', (req, res) => {
                     res.render('admin/cash_voucher', {cv_number: (result[0].cv_number+1)});
             }
         })
-    } else {
-        res.redirect('/');
-    }
+    } 
 });
 
 router.get("/view-cash-voucher/:cv_number", function(req,res){
@@ -67,7 +67,6 @@ router.post('/add', async function (req, res) {
     } else {
         addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date,cv_type,cv_payment_type,cv_contact,cv_name,cv_signature,cv_amount, cv_details, res)
     }
-
 });
 
 function checkCV(cash_voucher_number_manual){
@@ -94,6 +93,9 @@ function addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date
     ledgerData.l_seller_weight = 0
     ledgerData.l_buyer_weight = 0
     ledgerData.l_rate = 0
+    ledgerData.l_balance = cv_amount
+    ledgerData.l_debit = cv_amount
+    ledgerData.l_credit = 0
     ledgerData.cv_number_manual = cash_voucher_number_manual
 
     if(cv_type == "Pay") { 
@@ -113,7 +115,7 @@ function addCashVoucher(cash_voucher_number_manual,cv_commodity,party_id,cv_date
         ledgerData.l_type = "Recovery"
     }
 
-    query1 = "insert into cash_voucher (cv_number_manual,cv_commodity, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details,cv_contact) values ('"+cash_voucher_number_manual+"','"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"', '"+cv_contact+"')"
+    query1 = "insert into cash_voucher (cv_number_manual,cv_commodity, party_id, cv_date, cv_type, cv_payment_type, cv_name, cv_signature, cv_amount, cv_details,cv_contact,cv_advance) values ('"+cash_voucher_number_manual+"','"+cv_commodity+"','"+party_id+"', '"+cv_date+"', '"+cv_type+"', '"+cv_payment_type+"', '"+cv_name+"', '"+cv_signature+"', '"+cv_amount+"', '"+cv_details+"', '"+cv_contact+"','false')"
     app.conn.query(query1, async function(err,result1){
         if(err){
             res.status(200).json({status: "error", errorMessage:err.message})
