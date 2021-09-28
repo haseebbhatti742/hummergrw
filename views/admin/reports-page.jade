@@ -35,10 +35,9 @@
                                             th Description
                                             th Type
                                             th Weight
-                                            //th Buyer Weight
                                             th Rate
-                                            th Debit
-                                            th Credit
+                                            th Amount
+                                            //- th Credit
                                             th Balance
                                     tbody
                                         -for(let i=0; i<dataset.length; i++){
@@ -51,10 +50,14 @@
                                                 td #{dataset[i].l_description}
                                                 td #{dataset[i].l_type}
                                                 td #{dataset[i].l_seller_weight}
-                                                //td #{dataset[i].l_buyer_weight}
                                                 td #{dataset[i].l_rate}
-                                                td #{dataset[i].l_debit}
-                                                td #{dataset[i].l_credit}
+                                                if(dataset[i].l_debit == 0)
+                                                    td #{dataset[i].l_credit}
+                                                else if(dataset[i].l_credit == 0)
+                                                    td #{dataset[i].l_debit}
+                                                else
+                                                //- td #{dataset[i].l_debit}
+                                                //- td #{dataset[i].l_credit}
                                                 td #{dataset[i].l_balance}
                                                 
                                         -}
