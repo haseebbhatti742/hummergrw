@@ -36,8 +36,8 @@
                                             th Type
                                             th Weight
                                             th Rate
-                                            th Amount
-                                            //- th Credit
+                                            th Debit
+                                            th Credit
                                             th Balance
                                     tbody
                                         -for(let i=0; i<dataset.length; i++){
@@ -51,13 +51,8 @@
                                                 td #{dataset[i].l_type}
                                                 td #{dataset[i].l_seller_weight}
                                                 td #{dataset[i].l_rate}
-                                                if(dataset[i].l_debit == 0)
-                                                    td #{dataset[i].l_credit}
-                                                else if(dataset[i].l_credit == 0)
-                                                    td #{dataset[i].l_debit}
-                                                else
-                                                //- td #{dataset[i].l_debit}
-                                                //- td #{dataset[i].l_credit}
+                                                td #{dataset[i].l_debit}
+                                                td #{dataset[i].l_credit}
                                                 td #{dataset[i].l_balance}
                                                 
                                         -}
@@ -67,8 +62,9 @@
                                 p 
                                     strong NOTE:
                                     br
-                                    | Negative Balance shows Client Payable
-                                    | Positive Balance shows HUMMER Payable
+                                    | Negative Balance = Client Payable
+                                    br
+                                    | Positive Balance = HUMMER Payable
                             .col-6
                                 .table-responsive
                                     table.table

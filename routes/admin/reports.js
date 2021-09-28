@@ -31,8 +31,24 @@ router.get("/get_report/:party_id/:report_type/:report_commodity/:report_date_fr
     
     report_date_from = new Date(report_date_from)
     report_date_to = new Date(report_date_to)
-    report_date_from = report_date_from.getFullYear()+"-0"+(report_date_from.getMonth()+1)+"-0"+report_date_from.getDate()
-    report_date_to = report_date_to.getFullYear()+"-0"+(report_date_to.getMonth()+1)+"-0"+report_date_to.getDate()
+    
+    if((report_date_from.getMonth()+1)<10 && report_date_from.getDate()<10)
+        report_date_from = report_date_from.getFullYear()+"-0"+(report_date_from.getMonth()+1)+"-0"+report_date_from.getDate()
+    else if((report_date_from.getMonth()+1)>=10 && report_date_from.getDate()<10)
+        report_date_from = report_date_from.getFullYear()+"-"+(report_date_from.getMonth()+1)+"-0"+report_date_from.getDate()
+    else if((report_date_from.getMonth()+1)<10 && report_date_from.getDate()>=10)
+        report_date_from = report_date_from.getFullYear()+"-0"+(report_date_from.getMonth()+1)+"-"+report_date_from.getDate()
+    else if((report_date_from.getMonth()+1)>=10 && report_date_from.getDate()>=10)
+        report_date_from = report_date_from.getFullYear()+"-"+(report_date_from.getMonth()+1)+"-"+report_date_from.getDate()
+    
+    if((report_date_to.getMonth()+1)<10 && report_date_to.getDate()<10)
+        report_date_to = report_date_to.getFullYear()+"-0"+(report_date_to.getMonth()+1)+"-0"+report_date_to.getDate()
+    else if((report_date_to.getMonth()+1)>=10 && report_date_to.getDate()<10)
+        report_date_to = report_date_to.getFullYear()+"-"+(report_date_to.getMonth()+1)+"-0"+report_date_to.getDate()
+    else if((report_date_to.getMonth()+1)<10 && report_date_to.getDate()>=10)
+        report_date_to = report_date_to.getFullYear()+"-0"+(report_date_to.getMonth()+1)+"-"+report_date_to.getDate()
+    else if((report_date_to.getMonth()+1)>=10 && report_date_to.getDate()>=10)
+        report_date_to = report_date_to.getFullYear()+"-"+(report_date_to.getMonth()+1)+"-"+report_date_to.getDate()
     
     let query    
     if(report_type == "" || report_type == "null") { filter_report_type = " " }

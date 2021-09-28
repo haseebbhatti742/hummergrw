@@ -22,8 +22,23 @@ router.get("/get_general_ledger/:party_id/:date_from/:date_to", function(req,res
 
     date_from = new Date(date_from)
     date_to = new Date(date_to)
-    date_from = date_from.getFullYear()+"-0"+(date_from.getMonth()+1)+"-0"+date_from.getDate()
-    date_to = date_to.getFullYear()+"-0"+(date_to.getMonth()+1)+"-0"+date_to.getDate()
+    if((date_from.getMonth()+1)<10 && date_from.getDate()<10)
+        date_from = date_from.getFullYear()+"-0"+(date_from.getMonth()+1)+"-0"+date_from.getDate()
+    else if((date_from.getMonth()+1)>=10 && date_from.getDate()<10)
+        date_from = date_from.getFullYear()+"-"+(date_from.getMonth()+1)+"-0"+date_from.getDate()
+    else if((date_from.getMonth()+1)<10 && date_from.getDate()>=10)
+        date_from = date_from.getFullYear()+"-0"+(date_from.getMonth()+1)+"-"+date_from.getDate()
+    else if((date_from.getMonth()+1)>=10 && date_from.getDate()>=10)
+        date_from = date_from.getFullYear()+"-"+(date_from.getMonth()+1)+"-"+date_from.getDate()
+    
+    if((date_to.getMonth()+1)<10 && date_to.getDate()<10)
+        date_to = date_to.getFullYear()+"-0"+(date_to.getMonth()+1)+"-0"+date_to.getDate()
+    else if((date_to.getMonth()+1)>=10 && date_to.getDate()<10)
+        date_to = date_to.getFullYear()+"-"+(date_to.getMonth()+1)+"-0"+date_to.getDate()
+    else if((date_to.getMonth()+1)<10 && date_to.getDate()>=10)
+        date_to = date_to.getFullYear()+"-0"+(date_to.getMonth()+1)+"-"+date_to.getDate()
+    else if((date_to.getMonth()+1)>=10 && date_to.getDate()>=10)
+        date_to = date_to.getFullYear()+"-"+(date_to.getMonth()+1)+"-"+date_to.getDate()
 
     dataset = []
     date1 = new Date()
