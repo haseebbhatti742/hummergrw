@@ -14,14 +14,16 @@ router.get('/', (req, res) => {
     }
 });
 
-router.get("/get_report/:party_id/:report_type/:report_commodity/:report_date_from/:report_date_to", function(req,res){
+router.get("/get_report/:party_id/:report_type/:report_genre/:report_commodity/:report_date_from/:report_date_to", function(req,res){
     party_id = req.params.party_id
     report_type = req.params.report_type
+    report_genre = req.params.report_genre
     report_commodity = req.params.report_commodity
     report_date_from = req.params.report_date_from
     report_date_to = req.params.report_date_to
 
     filter_party = " ledger.party_id='"+party_id+"' AND "
+    filter_report_genre = " "
     filter_report_type = " "
     filter_commodity = " "
 
@@ -52,15 +54,20 @@ router.get("/get_report/:party_id/:report_type/:report_commodity/:report_date_fr
     
     let query    
     if(report_type == "" || report_type == "null") { filter_report_type = " " }
-    if(report_commodity == "" || report_commodity == "null") { report_commodity = "" }
     if(report_type == "Expense") { filter_report_type = " l_type='Expense' AND " }
     if(report_type == "Recovery"){ filter_report_type = " l_type='Recovery' AND " }
+
+    if(report_genre == "" || report_genre == "null") { filter_report_genre = " " }
+    if(report_genre == "gp"){ filter_report_genre = " gp_number!='NULL' AND " }
+    if(report_genre == "cv"){ filter_report_genre = " cv_number!='NULL' AND " }
+    
+    if(report_commodity == "" || report_commodity == "null") { report_commodity = "" }
     if(report_commodity != ""){ filter_commodity = " l_commodity='"+report_commodity+"' AND " }
     filter_date = " l_date>='"+report_date_from+"' AND l_date<='"+report_date_to+"'"
     
     let party_join = " join party_info on ledger.party_id=party_info.party_id "
 
-    query = "select * from ledger "+party_join+" where "+filter_party+filter_report_type+filter_commodity+filter_date
+    query = "select * from ledger "+party_join+" where "+filter_party+filter_report_type+filter_report_genre+filter_commodity+filter_date
     app.conn.query(query, async function(err,result){
         if(err) { res.render("admin/reports-page", {status:"error", erroeMessage: err.message}) }
         else if(result.length == 0){

@@ -15,6 +15,14 @@ include aside
                                 .row.form-group
                                     .col-md-2
                                         .form-group.input-group-md
+                                            label Genre
+                                            select#report_genre.form-control
+                                                option(value="" selected disabled) Select Genre
+                                                option(value="gp") Gate Pass
+                                                option(value="cv") Cash Voucher
+                                        #report_genre_error(style="color:red")
+                                    .col-md-2
+                                        .form-group.input-group-md
                                             label Type
                                             select#report_type.form-control
                                                 option(value="" selected disabled) Select Type
@@ -63,10 +71,9 @@ include aside
                                             label Date To
                                             input#report_date_to.form-control(type = "date")
                                         #report_date_to_error(style="color:red")
-                                    .col-md-2
-                                        .form-group
-                                            label &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            button#btnSearch.btn.btn-success(onclick="searchReport()") Search
+                                .row
+                                    .col-12
+                                       button#btnSearch.btn.btn-success.col-12(onclick="searchReport()") Search
             //report
             #report
 

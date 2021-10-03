@@ -8,12 +8,13 @@ let party_id = ""
 
 function searchReport(){
     party_name = document.getElementById("party_name").value
+    report_genre = document.getElementById("report_genre").value
     report_type = document.getElementById("report_type").value
     report_commodity = document.getElementById("report_commodity").value
     report_date_from = document.getElementById("report_date_from").value
     report_date_to = document.getElementById("report_date_to").value
     
-    if(party_name=="" && report_type=="" && report_commodity=="" && report_date_from=="" && report_date_to==""){
+    if(party_name=="" && report_genre=="" && report_type=="" && report_commodity=="" && report_date_from=="" && report_date_to==""){
         toastr.error("Enter Any Field")
     } else {
         if(party_name != "") party_id = document.getElementById("party_id").value
@@ -22,11 +23,12 @@ function searchReport(){
 
         if(party_id=="") party_id="null"
         if(report_type=="") report_type="null"
+        if(report_genre=="") report_genre="null"
         if(report_commodity=="") report_commodity="null"
         if(report_date_from=="") report_date_from="null"
         if(report_date_to=="") report_date_to="null"
 
-        url = "/reports/get_report/"+party_id+"/"+report_type+"/"+report_commodity+"/"+report_date_from+"/"+report_date_to
+        url = "/reports/get_report/"+party_id+"/"+report_type+"/"+report_genre+"/"+report_commodity+"/"+report_date_from+"/"+report_date_to
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
