@@ -18,10 +18,17 @@ router.get("/", async function (req, res) {
 
     total_expense = parseFloat(total_expense.toFixed(2)).toLocaleString();
     total_recoveries = parseFloat(total_recoveries.toFixed(2)).toLocaleString();
-    balance_amount = parseFloat(balance_amount.toFixed(2)).toLocaleString();
-    total_weight_in = parseFloat(total_weight_in.toFixed(2)).toLocaleString();
-    total_weight_out = parseFloat(total_weight_out.toFixed(2)).toLocaleString();
-    balance_weight = parseFloat(balance_weight.toFixed(2)).toLocaleString();
+    balance_amount = parseFloat(balance_amount).toFixed(2);
+    total_weight_in = parseFloat(total_weight_in).toFixed(2);
+    total_weight_out = parseFloat(total_weight_out).toFixed(2);
+    balance_weight = parseFloat(balance_weight).toFixed(2);
+
+    total_expense = total_expense.toLocaleString("en-US");
+    total_recoveries = total_recoveries.toLocaleString("en-US");
+    balance_amount = balance_amount.toLocaleString("en-US");
+    total_weight_in = total_weight_in.toLocaleString("en-US");
+    total_weight_out = total_weight_out.toLocaleString("en-US");
+    balance_weight = balance_weight.toLocaleString("en-US");
 
     res.render("admin/home", {
       total_expense,

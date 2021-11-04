@@ -144,44 +144,20 @@ router.get(
                   "/" +
                   date3.getFullYear();
                 result2[i].l_date = date4;
-
-                result2[i].l_seller_weight = parseFloat(
-                  result2[i].l_seller_weight.toFixed(2)
-                ).toLocaleString();
-
-                result2[i].l_rate = parseFloat(
-                  result2[i].l_rate.toFixed(2)
-                ).toLocaleString();
-
-                result2[i].l_debit = parseFloat(
-                  result2[i].l_debit.toFixed(2)
-                ).toLocaleString();
-
-                result2[i].l_credit = parseFloat(
-                  result2[i].l_credit.toFixed(2)
-                ).toLocaleString();
-
-                result2[i].l_balance = parseFloat(
-                  result2[i].l_balance.toFixed(2)
-                ).toLocaleString();
                 data = result2[i];
 
                 dataset.total_seller_weight =
                   parseFloat(dataset.total_seller_weight) +
                   parseFloat(result2[i].l_seller_weight);
-
                 dataset.total_buyer_weight =
                   parseFloat(dataset.total_buyer_weight) +
                   parseFloat(result2[i].l_buyer_weight);
-
                 dataset.total_debit =
                   parseFloat(dataset.total_debit) +
                   parseFloat(result2[i].l_debit);
-
                 dataset.total_credit =
                   parseFloat(dataset.total_credit) +
                   parseFloat(result2[i].l_credit);
-
                 dataset.balance = result2[i].l_balance;
 
                 dataset.ledger.push(data);

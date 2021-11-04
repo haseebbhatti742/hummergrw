@@ -6,13 +6,13 @@ const session = require("express-session");
 const mysql = require("mysql");
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
-const cors = require("cors");
-var passport = require("passport");
+const cors = require('cors');
+var passport = require('passport');
 
 //settings
 app1.use(cookieParser("secret"));
 app1.use(flash());
-app1.use(bodyParser.urlencoded({ extended: true }));
+app1.use(bodyParser.urlencoded({extended: true }));
 app1.use(cors());
 app1.use(bodyParser.json());
 app1.use(express.static("assets"));
@@ -20,8 +20,7 @@ app1.set("views", "./views");
 app1.set("view engine", "jade"); // both keywords
 
 //session management
-app1.use(
-  session({
+app1.use(session({
     saveUninitialized: false,
     resave: true,
     secret: "ssshhhhh",
@@ -51,7 +50,7 @@ var conn = mysql.createPool({
   database: "hummjyxk_hummer_db",
 });
 
-var conn;
+var conn; 
 conn.getConnection(function (err, con) {
   if (err) {
     console.log("DB Error!");

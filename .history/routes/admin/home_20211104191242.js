@@ -9,19 +9,19 @@ router.get("/", async function (req, res) {
     res.locals.title = "Home";
     res.locals.subtitle = "Home";
 
-    let total_expense = await getTotalExpenses();
-    let total_recoveries = await getTotalRecoveries();
-    let balance_amount = await getTotalBalance();
-    let total_weight_in = await getTotalWeightsIn();
-    let total_weight_out = await getTotalWeightsOut();
-    let balance_weight = total_weight_out - total_weight_in;
+    total_expense = await getTotalExpenses();
+    total_recoveries = await getTotalRecoveries();
+    balance_amount = await getTotalBalance();
+    total_weight_in = await getTotalWeightsIn();
+    total_weight_out = await getTotalWeightsOut();
+    balance_weight = total_weight_out - total_weight_in;
 
-    total_expense = parseFloat(total_expense.toFixed(2)).toLocaleString();
-    total_recoveries = parseFloat(total_recoveries.toFixed(2)).toLocaleString();
-    balance_amount = parseFloat(balance_amount.toFixed(2)).toLocaleString();
-    total_weight_in = parseFloat(total_weight_in.toFixed(2)).toLocaleString();
-    total_weight_out = parseFloat(total_weight_out.toFixed(2)).toLocaleString();
-    balance_weight = parseFloat(balance_weight.toFixed(2)).toLocaleString();
+    total_expense = total_expense.toLocaleString("en-US").toFixed(2);
+    total_recoveries = total_recoveries.toLocaleString("en-US").toFixed(2);
+    balance_amount = balance_amount.toLocaleString("en-US").toFixed(2);
+    total_weight_in = total_weight_in.toLocaleString("en-US").toFixed(2);
+    total_weight_out = total_weight_out.toLocaleString("en-US").toFixed(2);
+    balance_weight = balance_weight.toLocaleString("en-US").toFixed(2);
 
     res.render("admin/home", {
       total_expense,

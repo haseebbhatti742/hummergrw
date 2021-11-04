@@ -24,6 +24,7 @@ function addNewParty() {
         if (data.status == "ok") {
           toastr.success("Party Added...!");
           document.getElementById("new_party_name").value = "";
+          document.getElementById("gate_pass_party_id").innerHTML = "";
           document.getElementById("btnAddParty").disabled = false;
           document.getElementById("new_party_contact_error").innerHTML = "";
         } else if (data.status == "error") {

@@ -212,22 +212,11 @@ router.get(
         total_weight_in = await getTotalWeightsIn();
         total_weight_out = await getTotalWeightsOut();
 
-        // total_expense = total_expense.toLocaleString("en-US");
-        // total_recoveries = total_recoveries.toLocaleString("en-US");
-        // balance_amount = balance_amount.toLocaleString("en-US");
-        // total_weight_in = total_weight_in.toLocaleString("en-US");
-        // total_weight_out = total_weight_out.toLocaleString("en-US");
-        total_expense = parseFloat(total_expense.toFixed(2)).toLocaleString();
-        total_recoveries = parseFloat(
-          total_recoveries.toFixed(2)
-        ).toLocaleString();
-        balance_amount = parseFloat(balance_amount.toFixed(2)).toLocaleString();
-        total_weight_in = parseFloat(
-          total_weight_in.toFixed(2)
-        ).toLocaleString();
-        total_weight_out = parseFloat(
-          total_weight_out.toFixed(2)
-        ).toLocaleString();
+        total_expense = total_expense.toLocaleString("en-US");
+        total_recoveries = total_recoveries.toLocaleString("en-US");
+        balance_amount = balance_amount.toLocaleString("en-US");
+        total_weight_in = total_weight_in.toLocaleString("en-US");
+        total_weight_out = total_weight_out.toLocaleString("en-US");
 
         res.render("admin/reports-page", {
           status: "ok",

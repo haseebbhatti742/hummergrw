@@ -169,20 +169,35 @@ router.get(
                 dataset.total_seller_weight =
                   parseFloat(dataset.total_seller_weight) +
                   parseFloat(result2[i].l_seller_weight);
+                dataset.total_seller_weight = parseFloat(
+                  dataset.total_seller_weight.toFixed(2)
+                ).toLocaleString();
 
                 dataset.total_buyer_weight =
                   parseFloat(dataset.total_buyer_weight) +
                   parseFloat(result2[i].l_buyer_weight);
+                dataset.total_buyer_weight = parseFloat(
+                  dataset.total_buyer_weight.toFixed(2)
+                ).toLocaleString();
 
                 dataset.total_debit =
                   parseFloat(dataset.total_debit) +
                   parseFloat(result2[i].l_debit);
+                dataset.total_debit = parseFloat(
+                  dataset.total_debit.toFixed(2)
+                ).toLocaleString();
 
                 dataset.total_credit =
                   parseFloat(dataset.total_credit) +
                   parseFloat(result2[i].l_credit);
+                dataset.total_credit = parseFloat(
+                  dataset.total_credit.toFixed(2)
+                ).toLocaleString();
 
                 dataset.balance = result2[i].l_balance;
+                dataset.balance = parseFloat(
+                  dataset.balance.toFixed(2)
+                ).toLocaleString();
 
                 dataset.ledger.push(data);
               } else if (i == result2.length) {
