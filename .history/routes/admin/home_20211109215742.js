@@ -17,12 +17,22 @@ router.get("/", async function (req, res) {
     let total_weight_out = await getTotalWeightsOut();
     let balance_weight = total_weight_out - total_weight_in;
 
+    console.log(total_expense);
+    console.log(total_recoveries);
+    console.log(balance_amount);
+    console.log("");
+
     total_expense = parseFloat(total_expense.toFixed(2)).toLocaleString();
     total_recoveries = parseFloat(total_recoveries.toFixed(2)).toLocaleString();
     balance_amount = parseFloat(balance_amount.toFixed(2)).toLocaleString();
     total_weight_in = parseFloat(total_weight_in.toFixed(2)).toLocaleString();
     total_weight_out = parseFloat(total_weight_out.toFixed(2)).toLocaleString();
     balance_weight = parseFloat(balance_weight.toFixed(2)).toLocaleString();
+
+    console.log(total_expense);
+    console.log(total_recoveries);
+    console.log(balance_amount);
+    console.log("");
 
     res.render("admin/home", {
       total_expense,
@@ -83,22 +93,15 @@ function getTotalRecoveries() {
 
 function getTotalBalance() {
   return new Promise(function (resolve, reject) {
-    // query =
-    //   "select l_balance as balance from ledger order by l_id desc limit 1";
     query =
-      "SELECT l_balance FROM `ledger` GROUP BY party_id ORDER BY party_id DESC";
+      "select l_balance as balance from ledger order by l_id desc limit 1";
     app.conn.query(query, function (err, result) {
       if (err) {
         console.log(err.message);
+      } else if (result.length > 0) {
+        resolve(result[0].balance);
       } else if (result.length == 0) {
         resolve("0");
-      } else if (result.length > 0) {
-        let balance = 0;
-        for (let i = 0; i <= result.length; i++) {
-          if (i < result.length)
-            balance = parseFloat(balance) + parseFloat(result[i].l_balance);
-          else if (i == result.length) resolve(balance);
-        }
       }
     });
   });

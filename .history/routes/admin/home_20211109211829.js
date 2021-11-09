@@ -8,7 +8,7 @@ router.get("/", async function (req, res) {
   } else if (req.session.username != undefined && req.session.type == "admin") {
     res.locals.title = "Home";
     res.locals.subtitle = "Home";
-    req.session.company_name = "MS Yard";
+    res.session.company_name = "MS Yard";
 
     let total_expense = await getTotalExpenses();
     let total_recoveries = await getTotalRecoveries();
@@ -83,22 +83,15 @@ function getTotalRecoveries() {
 
 function getTotalBalance() {
   return new Promise(function (resolve, reject) {
-    // query =
-    //   "select l_balance as balance from ledger order by l_id desc limit 1";
     query =
-      "SELECT l_balance FROM `ledger` GROUP BY party_id ORDER BY party_id DESC";
+      "select l_balance as balance from ledger order by l_id desc limit 1";
     app.conn.query(query, function (err, result) {
       if (err) {
         console.log(err.message);
+      } else if (result.length > 0) {
+        resolve(result[0].balance);
       } else if (result.length == 0) {
         resolve("0");
-      } else if (result.length > 0) {
-        let balance = 0;
-        for (let i = 0; i <= result.length; i++) {
-          if (i < result.length)
-            balance = parseFloat(balance) + parseFloat(result[i].l_balance);
-          else if (i == result.length) resolve(balance);
-        }
       }
     });
   });

@@ -90,15 +90,10 @@ function getTotalBalance() {
     app.conn.query(query, function (err, result) {
       if (err) {
         console.log(err.message);
+      } else if (result.length > 0) {
+        resolve(result[0].balance);
       } else if (result.length == 0) {
         resolve("0");
-      } else if (result.length > 0) {
-        let balance = 0;
-        for (let i = 0; i <= result.length; i++) {
-          if (i < result.length)
-            balance = parseFloat(balance) + parseFloat(result[i].l_balance);
-          else if (i == result.length) resolve(balance);
-        }
       }
     });
   });

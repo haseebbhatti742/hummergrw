@@ -7,27 +7,31 @@
                         .row
                             .col-12
                                 h4
-                                    i.fas.fa-globe &nbsp; #{session.company_name}
-                                    small.float-right Date From: #{date_from}
+                                    i.fas.fa-globe &nbsp; Hummer Grw
+                                    small.float-right Date From: #{dataset.date_from}
                             // /.col
                         // info row
                         .row.invoice-info
-                            .col-sm-6.invoice-col Party Info
+                            .col-sm-6.invoice-col 
+                                //- | Party Info
                                 address
-                                    strong #{dataset.party_info.party_name}
-                                    br
-                                    |                     Phone: #{dataset.party_info.party_contact}
+                                    //- strong #{dataset.party_info.party_name}
+                                    //- br
+                                    //- |                     Phone: #{dataset.party_info.party_contact}
                             .col-sm-6.invoice-col.float-right
                                 h4
-                                    small.float-right Date To: #{date_to}
+                                    small.float-right Date To: #{dataset.date_to}
+                        br
                         .row
                             .col-12.table-responsive
                                 table.table.table-bordered
                                     thead.thead-dark
                                         tr
+                                            th Party
                                             th Date
                                             th GP #
                                             th CV #
+                                            th Head
                                             th Description
                                             th Type
                                             th Weight
@@ -36,27 +40,31 @@
                                             th Credit
                                             th Balance
                                     tbody
-                                        -for(let i=0; i<dataset.ledger.length; i++){
+                                        -for(let i=0; i<dataset.length; i++){
                                             tr
-                                                td #{dataset.ledger[i].l_date}
-                                                td #{dataset.ledger[i].gp_number_manual}
-                                                td #{dataset.ledger[i].cv_number_manual}
-                                                td #{dataset.ledger[i].l_description}
-                                                td #{dataset.ledger[i].l_type}
-                                                td #{dataset.ledger[i].l_seller_weight}
-                                                td #{dataset.ledger[i].l_rate}
-                                                td #{dataset.ledger[i].l_debit}
-                                                td #{dataset.ledger[i].l_credit}
-                                                td #{dataset.ledger[i].l_balance}
+                                                td #{dataset[i].party_name}
+                                                td #{dataset[i].l_date}
+                                                td #{dataset[i].gp_number_manual}
+                                                td #{dataset[i].cv_number_manual}
+                                                td #{dataset[i].l_commodity}
+                                                td #{dataset[i].l_description}
+                                                td #{dataset[i].l_type}
+                                                td #{dataset[i].l_seller_weight}
+                                                td #{dataset[i].l_rate}
+                                                td #{dataset[i].l_debit}
+                                                td #{dataset[i].l_credit}
+                                                td #{dataset[i].l_balance}
+                                                
                                         -}
                         .row
+                            // accepted payments column
                             .col-6
                                 p 
                                     strong NOTE:
                                     br
                                     | Negative Balance = Client Payable
                                     br
-                                    | Positive Balance = #{session.company_name} Payable
+                                    | Positive Balance = HUMMER Payable
                             .col-6
                                 .table-responsive
                                     table.table
@@ -81,5 +89,5 @@
 .col-md-12
     .row.no-print
         .col-12
-            a.btn.btn-default.float-right(onclick="printLedger()")
+            a.btn.btn-default.float-right(onclick="printReport()")
                 i.fas.fa-print Print
