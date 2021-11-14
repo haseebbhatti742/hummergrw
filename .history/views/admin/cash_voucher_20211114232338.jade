@@ -4,6 +4,24 @@ include aside
     section.content
         .container-fluid
             include sub-header
+            //search
+            .col-md-12
+                .card.card-success.card-outline
+                    .card-header
+                        h3.card-title Search
+                    .card-body.p-2.mt-2
+                         .card-tools
+                            #tab1
+                                .row.form-group
+                                    .col-md-10
+                                        .form-group.input-group-md
+                                            input#searchId.form-control(type="text", placeholder="Enter Cash Voucher #...")
+                                        #searchId_error(style="color:red")
+                                    .col-md-2
+                                        .form-group 
+                                            button#btnSearch.btn.btn-success(onclick="searchGatePass()") Search
+            
+            //cash voucher form
             .col-md-12
                 .card.card-primary.card-outline
                     .card-header
@@ -13,21 +31,21 @@ include aside
                             .row.form-group
                                 .col-md-2
                                     .form-group.input-group-md
-                                        label CV Number
-                                        input#cash_voucher_number.form-control(type = "text", value="#{cv_number}", disabled='true')
+                                            label CV Number
+                                            input#cash_voucher_number.form-control(type = "text", value='#{cv_number}', disabled='true' required)
                                     #cash_voucher_number_error(style="color:red")
                                 .col-md-2
                                     .form-group.input-group-md
-                                            label Manual CV #
-                                            input#cash_voucher_number_manual.form-control(type = "text", placeholder="Manual Cash Voucher Number" required)
+                                            label CV Manual #
+                                            input#cash_voucher_number_manual.form-control(type = "text", placeholder="Manual CV Number", required)
                                     #cash_voucher_number_manual_error(style="color:red")
                                 .col-md-6
                                     .form-group.input-group-md
                                         label Name
                                         input#cash_voucher_party_id.form-control(type = "text", placeholder='Enter Name' autocomplete="off" required)
                                         input#cv_party_id.form-control(type="hidden")
-                                    #cash_voucher_name_error(style="color:red")
-                                .col-md-2 
+                                    #cash_voucher_party_id_error(style="color:red")
+                                .col-md-2
                                     .form-group.input-group-md
                                         label Type
                                         select#cash_voucher_type.form-control(required)
@@ -38,7 +56,7 @@ include aside
                                 .col-md-3
                                     .form-group.input-group-md
                                         label Amount (RS)
-                                        input#cash_voucher_amount.form-control(type = "number", placeholder='Enter Amount' required)
+                                        input#cash_voucher_amount.form-control(type = "text", placeholder='Enter Amount' data-a-sign="," data-a-dec="," data-a-sep="." required)
                                     #cash_voucher_amount_error(style="color:red")
                                 .col-md-3
                                     .form-group.input-group-md
@@ -58,7 +76,8 @@ include aside
                             .row.form-group
                                 .col-md-6
                                     label Details
-                                    input#cash_voucher_details.form-control(type="text" placeholder="Enter Details Here...", rows="5" required)
+                                    input#cash_voucher_details.form-control(placeholder="Enter Details Here...", rows="5" required)
+                                //col commodity
                                 #div_commodity.col-md-6(style="display:none")
                                     .form-group.input-group-md
                                             label Head
@@ -84,9 +103,6 @@ include aside
                                                 option(value="Chalu") Chalu
                                                 option(value="Misc") Misc
                                                 option(value="Transport") Transport
-                                                option(value="Daily Expense") Daily Expense
-                                                option(value="Capital Expense") Capital Expense
-                                                option(value="Gista") Gista
                                         #gate_pass_commodity_type_error(style="color:red")
                             #voucherButtons
                                 .row.form-group
@@ -98,10 +114,19 @@ include aside
                                 #submitButtons
                                     .row.form-group
                                         button#btn2.col-md-12.btn.btn-success(type="submit") Submit
-
 include footer
-script(src='/js/advance_cash_voucher.js')
+script(src='/js/cash_voucher.js')
 script.
+    function searchGatePass(){
+        gp_number = document.getElementById("searchId").value
+        if(gp_number == ""){
+            document.getElementById("searchId_error").innerHTML = "Enter Cash Voucher Number"
+        } else {
+            document.getElementById("searchId_error").innerHTML = ""
+            window.location.replace("/cash_voucher/view-cash-voucher/"+gp_number)
+        }
+    }
+
     function add_commodity(){
         document.getElementById("divAddVoucher").style.display = "none"
         document.getElementById("divRemoveVoucher").style.display = "block"

@@ -196,12 +196,11 @@ router.get(
                   date_from,
                   date_to
                 );
-                // balance_amount = await getTotalBalance(
-                //   party_id,
-                //   date_from,
-                //   date_to
-                // );
-                balance_amount = total_expense + total_recoveries;
+                balance_amount = await getTotalBalance(
+                  party_id,
+                  date_from,
+                  date_to
+                );
                 total_weight_in = await getTotalWeightsIn(
                   party_id,
                   date_from,

@@ -513,20 +513,20 @@ function addCommodity() {
   option21.innerText = "Transport";
   commodity_select.appendChild(option21);
 
-  var option22 = document.createElement("option");
-  option22.setAttribute("value", "Daily Expense");
-  option22.innerText = "Daily Expense";
-  commodity_select.appendChild(option22);
+  var option21 = document.createElement("option");
+  option21.setAttribute("value", "Transport");
+  option21.innerText = "Transport";
+  commodity_select.appendChild(option21);
 
-  var option23 = document.createElement("option");
-  option23.setAttribute("value", "Capital Expense");
-  option23.innerText = "Capital Expense";
-  commodity_select.appendChild(option23);
+  var option21 = document.createElement("option");
+  option21.setAttribute("value", "Transport");
+  option21.innerText = "Transport";
+  commodity_select.appendChild(option21);
 
-  var option24 = document.createElement("option");
-  option24.setAttribute("value", "Gista");
-  option24.innerText = "Gista";
-  commodity_select.appendChild(option24);
+  var option21 = document.createElement("option");
+  option21.setAttribute("value", "Transport");
+  option21.innerText = "Transport";
+  commodity_select.appendChild(option21);
 
   form_group.appendChild(label);
   form_group.appendChild(commodity_select);

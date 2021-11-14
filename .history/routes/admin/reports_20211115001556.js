@@ -208,8 +208,7 @@ router.get(
 
         total_expense = await getTotalExpenses();
         total_recoveries = await getTotalRecoveries();
-        // balance_amount = await getTotalBalance();
-        balance_amount = total_expense + total_recoveries;
+        balance_amount = await getTotalBalance();
         total_weight_in = await getTotalWeightsIn();
         total_weight_out = await getTotalWeightsOut();
 
